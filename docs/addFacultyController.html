@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Node.js, ReactJS, React, JavaScript, Typescript, SPA, Kotlin, HTML, CSS, Express, Blockchain, Cardano, DID,
+        PRISM, education, university, faculty, study, student, professor, assignments" />
+    <meta name="description" content="DIDEdu " />
+    <meta name="title" content="DIDEdu">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <title>DIDEdu</title>
+
+    <!-- Styles start -->
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="icon" href="img/icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Styles end -->
+
+</head>
+
+<body class="d-flex flex-column min-vh-100 m-0">
+    <!-- Navigation start -->
+    <header>
+        <nav class="navbar fixed-top navbar-expand-xl navbar-light bg-light p-0">
+            <div class="container-fluid p-0">
+                <a class="navbar-brand backBtn ms-3" href="mainAdmin.html">DIDEdu</a>
+                <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection" aria-current="page" href="mainAdmin.html">Universities</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection" aria-current="page" href="addUni.html">Add University</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection" aria-current="page" href="addFaculty.html">Add Faculty</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection active" aria-current="page" href="addFacultyController.html">Add Controller</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection" aria-current="page" href="editAdminProfile.html">Edit Profile</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        <a href="index.html" class="btn mainBtnOutline mt-1 pt-2 pb-2 ps-3 pe-3 w-100 me-3">
+                            Log Out
+                        </a>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Navigation end -->
+
+    <!-- Register form start -->
+    <div class="container-fluid  d-flex justify-content-center pt-5 mt-4 mb-4">
+        <form action="#" class="pb-1 ps-3 mt-5 bg-light" style="box-shadow: 4px 4px 12px 4px gray">
+            <div class="input-group mb-4 row">
+                <div class="col col-xl-12">
+                    <h1 class="containerText1 text-center pt-3 mb-3">Add Controller</b></h1>
+                </div>
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="col col-xl-12">
+                    <label for="chooseUniversity" class="form-label"><b>Name of university</b></label>
+                    <input class="form-control" list="universities" id="chooseUniversity" placeholder="Type to search..." onchange="check(this, 'list');">
+                    <datalist id="universities">
+                        <option>University Of Ljubljana</option>
+                        <option>University Of Maribor</option>
+                        <option>University Of London</option>
+                    </datalist>
+                    <div class="invalid-feedback">
+                        This field is required
+                    </div>
+                </div>
+            </div>
+            <div id="list" class="input-group mb-3 row" style="display: none;">
+                <div class="col col-xl-12">
+                    <label for="chooseFaculty" class="form-label"><b>Name of faculty</b></label>
+                    <input class="form-control" list="faculties" id="chooseFaculty" placeholder="Type to search...">
+                    <datalist id="faculties">
+                        <option>Faculty Of Computer Science</option>
+                        <option>Faculty Of Philosophy</option>
+                        <option>Faculty Of Mathematics and Physics</option>
+                        <option>Faculty Of Chemistry</option>
+                    </datalist>
+                    <div class="invalid-feedback">
+                        This field is required
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="col col-xl-6">
+                    <label for="firstName" class="form-label"><b>First name</b></label>
+                    <input type="text" class="form-control" id="firstName" placeholder="First name">
+                    <div class="invalid-feedback">
+                        This field is required
+                    </div>
+                </div>
+                <div class="col col-xl-6">
+                    <label for="lastName" class="form-label"><b>Last name</b></label>
+                    <input type="text" class="form-control" id="lastName" placeholder="Last name">
+                    <div class="invalid-feedback">
+                        This field is required
+                    </div>
+                </div>
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="col col-sm-12 col-xl-12">
+                    <label for="email" class="form-label"><b>Email address</b></label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email address">
+                    <div class="invalid-feedback">
+                        This field is required
+                    </div>
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col col-xl-12 d-flex justify-content-center">
+                    <button id="submit" type="submit" class="btn mainBtn mt-4 pt-2 me-3 ps-4 pe-4">
+                        <h4>Submit</h4>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Register form end -->
+
+    <!-- Footer start -->
+    <footer class="text-center text-lg-start bg-light text-muted mt-auto">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col col-xl-10 pt-3">
+                    <p class="mb-0">
+                        You are now logged in as <a href="editAdminProfile.html" class="containerText1">Nikolay Vasilev</a>
+                    </p>
+                    <p>
+                        <a href="mainAdmin.html" class="containerText1">Home</a> |
+                        <a href="index.html" class="containerText1">Log out</a>
+                    </p>
+                    <p class="mb-0 pt-3">
+                        Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>: All rights reserved | This Website is Developed by <b>Nikolay Vasilev</b>
+                    </p>
+                </div>
+                <div class="col d-flex col-xl-2 justify-content-end">
+                    <img src="img/logo.png" alt="DIDEdu logo">
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer end -->
+
+    <!-- Go up button start-->
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-angles-up"></i></button>
+    <!-- Go up button end-->
+
+    <!-- Scripts start -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/b65a3b9f50.js" crossorigin="anonymous"></script>
+    <script src="js/goToTop.js" type="application/javascript"></script>
+    <script src="js/loginUniversity.js" type="application/javascript"></script>
+    <!-- Scripts end -->
+</body>
+
+</html>

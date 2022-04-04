@@ -12,6 +12,8 @@ html, body {
     left: 0;
 }
 
+
+
 a {
     text-decoration: none !important;
     color: rgba(34,54,69,0.7);
@@ -20,17 +22,6 @@ a {
 
 a:hover {
     color: #e74c3c !important;
-}
-
-ul {
-    list-style: none;
-}
-
-.navbar {
-    background: white;
-    padding: 3rem 2rem;
-    height: 0rem;
-    min-height: 12vh;
 }
 
 .navbar .navbar-brand a {
@@ -70,50 +61,26 @@ ul {
     margin-left: 10px;
 }
 
-.navbar-expand-lg .navbar-nav .nav-link {
+.navbar-expand-xl .navbar-nav .nav-link {
     padding: 2rem 1.2rem !important;
     font-size: 1.4rem;
     position: relative;
 }
 
-.navbar-collapse.collapsing {
-    background-color: white;
-    border-radius: 10px;
+.scroll {
+    overflow-y: auto !important;
+    max-height: 200px !important;
 }
 
-@media only screen and (max-width : 992px) {
-    .navbar-collapse {
-        background: #f5f5f5 !important;
-        border-bottom-left-radius: 25px;
-        border-bottom-right-radius: 25px;
-    }
-}
-
-.navbar-expand-lg .navbar-nav .nav-link:hover {
+.navbar-expand-xl .navbar-nav .nav-link:hover {
     border-top: 4px solid #e74c3c;
+    text-shadow: 1px 1px black;
 }
 
-.navbar-expand-lg .navbar-nav .nav-link.active {
+.navbar-expand-xl .navbar-nav .nav-link.active {
     border-top: 4px solid #e74c3c;
     color: #e74c3c !important;
-}
-
-.navbar-nav button {
-    padding: 1.2rem 0;
-}
-
-.navbar-nav .btn {
-    background-color: #e74c3c;
-    color: white;
-    border-radius: 25px;
-    padding: 1rem 1.5rem;
-    font-size: 1.2rem;
-    margin-top: -10px;
-}
-
-.navbar-nav .btn:hover {
-    background-color: #D13838;
-    color: white !important;
+    text-shadow: 1px 1px black;
 }
 
 .about {
@@ -181,7 +148,6 @@ ul {
     font-size: 30px;
     color: white;
     text-decoration: none;
-
 }
 
 #tutorialList li a:hover {
@@ -230,7 +196,7 @@ iframe {
     color: white;
 }
 
-.registerBtn {
+.mainBtn {
     background-color: #e74c3c !important;
     color: white !important;
     border-radius: 25px !important;
@@ -238,7 +204,7 @@ iframe {
     margin-top: -10px;
 }
 
-.registerBtn:hover {
+.mainBtn:hover {
     background-color: #D13838 !important;
     color: white !important;
     text-shadow: 2px 2px black;
@@ -248,24 +214,84 @@ iframe {
     border-bottom: 3px solid #e74c3c;
 }
 
-.contactBtn {
-    background-color: #e74c3c !important;
-    color: white !important;
-    font-size: 1.2rem !important;
-    margin-top: -10px;
-}
-
-.contactBtn:hover {
-    background-color: #D13838 !important;
-    color: white !important;
-    text-shadow: 2px 2px black;
-}
-
 .backBtn:hover {
     text-shadow: 2px 2px black;
 }
 
-/*.university {*/
-/*    border-radius: 20px;*/
-/*    box-shadow: 2px 2px 8px 4px gray;*/
-/*}*/
+.dropdown-menu {
+    border: 1px solid #e74c3c !important;
+    box-shadow: 2px 2px 4px black;
+    border-radius: 0px 0px 20px 20px !important;
+}
+
+.dropdown-menu li:last-child a:hover {
+    border-radius: 0px 0px 20px 20px !important;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #e74c3c !important;
+    color: white !important;
+    text-shadow: 1px 1px black;
+}
+
+.dropdown-menu li hr {
+    border: 1px solid #e74c3c !important;
+}
+
+.mainBtnOutline {
+    border: 2px solid #e74c3c !important;
+    background-color: #f1f1f1 !important;
+    color: #e74c3c !important;
+    font-size: 1.2rem !important;
+}
+
+.mainBtnOutline:hover {
+    background-color: #e74c3c !important;
+    color: white !important;
+    text-shadow: 1px 1px black;
+}
+
+.scrollListBig {
+    overflow-y: auto;
+    max-height: 468px;
+}
+
+.scrollListBig li {
+    border-bottom: 1px dotted #e74c3c !important;
+}
+
+.scrollListBig li:hover {
+    background: rgba(231, 76, 60, 0.1)
+}
+
+[type="radio"] {
+    visibility: hidden;
+}
+
+[type="radio"]::before {
+    border: 2px solid gray;
+    height: .9em;
+    width: .9em;
+    border-radius: 50%;
+    display: block;
+    content: " ";
+    cursor: pointer;
+    visibility: visible;
+}
+
+[type="radio"]:checked::before {
+    background: radial-gradient(#e74c3c 50%, transparent 60%);
+}
+
+.scrollListSmall {
+    overflow-y: auto;
+    max-height: 220px;
+}
+
+.scrollListSmall li {
+    border-bottom: 1px dotted #e74c3c !important;
+}
+
+.scrollListSmall li:hover {
+    background: rgba(231, 76, 60, 0.1)
+}
