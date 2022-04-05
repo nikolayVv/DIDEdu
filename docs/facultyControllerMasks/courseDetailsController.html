@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Node.js, ReactJS, React, JavaScript, Typescript, SPA, Kotlin, HTML, CSS, Express, Blockchain, Cardano, DID,
+        PRISM, education, university, faculty, study, student, professor, assignments" />
+    <meta name="description" content="DIDEdu " />
+    <meta name="title" content="DIDEdu">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <title>DIDEdu</title>
+
+    <!-- Styles start -->
+    <link href="../css/style.css" rel="stylesheet">
+    <link rel="icon" href="../img/icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Styles end -->
+
+</head>
+
+<body class="d-flex flex-column min-vh-100 m-0">
+    <!-- Navigation start -->
+    <header>
+        <nav class="navbar fixed-top navbar-expand-xl navbar-light bg-light p-0">
+            <div class="container-fluid p-0">
+                <a class="navbar-brand backBtn ms-3" href="mainFacultyController.html">
+                    DIDEdu <b class="text-secondary ps-3">F R I</b>
+                </a>
+                <button class="navbar-toggler me-3 d-block d-sm-block d-md-block d-lg-block d-xl-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection " aria-current="page" href="mainFacultyController.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection" aria-current="page" href="professorsList.html">Professors</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link aboutSection" aria-current="page" href="studentsList.html">Students</a>
+                        </li>
+                    </ul>
+                    <div class="ms-auto">
+                        <div class="btn-group d-flex justify-content-center ms-xl-5 me-xl-5">
+                            <button type="button" class="btn mainBtn ps-5 pe-5" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user pe-3"></i> My Profile <i class="fas fa-caret-down ps-3"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-light w-100 pt-0 pb-0">
+                                <li>
+                                        <span class="dropdown-item disabled bg-light pt-3 pb-2">
+                                            <img src="../img/avatar.jpg" alt="profile picture" class="rounded-circle d-inline" width="40" height="40">
+                                            <h6 class="d-inline ms-1  text-dark">Hello, Nikolay Vasilev!</h6>
+                                        </span>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider mt-0 mb-0">
+                                </li>
+                                <li><a class="dropdown-item pt-2 pb-2" href="addProfessor.html">Add Professor</a></li>
+                                <li><a class="dropdown-item pt-2 pb-2" href="addStudent.html">Add Student</a></li>
+                                <li><a class="dropdown-item pt-2 pb-2" href="editProfileController.html">Edit Profile</a></li>
+                                <li><a class="dropdown-item pt-2 pb-2" href="../index.html">Log Out</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Navigation end -->
+
+    <!-- Course content start -->
+    <div class="container-fluid pt-5 mt-5 pb-3">
+        <div class="row g-5 pt-3 ms-1 pe-xl-1 me-1">
+            <!-- Course preview start -->
+            <div class="col col-12 col-xl-9 bg-light">
+                <div class="row pt-3">
+                    <div class="col col-12 col-xl-9">
+                        <h1><i class="fa fa-sun containerText1"></i> Course title</h1>
+                        <h3><span class="text-secondary">3. year, bachelor's degree (2021/2022)</span></h3>
+                    </div>
+                    <div class="col col-12 col-xl-3 scrollListSmall pt-2">
+                        <select class="form-select " id="year">
+                            <option selected disabled>--Choose week--</option>
+                            <option value="1">1. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="2">2. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="3">3. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">4. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">5. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">6. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">7. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">8. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="1">9. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="2">10. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="3">11. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">12. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">13. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                            <option value="4">14. week (dd.mm.yyyy-dd.mm.yyyy)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row pt-5 pe-3">
+                    <div class="col col-xl-12">
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 titleSideBar">
+                                <p class="containerText1 display-5">About</p>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Rules</h4>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h5>Exercises: </h5>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                <h5>Lectures: </h5>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                                <h5>Assignments: </h5>
+                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Exams</h4>
+                            </div>
+                            <div class="col col-4 col-xl-4 pt-3">
+                                <h5>Colloquiums: </h5>
+                                <ul>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                </ul>
+                            </div>
+                            <div class="col col-4 col-xl-4 pt-3">
+                                <h5>Tests: </h5>
+                                <ul>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                </ul>
+                            </div>
+                            <div class="col col-4 col-xl-4 pt-3">
+                                <h5>Exams: </h5>
+                                <ul>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                    <li>dd.mm.yyyy hh:mm</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-5 mb-5">
+                    <div class="col col-xl-12">
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 titleSideBar">
+                                <p class="containerText1 display-6">1. Week (dd.mm.yyyy-dd.mm.yyyy)</p>
+                            </div>
+                            <div class="col col-xl-12 pt-3">
+                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Lectures</h4>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-book containerText1" aria-hidden="true"></i> 1. Lecture - Slides (Part 1)</a>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-book containerText1" aria-hidden="true"></i> 1. Lecture - Slides (Part 2)</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Exercises</h4>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-book containerText1" aria-hidden="true"></i> 1. Exercise - Slides</a>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-video containerText1" aria-hidden="true"></i> 1. Exercise</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Assignments</h4>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-file-circle-question containerText1" aria-hidden="true"></i> 1. Quiz</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-5 mb-5">
+                    <div class="col col-xl-12">
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 titleSideBar">
+                                <p class="containerText1 display-6">2. Week (dd.mm.yyyy-dd.mm.yyyy)</p>
+                            </div>
+                            <div class="col col-xl-12 pt-3">
+                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Lectures</h4>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-book containerText1" aria-hidden="true"></i> 2. Lecture - Slides (Part 1)</a>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-book containerText1" aria-hidden="true"></i> 2. Lecture - Slides (Part 2)</a>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-book containerText1" aria-hidden="true"></i> 2. Lecture - Slides (Part 3)</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Exercises</h4>
+                            </div>
+                            <div class="col col-xl-12 pt-3 ms-3">
+                                <p>It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-book containerText1" aria-hidden="true"></i> 2. Exercise - Slides</a>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-file-code containerText1" aria-hidden="true"></i> Hello World</a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Assignments</h4>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa fa-lg fa-file containerText1" aria-hidden="true"></i> 1. Homework</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-5 mb-5">
+                    <div class="col col-xl-12">
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 titleSideBar">
+                                <p class="containerText1 display-6">3. Week (dd.mm.yyyy-dd.mm.yyyy)</p>
+                            </div>
+                            <div class="col col-xl-12 pt-3">
+                                <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-xl-12 pt-3">
+                                <h4 class="titleSideBar">Exams</h4>
+                            </div>
+                            <div class="col col-12 col-xl-12 pt-3 ms-3">
+                                <a href="#" class="h6 text-black"><i class="fa-solid fa-lg fa-file-shield containerText1" aria-hidden="true"></i> 1. Exam</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Course preview end -->
+
+            <!-- Sidebar start -->
+            <div class="col col-12 col-xl-3 pe-0 ps-0 ps-xl-4">
+                <div class="p-4 mb-3 bg-light rounded">
+                    <h4>Search</h4>
+                    <form action="#" class="m-0 p-0">
+                        <div class="row input-group m-0 p-0">
+                            <input type="search" id="searchInput" class="form-control rounded mt-3" placeholder="Search by professor's name...">
+                        </div>
+                        <div class="row row-xl-12 input-group pt-3 justify-content-start m-0 p-0">
+                            <div class="col col-6 col-xl-6 form-check pb-3">
+                                <input class="form-check-input" type="radio" name="mainSearch" id="professors" checked>
+                                <label class="form-check-label" for="professors">
+                                    Search professors
+                                </label>
+                            </div>
+                            <div class="col col-6 col-xl-6 form-check d-flex justify-content-end">
+                                <input class="form-check-input" type="radio" name="mainSearch" id="students">
+                                <label class="form-check-label ps-2" for="students">
+                                    Search students
+                                </label>
+                            </div>
+                            <div class="col col-6 col-xl-6 form-check d-flex justify-content-start">
+                                <input class="form-check-input" type="radio" name="mainSearch" id="admins">
+                                <label class="form-check-label ps-2" for="admins">
+                                    Search admins
+                                </label>
+                            </div>
+                            <div class="col col-6 col-xl-6 form-check d-flex justify-content-end">
+                                <input class="form-check-input" type="radio" name="mainSearch" id="subjects">
+                                <label class="form-check-label ps-2" for="subjects">
+                                    Search subjects
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mb-3 bg-light rounded">
+                    <h4 class="titleSideBar p-4 mb-0">Last visited subjects</h4>
+                    <ul id="lastSubjects" class="scrollListSmall list-group list-group-flush pe-0">
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa fa-sun containerText1"></i> Course title</h5>
+                                    </a>
+                                    <p class="text-secondary mb-0">3. year, bachelor's degree (2021/2022)</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa fa-snowflake-o containerText1"></i> Course title)</h5>
+                                    </a>
+                                    <p class="text-secondary mb-0">3. year, bachelor's degree (2020/2021) </p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa fa-snowflake-o containerText1"></i> Course title </h5>
+                                    </a>
+                                    <p class="text-secondary mb-0">3. year, bachelor's degree (2020/2021)</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa fa-sun containerText1"></i> Course title</h5>
+                                    </a>
+                                    <p class="text-secondary mb-0">3. year, bachelor's degree (2021/2022)</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa fa-sun containerText1"></i> Course title</h5>
+                                    </a>
+                                    <p class="text-secondary mb-0">3. year, bachelor's degree (2021/2022)</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-light rounded">
+                    <h4 class="titleSideBar p-4 mb-0">Assignments for this subject</h4>
+                    <ul id="assignments" class="scrollListSmall list-group list-group-flush pe-0"  style="max-height: 265px">
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+                                    </a>
+                                    <h6 class="text-secondary mb-3">(Course title)</h6>
+                                    <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+                                    <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+                                    </a>
+                                    <h6 class="text-secondary mb-3">(Course title)</h6>
+                                    <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+                                    <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+                                    </a>
+                                    <h6 class="text-secondary mb-3">(Course title)</h6>
+                                    <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+                                    <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item pe-0 bg-light">
+                            <div class="row me-3 pt-2 pb-2">
+                                <div class="col col-xl-12">
+                                    <a href="courseDetailsController.html" class="text-black">
+                                        <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+                                    </a>
+                                    <h6 class="text-secondary mb-3">(Course title)</h6>
+                                    <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+                                    <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Sidebar end -->
+        </div>
+    </div>
+    <!-- Course content end -->
+
+    <!-- Footer start -->
+    <footer class="text-center text-lg-start bg-light text-muted mt-auto">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col col-xl-11 pt-3">
+                    <p class="mb-0">
+                        You are now logged in as <a href="../editProfile.html" class="containerText1">Nikolay Vasilev</a>
+                    </p>
+                    <p class="pt-3">
+                        <a href="mainFacultyController.html" class="containerText1">Home</a> |
+                        <a href="professorsList.html" class="containerText1">Professors</a> |
+                        <a href="studentsList.html" class="containerText1">Students</a> |
+                        <a href="../index.html" class="containerText1">Log out</a>
+                    </p>
+                    <p class="mb-0 pt-3">
+                        Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>: All rights reserved | This Website is Developed by <b>Nikolay Vasilev</b>
+                    </p>
+                </div>
+                <div class="col  d-flex col-xl-1 justify-content-end">
+                    <img src="../img/logo.png" alt="DIDEdu logo">
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer end -->
+
+    <!-- Go up button start-->
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-angles-up"></i></button>
+    <!-- Go up button end-->
+
+    <!-- Scripts start -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/b65a3b9f50.js" crossorigin="anonymous"></script>
+    <script src="../js/goToTop.js" type="application/javascript"></script>
+    <!-- Scripts end -->
+</body>
+
+</html>

@@ -12,16 +12,21 @@ html, body {
     left: 0;
 }
 
-
-
 a {
     text-decoration: none !important;
-    color: rgba(34,54,69,0.7);
     font-weight: 500;
 }
 
 a:hover {
     color: #e74c3c !important;
+}
+
+footer {
+    border-top: 1px solid lightgray;
+}
+
+.navbar {
+    border-bottom: 1px solid lightgray;
 }
 
 .navbar .navbar-brand a {
@@ -201,7 +206,6 @@ iframe {
     color: white !important;
     border-radius: 25px !important;
     font-size: 1.2rem !important;
-    margin-top: -10px;
 }
 
 .mainBtn:hover {
@@ -240,7 +244,7 @@ iframe {
 
 .mainBtnOutline {
     border: 2px solid #e74c3c !important;
-    background-color: #f1f1f1 !important;
+    background-color: white !important;
     color: #e74c3c !important;
     font-size: 1.2rem !important;
 }
@@ -253,7 +257,7 @@ iframe {
 
 .scrollListBig {
     overflow-y: auto;
-    max-height: 468px;
+    max-height: 460px;
 }
 
 .scrollListBig li {
@@ -294,4 +298,22 @@ iframe {
 
 .scrollListSmall li:hover {
     background: rgba(231, 76, 60, 0.1)
+}
+
+.circle-text {
+    font-size: 15px;
+}
+
+.page-link {
+    cursor: pointer;
+    color: black !important;
+    border: none !important;
+}
+
+.disabled a {
+    color: rgba(231, 76, 60, 0.1) !important;
+}
+
+.titleSideBar {
+    border-bottom: 1px solid lightgray;
 }

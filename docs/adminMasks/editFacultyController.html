@@ -14,8 +14,8 @@
     <title>DIDEdu</title>
 
     <!-- Styles start -->
-    <link href="css/style.css" rel="stylesheet">
-    <link rel="icon" href="img/icon.png">
+    <link href="../css/style.css" rel="stylesheet">
+    <link rel="icon" href="../img/icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <!-- Styles end -->
 
@@ -41,7 +41,7 @@
                             <a class="nav-link aboutSection" aria-current="page" href="addUni.html">Add University</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link aboutSection active" aria-current="page" href="addFaculty.html">Add Faculty</a>
+                            <a class="nav-link aboutSection" aria-current="page" href="addFaculty.html">Add Faculty</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link aboutSection" aria-current="page" href="addFacultyController.html">Add Controller</a>
@@ -51,7 +51,7 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
-                        <a href="index.html" class="btn mainBtnOutline mt-1 pt-2 pb-2 ps-3 pe-3 w-100 me-3">
+                        <a href="../index.html" class="btn mainBtnOutline mt-1 pt-2 pb-2 ps-3 pe-3 w-100 me-3">
                             Log Out
                         </a>
                     </ul>
@@ -61,54 +61,59 @@
     </header>
     <!-- Navigation end -->
 
-    <!-- Register form start -->
+    <!-- Edit form start -->
     <div class="container-fluid  d-flex justify-content-center pt-5 mt-4 mb-4">
         <form action="#" class="pb-1 ps-3 mt-5 bg-light" style="box-shadow: 4px 4px 12px 4px gray">
-            <div class="input-group mb-4 row">
-                <div class="col col-sm-12 col-xl-12">
-                    <h1 class="containerText1 text-center pt-3 mb-3 w-100">Add Faculty</h1>
-                </div>
-            </div>
-            <div class="input-group mb-4 row">
+            <div class="input-group mb-3 row">
                 <div class="col col-xl-12">
-                    <label for="chooseUniversity" class="form-label"><b>Name of university</b></label>
-                    <input class="form-control" list="universities" id="chooseUniversity" placeholder="Type to search...">
-                    <datalist id="universities">
-                        <option>University Of Ljubljana</option>
-                        <option>University Of Maribor</option>
-                        <option>University Of London</option>
-                    </datalist>
+                    <h1 class="text-center pt-3 mb-3">Faculty Of Computer Science <b class="containerText1">Controller</b></h1>
+                </div>
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="col col-xl-6">
+                    <label for="firstName" class="form-label"><b>First name</b></label>
+                    <input type="text" class="form-control" id="firstName" placeholder="First name" value="Franc">
+                    <div class="invalid-feedback">
+                        This field is required
+                    </div>
+                </div>
+                <div class="col col-xl-6">
+                    <label for="lastName" class="form-label"><b>Last name</b></label>
+                    <input type="text" class="form-control" id="lastName" placeholder="Last name" value="Novak">
                     <div class="invalid-feedback">
                         This field is required
                     </div>
                 </div>
             </div>
-            <div class="input-group mb-4 row ">
-                <div class="col col-8 col-xl-8">
-                    <label for="address" class="form-label"><b>Address</b></label>
-                    <input type="text" class="form-control" id="address" placeholder="Address">
+            <div class="input-group mb-3 row">
+                <div class="col col-sm-12 col-xl-12">
+                    <label for="email" class="form-label"><b>Email address</b></label>
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email address" value="fn1233@admin.uni-lj.si">
                     <div class="invalid-feedback">
                         This field is required
                     </div>
                 </div>
-                <div class="col col-4 col-xl-4">
-                    <label for="abbreviation" class="form-label"><b>Abbreviation</b></label>
-                    <input type="text" class="form-control" id="abbreviation" placeholder="Abbreviation">
+            </div>
+            <div class="input-group mb-3 row">
+                <div class="col col-xl-12">
+                    <label for="newPassword" class="form-label"><b>New password</b></label>
+                    <input type="password" class="form-control" id="newPassword" aria-describedby="newPassword" placeholder="New password">
                     <div class="invalid-feedback">
                         This field is required
                     </div>
                 </div>
             </div>
             <div class="row pb-3">
-                <div class="col col-xl-12 d-flex justify-content-center">
-                    <button id="submit" type="submit" class="btn mainBtn mt-4 pt-2 me-3 ps-4 pe-4">
-                        <h4>Submit</h4>
-                    </button>
+                <div class="d-flex justify-content-start col col-xl-6 ps-3">
+                    <button type="button" class="btn mainBtnOutline mt-3 pt-2 me-3 ps-3 pe-3" style="border-radius: 25px"><h4>Delete Controller</h4></button>
+                </div>
+                <div class="d-flex justify-content-end col col-xl-6 pe-4">
+                    <button id="submit" type="submit" class="btn mainBtn mt-3 pt-2 me-3 ps-3 pe-3"><h4>Save Changes</h4></button>
                 </div>
             </div>
         </form>
     </div>
-    <!-- Register form end -->
+    <!-- Edit form end -->
 
     <!-- Footer start -->
     <footer class="text-center text-lg-start bg-light text-muted mt-auto">
@@ -118,9 +123,9 @@
                     <p class="mb-0">
                         You are now logged in as <a href="editAdminProfile.html" class="containerText1">Nikolay Vasilev</a>
                     </p>
-                    <p>
+                    <p class="pt-3">
                         <a href="mainAdmin.html" class="containerText1">Home</a> |
-                        <a href="index.html" class="containerText1">Log out</a>
+                        <a href="../index.html" class="containerText1">Log out</a>
                     </p>
                     <p class="mb-0 pt-3">
                         Copyright ©
@@ -130,7 +135,7 @@
                     </p>
                 </div>
                 <div class="col d-flex col-xl-2 justify-content-end">
-                    <img src="img/logo.png" alt="DIDEdu logo">
+                    <img src="../img/logo.png" alt="DIDEdu logo">
                 </div>
             </div>
         </div>
@@ -145,7 +150,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/b65a3b9f50.js" crossorigin="anonymous"></script>
-    <script src="js/goToTop.js" type="application/javascript"></script>
+    <script src="../js/goToTop.js" type="application/javascript"></script>
     <!-- Scripts end -->
 </body>
 
