@@ -1,0 +1,21 @@
+{
+  "name": "didedu",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "engines": {
+    "node": ">=16.9.0",
+    "npm": ">=7.21.1"
+  },
+  "dependencies": {
+    "cookie-parser": "*",
+    "debug": "*",
+    "express": "*",
+    "hbs": "*",
+    "http-errors": "*",
+    "mongoose": "*",
+    "morgan": "*"
+  }
+}

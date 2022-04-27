@@ -1,3 +1,1 @@
-
-rootProject.name = "DIDService"
-
+rootProject.name = "didService"

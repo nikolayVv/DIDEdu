@@ -1,0 +1,21 @@
+{
+  "strict": false,
+  "node": true,
+  "browser": true,
+  "esversion": 8,
+  "multistr": true,
+  "sub": true,
+  "globals": {
+    "module": false,
+    "$": false,
+    "formatPercentage": false,
+    "formatFlag": false,
+    "formatDateOnly": false,
+    "formatCurrency": false,
+    "formatNull": false,
+    "moment": false,
+    "indexArray": false,
+    "getData": false,
+    "round": false
+  }
+}
