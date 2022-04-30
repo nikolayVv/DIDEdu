@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
 
-const dbURI = "mongodb://localhost/DIDEdu";
+var dbURI = process.env.MONGODB_CLOUD_URI;
+
 mongoose.connect(dbURI);
 
 mongoose.connection.on("connected", () => {
-    console.log(`Mongoose connected on ${dbURI}.`);
+    console.log(`Mongoose connected.`);
 });
 
 mongoose.connection.on("error", (napaka) => {

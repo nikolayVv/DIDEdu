@@ -1,2 +1,187 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<!-- Introduction start -->
+<div class="about container-fluid pt-5 mt-5">
+    <div class="d-flex flex-column justify-content-center pt-4 mt-5 pb-5 mb-5">
+        {{{introduction}}}
+    </div>
+</div>
+<!-- Introduction end -->
+
+<!-- About start -->
+<div id="aboutSection" class="container-fluid section">
+    <div class="d-flex flex-column justify-content-center pb-4">
+        <h1 class="pt-4 text-center containerTitle1 text-uppercase">About</h1>
+        {{#each abouts as |about|}}
+            <div class="row pt-5">
+                {{#each about.contents as |content|}}
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <h4 class="fw-bold mb-4 containerText1">{{{content.header}}}</h4>
+                        <p>{{content.body}}</p>
+                    </div>
+                {{/each}}
+            </div>
+        {{/each}}
+    </div>
+</div>
+<!-- About end -->
+
+<!-- Tutorial start -->
+<div id="tutorialSection" class="tutorial container-fluid section">
+    <div class="d-flex flex-column justify-content-center pb-4 pt-3">
+        <h1 class="pt-4 pb-2 text-center containerTitle2 text-uppercase">How to</h1>
+        <div class="row mt-5">
+            {{{videos}}}
+        </div>
+    </div>
+</div>
+<!-- Tutorial end -->
+
+<!-- Register start -->
+<div id="registerSection" class="container-fluid section">
+    <div class="d-flex flex-column justify-content-center pb-5">
+        <h1 class="pt-4 text-center containerTitle1 text-uppercase">Get started</h1>
+    </div>
+    <div class="registerForm row container-fluid bg-light mb-5 pe-0 mt-3">
+        <div class="col col-lg-8 col-xl-8 col-xxl-9 pt-4">
+            <h2>{{{registerTitle}}}</h2>
+            <h4 class="containerText1 pt-1">{{registerSubTitle}}</h4>
+            <p class="registerText pt-4">{{{registerContent}}}</p>
+            <div class="row pt-4 pb-3">
+                <div class="col d-flex justify-content-end pt-5 containerText1">
+                    {{{registerBell}}}
+                </div>
+                <div class="col d-flex justify-content-center">
+                    {{{registerButton}}}
+                </div>
+                <div class="col d-flex justify-content-start pt-5 containerText1">
+                    {{{registerBell}}}
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4 col-xl-4 col-xxl-3 pe-0 d-sm-none d-none d-md-block d-flex justify-content-center">
+            <div class="register h-100">
+                <div class="registerBox w-100 pt-2">
+                    <h2>{{{registerPhone}}}</h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Register end -->
+
+<!-- FAQ start -->
+<div id="faqSection" class="container-fluid bg-light section">
+    <div class="d-flex flex-column justify-content-center pb-4">
+        <h1 class="pt-4 text-center containerTitle1 text-uppercase">Most asked</h1>
+        {{#each questions as |question|}}
+            <div class="row pt-5">
+            {{#each question.contents as |content|}}
+
+                    <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
+                        <h5 class="question pb-2">{{{content.title}}}</h5>
+                        <p>{{content.body}}</p>
+                    </div>
+            {{/each}}
+            </div>
+        {{/each}}
+    </div>
+</div>
+<!-- FAQ end -->
+
+<!-- Contact start -->
+<div id="contactSection" class="container-fluid section">
+    <div class="d-flex flex-column justify-content-center pb-4">
+        <h1 class="pt-4 text-center containerTitle1 text-uppercase">Contact us</h1>
+    </div>
+    <div class="row pt-3 pb-2">
+        <div class="col col-xs-12 col-sm-12 col-lg-6 col-xl-7">
+            <form action="#" class="pb-5 ps-3">
+                {{#each inputGroups as |inputGroup|}}
+                     <div class="input-group mb-3 row">
+                        {{{inputs inputGroup.inputs}}}
+                     </div>
+                {{/each}}
+                <button type="submit" class="btn mainBtn mt-3">Send</button>
+            </form>
+        </div>
+        <div class="col col-lg-4 col-xl-5 d-flex justify-content-center pt-5 mt-4 d-sm-none d-none d-md-none d-lg-block ps-5">
+            {{{sendIcon}}}
+        </div>
+    </div>
+</div>
+<!-- Contact end -->
+
+<!-- Footer start -->
+<footer class="text-center text-lg-start bg-light text-muted mt-auto pt-3">
+    <div class="container text-center text-md-start mt-3">
+        <div class="row">
+            <div class="col-md-3 col-lg-4 col-xl-4 mx-auto mb-4">
+                <h6 class="text-uppercase fw-bold mb-4">
+                    About
+                </h6>
+                <p class="mb-0">
+                    Here you can use rows and columns to organize your footer content. Lorem ipsum
+                    dolor sit amet, consectetur adipisicing elit.
+                </p>
+                <img src="../images/logo.png" alt="DIDEdu logo">
+            </div>
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                <h6 class="text-uppercase fw-bold mb-4">
+                    Useful links
+                </h6>
+                <p>
+                    <a href="#tutorialSection" class="text-reset">How to</a>
+                </p>
+                <p>
+                    <a href="#registerSection" class="text-reset">Get Started</a>
+                </p>
+
+                <p>
+                    <a href="#faqSection" class="text-reset">FAQ</a>
+                </p>
+                <p>
+                    <a href="#contactSection" class="text-reset">Contact us</a>
+                </p>
+            </div>
+            <!--About end-->
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
+                <h6 class="text-uppercase fw-bold mb-4">
+                    Contact
+                </h6>
+                <p><i class="fa fa-home me-3"></i> Ljubljana, SLO</p>
+                <p>
+                    <i class="fa fa-envelope me-3"></i>
+                    didedu-tech@gmail.com
+                </p>
+                <p><i class="fa fa-phone me-3"></i> + 01 234 567 88</p>
+            </div>
+            <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
+                <h6 class="text-uppercase fw-bold mb-4">
+                    Social medias
+                </h6>
+                <a href="" class="btn text-reset">
+                    <i class="fa fa-facebook"></i>
+                </a>
+                <a href="" class="btn text-reset">
+                    <i class="fa fa-twitter"></i>
+                </a>
+                <a href="" class="btn text-reset">
+                    <i class="fa fa-instagram"></i>
+                </a>
+                <a href="" class="btn text-reset">
+                    <i class="fa fa-linkedin"></i>
+                </a>
+                <a href="" class="btn text-reset">
+                    <i class="fa fa-github"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        Copyright ©
+        <script>
+            document.write(new Date().getFullYear());
+        </script>: All rights reserved | This Website is Developed by <b>Nikolay Vasilev</b>
+    </div>
+</footer>
+<!-- Footer end -->

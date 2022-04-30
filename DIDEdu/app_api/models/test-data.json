@@ -1,0 +1,155 @@
+[
+  {
+    "title": "University Of Ljubljana",
+    "abbreviation": "UL",
+    "country": "Slovenia",
+    "city": "Ljubljana",
+    "faculties": [
+        {
+            "title": "Academy of Fine Arts and Design",
+            "abbreviation": "AFAD",
+            "address": "Erjavčeva cesta 23, 1000",
+            "contactNumber": "+386 1 421 25 00",
+            "programs": [],
+            "controllers": [
+              {
+                  "name": "Marko",
+                  "surname": "Horvat",
+                  "email": "mh1441@gmail.com",
+                  "password": "MarkoH123",
+                  "publicKeys": []
+              },
+              {
+                  "name": "Ana",
+                  "surname": "Kovačič",
+                  "email": "ak5543@gmail.com",
+                  "password": "AnaK123",
+                  "publicKeys": []
+              }
+            ]
+        },
+        {
+            "title": "Academy of Music",
+            "abbreviation": "AM",
+            "address": "Stari trg 34, 1000",
+            "contactNumber": "+386 1 242 73 00"
+        },
+        {
+            "title": "Academy of Theatre, Radio, Film and Television",
+            "abbreviation": "ATRFT",
+            "address": "Trubarjeva cesta 3, 1000",
+            "contactNumber": "+386 1 251 04 12"
+        },
+        {
+            "title": "Biotechnical Faculty",
+            "abbreviation": "BF",
+            "address": "Jamnikarjeva ulica 101, 1000",
+            "contactNumber": "+386 1 320 30 00"
+        },
+        {
+            "title": "Faculty of Architecture",
+            "abbreviation": "FA",
+            "address": "Zoisova cesta 12, 1000",
+            "contactNumber": "+386 1 200 07 49"
+        },
+        {
+            "title": "Faculty of Chemistry and Chemical Technology",
+            "abbreviation": "FCCT",
+            "address": "Večna pot 113, 1000",
+            "contactNumber": "+386 1 479 80 00"
+        },
+        {
+            "title": "Faculty of Civil and Geodetic Engineering",
+            "abbreviation": "FCGE",
+            "address": "Jamova cesta 2, 1000",
+            "contactNumber": "+386 1 476 85 00"
+        },
+        {
+            "title": "Faculty of Computer and Information Science",
+            "abbreviation": "FCIC",
+            "address": "Večna pot 113, 1000",
+            "contactNumber": "+386 1 479 80 00"
+        },
+        {
+            "title": "Faculty of Education",
+            "abbreviation": "FE",
+            "address": "Kardeljeva ploščad 16, 1000",
+            "contactNumber": "+386 1 589 22 00"
+        },
+        {
+            "title": "Faculty of Electrical Engineering",
+            "abbreviation": "FEE",
+            "address": "Tržaška cesta 25, 1000",
+            "contactNumber": "+386 1 476 84 11"
+        },
+        {
+            "title": "Faculty of Health Sciences",
+            "abbreviation": "FHS",
+            "address": "Zdravstvena pot 5, 1000",
+            "contactNumber": "+386 1 300 11 11"
+        },
+        {
+            "title": "Faculty of Law",
+            "abbreviation": "FL",
+            "address": "Poljanski nasip 2, 1000",
+            "contactNumber": "+386 1 420 31 00"
+        },
+        {
+            "title": "Faculty of Mathematics and Physics",
+            "abbreviation": "FMP",
+            "address": "Jadranska ulica 19, 1000",
+            "contactNumber": "+386 1 476 65 15"
+        },
+        {
+            "title": "Faculty of Mechanical Engineering",
+            "abbreviation": "FME",
+            "address": "Aškerčeva cesta 6, 1000",
+            "contactNumber": "+386 1 477 12 00"
+        },
+        {
+            "title": "Faculty of Medicine",
+            "abbreviation": "FM",
+            "address": "Vrazov trg 2, 1000",
+            "contactNumber": "+386 1 543 77 00"
+        },
+        {
+            "title": "Faculty of Pharmacy",
+            "abbreviation": "FP",
+            "address": "Aškerčeva cesta 7, 1000",
+            "contactNumber": "+386 1 476 95 00"
+        },
+        {
+            "title": "Faculty of Sport",
+            "abbreviation": "FS",
+            "address": "Gortanova 22, 1000",
+            "contactNumber": "+386 1 520 77 00"
+        },
+        {
+            "title": "School of Economics and Business",
+            "abbreviation": "SEB",
+            "address": "Kardeljeva ploščad 17, 1000",
+            "contactNumber": "+386 1 589 24 00"
+        }
+    ],
+    "controller": {
+        "name": "Franc",
+        "surname": "Novak",
+        "email": "fn1234@gmail.com",
+        "password": "FrankN123",
+        "publicKeys": []
+    }
+  },
+  {
+    "title": "University Of Maribor",
+    "abbreviation": "UL",
+    "country": "Slovenia",
+    "city": "Maribor"
+  },
+  {
+    "title": "Harvard University",
+    "abbreviation": "UL",
+    "country": "USA",
+    "city": "Cambridge"
+  }
+]
+
