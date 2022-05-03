@@ -4,6 +4,8 @@ import { FooterService } from "../../services/footer.service";
 import { DideduDataService } from "../../services/didedu-data.service";
 import { University } from "../../classes/university";
 import { Faculty } from "../../classes/faculty";
+import {AuthenticationService} from "../../services/authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-university',
@@ -19,16 +21,25 @@ export class LoginUniversityComponent implements OnInit {
 
   constructor(
     private dideduDataService: DideduDataService,
+    private authenticationService: AuthenticationService,
+    private router: Router,
     private nav: NavbarService,
     private footer: FooterService
   ) { }
 
-  @Input() universities: University[] = [];
   public currFaculties: Faculty[] = [];
+  public universities: University[] = [];
+
+  private getUniversities(): void {
+    this.dideduDataService
+      .getAllUniversities()
+      .subscribe((foundUniversities) => (this.universities = foundUniversities))
+  }
 
   public trackFaculty (index: number, faculty: Faculty) {
     return faculty._id;
   }
+
 
   public check(event: Event, type: string) {
     let value = (event.target as HTMLInputElement).value;
@@ -66,12 +77,15 @@ export class LoginUniversityComponent implements OnInit {
             this.activeButton = false;
         }
     }
-    console.log(this.currUniversity);
-    console.log(this.currFaculties);
   }
 
   ngOnInit(): void {
-      this.nav.hide();
-      this.footer.hide();
+      if (this.authenticationService.isLoggedIn()) {
+          this.router.navigateByUrl("didedu");
+      } else {
+          this.nav.hide();
+          this.footer.hide();
+          this.getUniversities();
+      }
   }
 }

@@ -1,0 +1,67 @@
+<!-- Register form start -->
+<div class="container-fluid  d-flex justify-content-center pt-3 mt-3 mb-4 pb-3">
+  <div class="mt-xl-5">
+    <form (ngSubmit)="sendData()" class="pb-1 ps-3 mt-5 bg-light" style="box-shadow: 4px 4px 12px 4px gray" autocomplete="off">
+      <div class="input-group row">
+        <div class="col col-sm-12 col-xl-12">
+          <h1 class="containerText1 text-center pt-3 mb-3 w-100">Add Controller</h1>
+        </div>
+      </div>
+      <div *ngIf="formError" class="form-group pt-0 pe-3 pb-3 pt-0">
+        <div class="alert alert-danger p-2" role="alert">
+          <i class="fas fa-exclamation-triangle pe-2 pt-0"></i>{{ formError }}
+        </div>
+      </div>
+      <div class="input-group mb-3 row">
+        <div class="col col-xl-6">
+          <label for="firstName" class="form-label"><b>First name</b></label>
+          <input type="text" class="form-control" name="firstName" id="firstName" placeholder="First name" [(ngModel)]="controllerData.name">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+        <div class="col col-xl-6">
+          <label for="lastName" class="form-label"><b>Last name</b></label>
+          <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Last name" [(ngModel)]="controllerData.surname">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group mb-3 row">
+        <div class="col col-sm-12 col-xl-12">
+          <label for="email" class="form-label"><b>Email address</b></label>
+          <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Email address" [(ngModel)]="controllerData.email">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group mb-3 row">
+        <div class="col col-sm-12 col-xl-12">
+          <label for="password" class="form-label"><b>Password</b></label>
+          <input type="password" class="form-control" name="password" id="password" aria-describedby="password" placeholder="Set password" [(ngModel)]="controllerData.password">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group mb-3 row">
+        <div class="col col-xl-12">
+          <label for="confirmPassword" class="form-label"><b>Confirm password</b></label>
+          <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" aria-describedby="confirmPassword" placeholder="Confirm password" [(ngModel)]="controllerData.confirmPassword">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="d-flex justify-content-center col col-xl-12 pb-2">
+          <button id="submit" type="submit" class="btn mainBtn mt-3 pt-2 me-3"><h4>Register</h4></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Register form end -->
+

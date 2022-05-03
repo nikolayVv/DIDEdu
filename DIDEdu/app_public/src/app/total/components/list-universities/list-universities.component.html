@@ -29,23 +29,28 @@
   </div>
   <div class="row ps-3 pe-2">
     <ul class="scrollListBig list-group list-group-flush pe-0">
-      <li class="list-group-item pe-0">
+      <li class="list-group-item pe-0" *ngFor="let university of universities">
         <div class="row me-3 pt-2 pb-2">
           <div class="col col-xl-8 pt-2">
-            <h6 class="m-0">University Of Ljubljana <span class="containerText1">(Slovenia, Ljubljana)</span></h6>
+            <h6 class="m-0">{{university.title}}{{university.abbreviation ? ', ' + university.abbreviation : ''}} <span class="containerText1">({{university.country}}, {{university.city}}) </span>- {{university.faculties.length != 1 ? university.faculties.length + ' faculties' : '1 faculty'}}</h6>
           </div>
           <div class="col col-xl-2 ms-auto d-flex justify-content-end">
             <a href="#">
-              <button class="btn btn-sm btn-danger me-3">
+              <button  class="btn btn-sm btn-danger me-3">
                 Delete University
               </button>
             </a>
           </div>
           <div class="col col-xl-2 ms-auto d-flex justify-content-end">
-            <a href="editUni.html">
-              <button class="btn btn-sm btn-outline-danger">
-                Edit University
-              </button>
+            <a *ngIf="university.controller !== null" routerLink="/didedu/universities/{{university._id}}">
+                <button class="btn btn-sm btn-outline-danger">
+                  View University
+                </button>
+            </a>
+            <a *ngIf="university.controller === null" routerLink="/didedu/universities/{{university._id}}/addController">
+                <button  class="btn btn-sm btn-outline-danger">
+                  Add Controller
+                </button>
             </a>
           </div>
         </div>

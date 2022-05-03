@@ -16,14 +16,6 @@ export class LayoutComponent implements OnInit {
     private authenticationService: AuthenticationService,
   ) { }
 
-  public universities: University[] = [];
-
-  private getUniversities(): void {
-    this.dideduDataService
-      .getAllUniversities()
-      .subscribe((foundUniversities) => (this.universities = foundUniversities))
-  }
-
   public isLoggedIn(): boolean {
     return this.authenticationService.isLoggedIn();
   }
@@ -33,7 +25,7 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUniversities();
+
   }
 
 }

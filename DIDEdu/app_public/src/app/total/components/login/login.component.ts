@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
   }
 
   public sendData(): void {
-      console.log(this.loginData)
       this.formError = '';
       if (!this.loginData.email || !this.loginData.password) {
           this.formError = 'All data is required, please try again!';
@@ -40,7 +39,6 @@ export class LoginComponent implements OnInit {
       this.authenticationService
         .login(this.loginData)
         .pipe(catchError((error: HttpErrorResponse) => {
-
             this.formError = error.toString();
             return throwError(() => error);
         })).subscribe(() => {
@@ -56,8 +54,11 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-      this.nav.hide();
-      this.footer.hide();
+    if (this.authenticationService.isLoggedIn()) {
+        this.router.navigateByUrl("didedu");
+    } else {
+        this.nav.hide();
+        this.footer.hide();
+    }
   }
-
 }

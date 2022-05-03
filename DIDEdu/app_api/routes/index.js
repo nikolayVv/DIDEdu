@@ -16,7 +16,6 @@ const ctrlPrograms = require('../controllers/programs');
 const ctrlDegrees = require('../controllers/degrees');
 
 /* Authentication */
-router.post("/register", authentication, ctrlAuthentication.register);
 router.post("/login", ctrlAuthentication.login);
 
 
@@ -43,6 +42,8 @@ router
     .route("/universities")
     .get(ctrlUniversities.getAllUniversities)
     .post(ctrlUniversities.addUniversity);
+
+router.get("/universities/:idUniversity", ctrlUniversities.getUniversityById);
 
 /* Faculties */
 router.get("/faculties", ctrlFaculties.getAllFaculties)

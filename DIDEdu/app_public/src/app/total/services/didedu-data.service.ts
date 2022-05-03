@@ -32,18 +32,42 @@ export class DideduDataService {
         .pipe(retry(1), catchError(this.handleError));
   }
 
+  public addUniversity(data: any): Observable<any> {
+      const url: string = `${this.apiUrl}/universities`;
+      return this.http
+        .post(url, data)
+        .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getUniversityDetails(idUniversity: string): Observable<University> {
+      const url: string = `${this.apiUrl}/universities/${idUniversity}`;
+      const httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this.storage.getItem('didedu-token')}`,
+        }),
+      };
+      return this.http
+        .get<University>(url, httpOptions)
+        .pipe(retry(1), catchError(this.handleError));
+  }
+
   public login(user: User): Observable<ResultAuthentication> {
       return this.authentication('login', user);
   }
 
-  public register(user: User): Observable<ResultAuthentication> {
-      return this.authentication('register', user);
+  public registerUniversityController(idUniversity: string, user: User): Observable<ResultAuthentication> {
+      return this.authentication(`universities/${idUniversity}/controller`, user);
   }
 
   private authentication(urlAddress: string, user: User): Observable<ResultAuthentication> {
       const url: string = `${this.apiUrl}/${urlAddress}`;
+      const httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this.storage.getItem('didedu-token')}`,
+        }),
+      };
       return this.http
-        .post<ResultAuthentication>(url, user)
+        .post<ResultAuthentication>(url, user, httpOptions)
         .pipe(retry(1), catchError(this.handleError));
   }
 

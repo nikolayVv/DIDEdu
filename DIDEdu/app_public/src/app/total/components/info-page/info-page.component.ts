@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { NavbarService } from "../../services/navbar.service";
-import {FooterService} from "../../services/footer.service";
+import { FooterService } from "../../services/footer.service";
+import { AuthenticationService } from "../../services/authentication.service";
+import { Router } from "@angular/router";
+import { University } from "../../classes/university";
 
 @Component({
   selector: 'app-info-page',
@@ -9,8 +12,12 @@ import {FooterService} from "../../services/footer.service";
 })
 
 export class InfoPageComponent implements OnInit {
-
-  constructor(private nav: NavbarService, private footer: FooterService) { }
+  constructor(
+    private nav: NavbarService,
+    private footer: FooterService,
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) { }
 
   pageData = {
       title: "DIDEdu",
@@ -84,7 +91,11 @@ export class InfoPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.nav.show();
-    this.footer.show();
+    if (this.authenticationService.isLoggedIn()) {
+      this.router.navigateByUrl("didedu");
+    } else {
+      this.nav.show();
+      this.footer.show();
+    }
   }
 }

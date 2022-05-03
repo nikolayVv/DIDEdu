@@ -60,7 +60,7 @@ const getUniversityController = (req, res) => {
                 message: "The university doesn't have a controller yet."
             });
         }
-        res.status(200).json(controller);
+        res.status(200).json(university.controller);
     });
 };
 

@@ -21,14 +21,6 @@ export class AuthenticationService {
       )
   }
 
-  public register(user: User): Observable<ResultAuthentication> {
-      return this.dideduDataService.register(user).pipe(
-          tap((resultAuthentication: ResultAuthentication) => {
-              this.setToken(resultAuthentication['token']);
-          })
-      )
-  }
-
   public logout(): void {
       this.storage.removeItem('didedu-token');
   }

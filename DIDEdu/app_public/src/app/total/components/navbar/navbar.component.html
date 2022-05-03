@@ -26,13 +26,10 @@
       </ul>
       <ul *ngIf="isLoggedIn && user!!.role === 'admin'" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
         <li class="nav-item">
-          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerlink="didedu">Universities</a>
+          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Universities</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tutorialSection" routerlink="didedu">Add University</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link tutorialSection" routerlink="didedu">Add Faculty</a>
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/addUniversity' ? 'active' : ''}}" routerLink="didedu/addUniversity">Add University</a>
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
