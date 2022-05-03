@@ -1,0 +1,165 @@
+<!-- Introduction start -->
+<div class="about container-fluid pt-5 mt-5">
+  <div class="d-flex flex-column justify-content-center pt-4 mt-5 pb-5 mb-5">
+    <h1 class="text-light pt-4 text-center"><b>{{pageData.introduction.title}}</b></h1>
+    <p class="text-light pt-4 text-center" [innerHTML]="pageData.introduction.body | htmlNewLine"></p>
+    <div class="d-flex justify-content-center pt-4 pb-4">
+      <a class="text-danger" href="#registerSection">Join us now</a>
+    </div>
+  </div>
+</div>
+<!-- Introduction end -->
+
+<!-- About start -->
+<div id="aboutSection" class="container-fluid section">
+  <div class="d-flex flex-column justify-content-center pb-4">
+    <h1 class="pt-4 text-center containerTitle1 text-uppercase">About</h1>
+    <div class="row pt-5" *ngFor="let about of pageData.about">
+      <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4" *ngFor="let aboutData of about">
+        <h4 class="fw-bold mb-4 containerText1" [innerHTML]="aboutData.title"></h4>
+        <p>{{aboutData.body}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- About end -->
+
+<!-- Tutorial start -->
+<div id="tutorialSection" class="tutorial container-fluid section">
+  <div class="d-flex flex-column justify-content-center pb-4 pt-3">
+    <h1 class="pt-4 pb-2 text-center containerTitle2 text-uppercase">How to</h1>
+    <div class="row mt-5">
+      <div class="col col-12 col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-3 pr-3 ps-0 pb-4">
+        <ul id="tutorialList" class="ps-0 w-100">
+          <li class="pt-5 pb-2 active tut w-100"><a href="#tutorialSection">Login process</a></li> <br/>
+          <li class="pt-5 pb-2 tut w-100"><a href="#tutorialSection">Checking assignments</a></li> <br/>
+          <li class="pt-5 pb-2 tut w-100"><a href="#tutorialSection">Submitting assignments</a></li> <br/>
+          <li class="pt-5 pb-2 tut w-100"><a href="#tutorialSection">Creating a verification card</a></li> <br/>
+          <li class="pt-5 pb-2 tut w-100"><a href="#tutorialSection">Applying for exam with verification card</a></li>
+        </ul>
+      </div>
+      <div class="col col-12 col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-9 d-flex justify-content-center embed-responsive embed-responsive-21by9">
+        <iframe class="embed-responsive-item w-100"  src="https://www.youtube.com/embed/SSo_EIwHSd4" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Tutorial end -->
+
+<!-- Register start -->
+<div id="registerSection" class="container-fluid section">
+  <div class="d-flex flex-column justify-content-center pb-5">
+    <h1 class="pt-4 text-center containerTitle1 text-uppercase">Get started</h1>
+  </div>
+  <div class="registerForm row container-fluid bg-light mb-5 pe-0 mt-3">
+    <div class="col col-lg-8 col-xl-8 col-xxl-9 pt-4">
+      <h2><b class="containerText1 text-uppercase">Welcome!</b> Universities from all around the world are already part of DIDEdu! It's your turn!</h2>
+      <h4 class="containerText1 pt-1">{{pageData.register.title}}</h4>
+      <p class="registerText pt-4" [innerHTML]="pageData.register.body | htmlNewLine"></p>
+      <div class="row pt-4 pb-3">
+        <div class="col d-flex justify-content-end pt-5 containerText1">
+          <i class="fa-solid fa-2xl fa-bell fa-shake"></i>
+        </div>
+        <div class="col d-flex justify-content-center">
+          <a class="btn mt-4 pt-2 mainBtn " href="#contactSection">
+            <h5><b class="text-uppercase"> Register now </b></h5>
+          </a>
+        </div>
+        <div class="col d-flex justify-content-start pt-5 containerText1">
+          <i class="fa-solid fa-2xl fa-bell fa-shake"></i>
+        </div>
+      </div>
+    </div>
+    <div class="col col-lg-4 col-xl-4 col-xxl-3 pe-0 d-sm-none d-none d-md-block d-flex justify-content-center">
+      <div class="register h-100">
+        <div class="registerBox w-100 pt-2">
+          <h2><i class="fa fa-phone ps-2" aria-hidden="true"></i> {{pageData.register.phone}}</h2>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Register end -->
+
+<!-- FAQ start -->
+<div id="faqSection" class="container-fluid bg-light section">
+  <div class="d-flex flex-column justify-content-center pb-4">
+    <h1 class="pt-4 text-center containerTitle1 text-uppercase">Most asked</h1>
+    <div class="row pt-5" *ngFor="let question of pageData.questions">
+      <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4" *ngFor="let questionData of question">
+        <h5 class="question pb-2"><b><span class="containerText1"><i class="fa fa-question-circle" aria-hidden="true"></i>Q{{questionData.number}}:</span> {{questionData.title}}</b></h5>
+        <p>{{questionData.body}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FAQ end -->
+
+<!-- Contact start -->
+<div id="contactSection" class="container-fluid section">
+  <div class="d-flex flex-column justify-content-center pb-4">
+    <h1 class="pt-4 text-center containerTitle1 text-uppercase">Contact us</h1>
+  </div>
+  <div class="row pt-3 pb-2">
+    <div class="col col-xs-12 col-sm-12 col-lg-6 col-xl-7">
+      <form action="#" class="pb-5 ps-3">
+        <div class="input-group mb-3 row">
+          <div class="col col-xl-6">
+            <label for="firstName" class="form-label">First name</label>
+            <input type="email" class="form-control" id="firstName" placeholder="First name">
+            <div class="invalid-feedback">
+              This field is required
+            </div>
+          </div>
+          <div class="col col-xl-6">
+            <label for="lastName" class="form-label">Last name</label>
+            <input type="email" class="form-control" id="lastName" placeholder="Last name">
+            <div class="invalid-feedback">
+              This field is required
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3 row">
+          <div class="col col-sm-12 col-xl-12">
+            <label for="email" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email address">
+            <div class="invalid-feedback">
+              This field is required
+            </div>
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else</div>
+          </div>
+        </div>
+        <div class="input-group mb-3 row">
+          <div class="col col-xl-12">
+            <label for="type" class="form-label">Type of message</label>
+            <select class="form-select" id="type">
+              <option selected disabled>--Choose type of message--</option>
+              <option value="1">Register University</option>
+              <option value="2">Report a problem</option>
+              <option value="3">Ask a question</option>
+              <option value="4">Other</option>
+            </select>
+            <div class="invalid-feedback">
+              This field is required
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3 row">
+          <div class="col col-xl-12">
+            <label for="message" class="form-label">Message</label>
+            <textarea class="form-control" id="message" placeholder="Message..." rows="9"></textarea>
+            <div class="invalid-feedback">
+              This field is required
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn mainBtn mt-3">Send</button>
+      </form>
+    </div>
+    <div class="col col-lg-4 col-xl-5 d-flex justify-content-center pt-5 mt-4 d-sm-none d-none d-md-none d-lg-block ps-5">
+          <span class="display-6 pt-5 ps-5"><i class="containerText1 fa-solid fa-paper-plane fa-10x" style="--fa-rotate-angle: -30deg;"></i></span>
+    </div>
+  </div>
+</div>
+<!-- Contact end -->

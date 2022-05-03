@@ -15,6 +15,32 @@ const getAllUsers = (req, res) => {
     });
 };
 
+const addUser = (req, res) => {
+    if (!req.body.email || !req.body.name || !req.body.surname || !req.body.email || !req.body.password) {
+        return res.status(400).json({ message: "All the data is required." });
+    }
+    User.findOne({ email: req.body.email }).exec((error, user) => {
+        if (user) {
+            return res.status(400).json({message: `User with email '${req.body.email}' already exists.`});
+        } else if (error) {
+            return res.status(500).json(error);
+        }
+        const newUser = new User();
+        newUser.name = req.body.name;
+        newUser.surname = req.body.surname;
+        newUser.email = req.body.email;
+        newUser.title = req.body.title;
+        newUser.setPassword(req.body.password);
+
+        newUser.save((error) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
+            res.status(200).json(newUser);
+        });
+    });
+};
+
 const getUniversityController = (req, res) => {
     let idUniversity = req.params.idUniversity;
     if (!idUniversity) {
@@ -62,7 +88,7 @@ const addUniversityController = (req, res) => {
 }
 
 const createUniversityController = (req, res, university) => {
-    if (!req.body.email || !req.body.surname || !req.body.email || !req.body.password) {
+    if (!req.body.email || !req.body.name || !req.body.surname || !req.body.email || !req.body.password) {
         return res.status(400).json({ message: "All the data is required." });
     }
     User.findOne({ email: req.body.email }).exec((error, user) => {
@@ -207,6 +233,7 @@ const deleteUser = (req, res) => {
 
 module.exports = {
     getAllUsers,
+    addUser,
     getUserById,
     deleteUser,
     getUniversityController,

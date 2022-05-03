@@ -1,0 +1,99 @@
+<footer *ngIf="footer.visible" class="text-center text-lg-start bg-light text-muted mt-auto pt-3">
+  <div *ngIf="!isLoggedIn">
+    <div class="container text-center text-md-start mt-3">
+      <div class="row">
+        <div class="col-md-3 col-lg-4 col-xl-4 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">
+            About
+          </h6>
+          <p class="mb-0">
+            Here you can use rows and columns to organize your footer content. Lorem ipsum
+            dolor sit amet, consectetur adipisicing elit.
+          </p>
+          <img src="/assets/images/logo.png" alt="DIDEdu logo">
+        </div>
+        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">
+            Useful links
+          </h6>
+          <p>
+            <a href="#tutorialSection" class="text-reset">How to</a>
+          </p>
+          <p>
+            <a href="#registerSection" class="text-reset">Get Started</a>
+          </p>
+
+          <p>
+            <a href="#faqSection" class="text-reset">FAQ</a>
+          </p>
+          <p>
+            <a href="#contactSection" class="text-reset">Contact us</a>
+          </p>
+        </div>
+        <!--About end-->
+        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">
+            Contact
+          </h6>
+          <p><i class="fa fa-home me-3"></i> Ljubljana, SLO</p>
+          <p>
+            <i class="fa fa-envelope me-3"></i>
+            didedu-tech@gmail.com
+          </p>
+          <p><i class="fa fa-phone me-3"></i> + 01 234 567 88</p>
+        </div>
+        <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-4">
+          <h6 class="text-uppercase fw-bold mb-4">
+            Social medias
+          </h6>
+          <a href="" class="btn text-reset">
+            <i class="fa fa-facebook"></i>
+          </a>
+          <a href="" class="btn text-reset">
+            <i class="fa fa-twitter"></i>
+          </a>
+          <a href="" class="btn text-reset">
+            <i class="fa fa-instagram"></i>
+          </a>
+          <a href="" class="btn text-reset">
+            <i class="fa fa-linkedin"></i>
+          </a>
+          <a href="" class="btn text-reset">
+            <i class="fa fa-github"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+      Copyright ©
+      <script>
+        document.write(new Date().getFullYear());
+      </script>: All rights reserved | This Website is Developed by <b>Nikolay Vasilev</b>
+    </div>
+  </div>
+  <div *ngIf="isLoggedIn" class="container-fluid">
+    <div class="row">
+      <div class="col col-xl-10 pt-3">
+        <p class="mb-0">
+          You are now logged in as <a href="{{user!!.role === 'admin' ? 'didedu' : ''}}" class="containerText1">Nikolay Vasilev</a>
+        </p>
+        <p *ngIf="user!!.role === 'admin'" class="pt-3">
+          <a routerLink="didedu" class="containerText1">Home</a> |
+          <a routerLink="" class="containerText1">Log out</a>
+        </p>
+        <p class="mb-0 pt-3">
+          Copyright ©
+          <script>
+            document.write(new Date().getFullYear());
+          </script>: All rights reserved | This Website is Developed by <b>Nikolay Vasilev</b>
+        </p>
+      </div>
+      <div class="col d-flex col-xl-2 justify-content-end">
+        <img src="assets/images/logo.png" alt="DIDEdu logo">
+      </div>
+    </div>
+  </div>
+</footer>
+<footer *ngIf="!footer.visible" class="d-flex justify-content-end mt-auto">
+  <img src="/assets/images/logo.png" alt="DIDEdu logo" class="pe-3">
+</footer>

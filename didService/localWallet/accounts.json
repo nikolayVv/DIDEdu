@@ -26,16 +26,16 @@
       }
   },
   {
-      "firstName": "Mojca",
-      "lastName": "Zupan",
-      "email": "mz0013@gmail.com",
-      "role": "university",
+      "password": "12345",
       "publicKey": {
         "curve": "secp256k1",
         "data": {
           "array": [3,119,-53,66,-8,-25,-69,-93,29,-57,-80,-6,126,24,45,-108,-94,-3,0,-99,9,-50,70,64,42,-115,63,-50,-99,-120,-93,-126,19]
         },
         "unknownFields": {}
+      },
+      "privateKey": {
+
       }
   },
   {

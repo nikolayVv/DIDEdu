@@ -1,0 +1,18 @@
+<!-- Navigation start -->
+<header>
+  <app-navbar [isLoggedIn]="isLoggedIn()" [user]="getUser()"></app-navbar>
+</header>
+<!-- Navigation end -->
+
+<!-- Main page start -->
+<router-outlet (activate)="universities"></router-outlet>
+<!-- Main page end -->
+
+<!-- Footer start -->
+<app-footer [isLoggedIn]="isLoggedIn()" [user]="getUser()"></app-footer>
+<!-- Footer end -->
+
+
+
+
+

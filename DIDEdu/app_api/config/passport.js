@@ -15,10 +15,7 @@ passport.use(
                 (error, user) => {
                     if (error) return cbFinished(error);
                     if (!user || !user.checkPassword(password)) {
-                        console.log("inside")
-                        return cbFinished(null, false, {
-                            message: "Wrong credentials.",
-                        });
+                        return cbFinished(null, false, "Wrong credentials.");
                     }
                     return cbFinished(null, user);
                 }

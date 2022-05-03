@@ -10,7 +10,6 @@ const passport = require('passport');
 require("./app_api/models/db");
 require("./app_api/config/passport");
 
-const indexRouter = require('./app_server/routes/index');
 const indexApi = require('./app_api/routes/index');
 
 const app = express();
@@ -18,8 +17,6 @@ const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, "app_server", "views"));
 app.set('view engine', 'hbs');
-
-require("./app_server/views/helpers/hbsh.js");
 
 app.disable("x-powered-by");
 
@@ -33,7 +30,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'app_public', 'build')));
 app.use(passport.initialize());
 
 app.use("/api", (req, res, next) => {
@@ -46,9 +43,10 @@ app.use("/api", (req, res, next) => {
   next();
 });
 
-
-app.use('/', indexRouter);
 app.use("/api", indexApi);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "app_public", "build", "index.html"));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

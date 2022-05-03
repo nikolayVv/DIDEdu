@@ -1,0 +1,47 @@
+<!-- Information start -->
+<div class="container-fluid d-flex justify-content-center pt-1">
+  <div class="row">
+    <div class="col col-12 col-xl-12">
+      <h2 class="display-1 text-center mb-0">
+        Welcome to <span class="containerText1" style="text-shadow: 1px 1px black;">DIDEdu</span>!
+      </h2>
+      <h4 class="text-center pt-3 display-6">{{university!!.title}} - {{faculty!!.title}}</h4>
+    </div>
+  </div>
+</div>
+<!-- Information end -->
+
+<!-- Login form start -->
+<div class="container-fluid d-flex justify-content-center pt-5">
+  <form (ngSubmit)="sendData()" class="pb-1 ps-3 w-50" autocomplete="off">
+    <div *ngIf="formError" class="form-group">
+      <div class="alert alert-danger p-2 mt-4" role="alert">
+        <i class="fas fa-exclamation-triangle pe-2"></i>{{ formError }}
+      </div>
+    </div>
+    <div class="input-group mb-4 row">
+      <div class="col col-sm-12 col-xl-12">
+        <label for="email" class="form-label"><b>Email address</b></label>
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Email address" [(ngModel)]="loginData.email">
+      </div>
+    </div>
+    <div class="input-group mb-3 row">
+      <div class="col col-sm-12 col-xl-12">
+        <label for="password" class="form-label"><b>Password</b></label>
+        <input type="password" class="form-control" id="password" name="password" aria-describedby="password" placeholder="Password" [(ngModel)]="loginData.password">
+      </div>
+    </div>
+    <div class="row pt-4">
+      <div class="d-flex justify-content-center col col-xl-12">
+          <button id="submit" class="btn mainBtn pt-2 me-3"><h4>Login</h4></button>
+      </div>
+    </div>
+
+    <div class="row pt-3 pb-4">
+      <div class="d-flex justify-content-center col col-xl-12">
+        <a class="btn mainBtnOutline pt-2 me-3" style="border-radius: 25px"><h4>Login with DID</h4></a>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Login form end -->

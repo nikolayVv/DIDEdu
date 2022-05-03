@@ -1,0 +1,43 @@
+<!-- University icon start -->
+<div *ngIf="!dataChosen" class="container-fluid d-flex justify-content-center pt-4">
+  <h2 class="containerText1 display-1" style="text-shadow: 2px 2px black;"><i class="fa fa-3x fa-university" aria-hidden="true"></i></h2>
+</div>
+<!-- University icon end -->
+
+<!-- University form start -->
+<div *ngIf="!dataChosen" class="container-fluid d-flex justify-content-center pt-2 pb-3">
+  <form class="pb-3 ps-3 w-75">
+    <div class="input-group mb-3 row">
+      <div class="col col-xl-12">
+        <label for="universities" class="form-label"><b>Name of university</b></label>
+        <select class="form-select" id="universities" (change)="check($event, 'list')">
+          <option selected disabled>-- Choose university --</option>
+          <option *ngFor="let university of universities">{{university.title}}</option>
+        </select>
+        <div class="invalid-feedback">
+          This field is required
+        </div>
+      </div>
+    </div>
+    <div id="list" class="input-group mb-3 row {{visibleFaculties ? '' : 'd-none'}}">
+      <div class="col col-xl-12">
+        <label for="faculties" class="form-label"><b>Name of faculty</b></label>
+        <select class="form-select" id="faculties" (change)="check($event, 'button')">
+          <option selected disabled>-- Choose faculty --</option>
+          <option *ngFor="let faculty of currFaculties; trackBy: trackFaculty">{{faculty.title}}</option>
+        </select>
+        <div class="invalid-feedback">
+          This field is required
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="d-flex justify-content-center col col-xl-12">
+        <button id="submit" class="btn mainBtn mt-5 pt-2 me-3 {{activeButton ? '' : 'disabled'}}" (click)="dataChosen = true" ><h4>Submit</h4></button>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- University form end -->
+
+<app-login *ngIf="dataChosen" [university]="currUniversity!!" [faculty]="currFaculty!!"></app-login>

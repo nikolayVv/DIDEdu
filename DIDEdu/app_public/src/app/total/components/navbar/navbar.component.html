@@ -1,0 +1,49 @@
+<nav *ngIf="nav.visible" class="navbar fixed-top navbar-expand-xl navbar-light bg-light p-0">
+  <div class="container-fluid p-0">
+    <a class="navbar-brand ms-3" routerLink="{{isLoggedIn ? 'didedu' : ''}}">DIDEdu</a>
+    <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul *ngIf="!isLoggedIn" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+        <li class="nav-item">
+          <a class="nav-link aboutSection" aria-current="page" href="#aboutSection">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection" href="#tutorialSection">How to</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link registerSection" href="#registerSection">Get Started</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link faqSection" href="#faqSection" routerlink="" >FAQ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link contactSection" href="#contactSection" routerlink="" >Contact us</a>
+        </li>
+      </ul>
+      <ul *ngIf="isLoggedIn && user!!.role === 'admin'" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+        <li class="nav-item">
+          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerlink="didedu">Universities</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection" routerlink="didedu">Add University</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection" routerlink="didedu">Add Faculty</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ms-auto">
+        <a *ngIf="!isLoggedIn" routerLink="login" class="btn mainBtn pt-3 pb-3 pe-4 ps-4 mt-1 me-3 w-100">
+          Log In
+        </a>
+        <a *ngIf="isLoggedIn" routerLink="" class="btn mainBtnOutline mt-1 pt-2 pb-2 ps-3 pe-3 w-100 me-3" (click)="logout()">
+          Log Out
+        </a>
+      </ul>
+    </div>
+  </div>
+</nav>
+<a *ngIf="!nav.visible" routerLink="" class="backBtn ps-3"><i class="containerText1  fa-solid fa-6x fa-angle-left"></i></a>

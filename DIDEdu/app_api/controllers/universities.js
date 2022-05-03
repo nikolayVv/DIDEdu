@@ -9,7 +9,7 @@ const getAllUniversities = (req, res) => {
         } else if (universities && universities.length === 0) {
             return res.status(404).json({ message: "There are no universities in the database yet." });
         }
-        res.status(200).json({ count: universities.length, universities: universities });
+        res.status(200).json(universities);
     });
 };
 

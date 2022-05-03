@@ -56,9 +56,9 @@ userSchema.methods.generateJwt = function () {
     //TODO add public key to the token or maybe DID?
     return jwt.sign(
         {
-            _id: this._id,
             email: this.email,
             name: this.name + " " + this.surname,
+            role: this.title,
             exp: parseInt(validUntil.getTime() / 1000)
         },
         process.env.JWT_PASSWORD

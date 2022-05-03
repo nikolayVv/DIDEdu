@@ -21,7 +21,10 @@ router.post("/login", ctrlAuthentication.login);
 
 
 /* Users */
-router.get("/users", ctrlUsers.getAllUsers);
+router
+    .route('/users')
+    .get(ctrlUsers.getAllUsers)
+    .post(ctrlUsers.addUser);
 router
     .route('/users/:idUser')
     .get(ctrlUsers.getUserById)
