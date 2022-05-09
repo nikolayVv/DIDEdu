@@ -1,18 +1,16 @@
 package com.did.service.didService.controllers
 
-import com.did.service.didService.models.Identity
-import com.did.service.didService.models.User
 import com.did.service.didService.repositories.IdentityRepository
 import com.did.service.didService.requests.DidGenerateRequest
 import com.did.service.didService.responses.DidGenerateResponse
 import io.iohk.atala.prism.api.KeyGenerator
+import io.iohk.atala.prism.api.models.AtalaOperationId
+import io.iohk.atala.prism.api.models.AtalaOperationStatus
 import io.iohk.atala.prism.common.PrismSdkInternal
-import io.iohk.atala.prism.crypto.keys.ECPublicKey
-import io.iohk.atala.prism.crypto.keys.toModel
-import io.iohk.atala.prism.identity.PrismDid
-import io.iohk.atala.prism.protos.CompressedECKeyData
-import io.iohk.atala.prism.protos.DID
-import org.springframework.beans.factory.annotation.Autowired
+import io.iohk.atala.prism.crypto.Sha256Digest
+import io.iohk.atala.prism.crypto.derivation.KeyDerivation
+import io.iohk.atala.prism.crypto.derivation.MnemonicCode
+import io.iohk.atala.prism.identity.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
@@ -25,45 +23,77 @@ class IdentityController {
 
     val identityRepository: IdentityRepository = IdentityRepository()
 
+    @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca"])
     @PostMapping("/register")
     @PrismSdkInternal
     suspend fun generateDID(
         @RequestBody @Valid request: DidGenerateRequest
     ): DidGenerateResponse {
-        // TODO Check if DID already exists
-
-        val publicKeyCompressed = try {
-            CompressedECKeyData(request.publicKey.curve, request.publicKey.data, request.publicKey.unknownFields)
+        val seed = try {
+            KeyDerivation.binarySeed(MnemonicCode(request.mnemonic), request.username + request.passphrase)
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid public key.", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid mnemonic.", e)
         }
-        val publicKey = publicKeyCompressed.toModel()
+        val masterKeyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, MasterKeyUsage, 0)
+        val issuingKeyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, IssuingKeyUsage, 0)
+        val revocationKeyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, RevocationKeyUsage, 0)
 
         val unpublishedDID = try {
-            PrismDid.buildLongFormFromMasterPublicKey(publicKey)
+            PrismDid.buildExperimentalLongFormFromKeys(
+                masterKeyPair.publicKey,
+                issuingKeyPair.publicKey,
+                revocationKeyPair.publicKey
+            )
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't create DID from Public key.", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't create DID from Public keys.", e)
         }
 
-        // TODO check if already published and if not publish it
-//        val publishedDid = try {
-//            //identityRepository.addToBlockchain(unpublishedDID, request.KeyPair.privateKey)
-//        } catch (e: Exception) {
-//            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't add the DID on the blockchain.", e)
-//        }
+        var message = ""
+        var operationId: AtalaOperationId? = null
+        if (identityRepository.readFromBlockchain(unpublishedDID.asCanonical().did) === null) {
+            operationId = try {
+                identityRepository.addToBlockchain(unpublishedDID, masterKeyPair.privateKey, issuingKeyPair.privateKey, revocationKeyPair.privateKey)
+            } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't add the DID on the blockchain.", e)
+            }
+        } else {
+            message = "Did is already on the blockchain"
+        }
 
-        // TODO check if it is published
-
-        // TODO Create the credential and issue it
-
+        var id = ""
+        if (operationId !== null) {
+            id = operationId.digest.hexValue
+        }
 
         return DidGenerateResponse(
-            firstName = request.firstName,
-            lastName = request.lastName,
-            email = request.email,
-            role = request.role,
-            did = unpublishedDID.asCanonical().did.toString()
+            did = unpublishedDID.asCanonical().did.toString(),
+            message = message,
+            operationId = id
         )
+    }
+
+    @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca"])
+    @GetMapping("/{operationId}/status")
+    @PrismSdkInternal
+    suspend fun checkDidOperationStatus(@PathVariable(value="operationId") operationId: String): String {
+        val digest = Sha256Digest.fromHex(operationId);
+        val status = try {
+            identityRepository.checkStatus(AtalaOperationId(digest));
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't check the status of the operation.", e)
+        }
+        var statusMessage = ""
+
+        when(status) {
+            AtalaOperationStatus.CONFIRMED_AND_APPLIED -> statusMessage = "Success"
+            AtalaOperationStatus.AWAIT_CONFIRMATION -> statusMessage = "Confirming"
+            AtalaOperationStatus.PENDING_SUBMISSION -> statusMessage = "Pending"
+            AtalaOperationStatus.CONFIRMED_AND_REJECTED -> statusMessage = "Rejected"
+            AtalaOperationStatus.UNKNOWN_OPERATION -> statusMessage = "Unknown operation"
+            else -> statusMessage = "Error"
+        }
+
+        return statusMessage
     }
 
     // TODO

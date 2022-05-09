@@ -36,7 +36,7 @@ const addUniversity = (req, res) => {
     if (!req.body.title || !req.body.country || !req.body.city) {
         return res.status(400).json({ message: "Title is required." });
     }
-    University.findOne({ title: /^req.body.title$/i }).exec((error, university) => {
+    University.findOne({ title: req.body.title }).exec((error, university) => {
         if (university) {
             return res.status(400).json({ message: `University with name '${req.body.title}' already exists.` });
         } else if (error) {

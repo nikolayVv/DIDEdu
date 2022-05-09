@@ -1,93 +1,27 @@
 [
   {
-      "firstName": "Franc",
-      "lastName": "Kovač",
-      "email": "fk1244@gmail.com",
-      "role": "student",
-      "publicKey": {
-          "curve": "secp256k1",
-          "data": {
-              "array": [2,90,-26,127,68,65,-120,-117,-39,12,-121,-118,55,86,-123,-42,59,53,78,-114,110,7,119,-113,-116,-39,-1,126,25,92,27,87,-2]
-          },
-          "unknownFields": {}
-      }
-  },
-  {
-      "firstName": "Marija",
-      "lastName": "Vidmar",
-      "email": "mv8849@gmail.com",
-      "role": "student",
-      "publicKey": {
-        "curve": "secp256k1",
-        "data": {
-          "array": [3,31,77,-36,-61,89,40,38,-78,-88,-113,-8,-46,100,83,15,26,13,97,112,-37,85,-15,-46,96,-31,92,89,-65,111,26,-74,-96]
-        },
-        "unknownFields": {}
-      }
-  },
-  {
-      "password": "12345",
-      "publicKey": {
-        "curve": "secp256k1",
-        "data": {
-          "array": [3,119,-53,66,-8,-25,-69,-93,29,-57,-80,-6,126,24,45,-108,-94,-3,0,-99,9,-50,70,64,42,-115,63,-50,-99,-120,-93,-126,19]
-        },
-        "unknownFields": {}
+    "name": "Student1",
+    "accounts": [
+      {
+        "email": "fk1244@gmail.com",
+        "mnemonic": ["zoo", "parent", "gym", "remind", "lake", "crush", "toast", "dry", "grit", "chapter", "century", "true", "task", "shield", "supreme", "gauge", "local", "holiday", "always", "clump", "ridge", "best", "unit", "real"],
+        "passphrase": "Programming1 DID"
       },
-      "privateKey": {
-
+      {
+        "email": "fk1244@gmail.com",
+        "mnemonic": ["zoo", "parent", "gym", "remind", "lake", "crush", "toast", "dry", "grit", "chapter", "century", "true", "task", "shield", "supreme", "gauge", "local", "holiday", "always", "clump", "ridge", "best", "unit", "real"],
+        "passphrase": "Programming2 DID"
       }
+    ]
   },
   {
-      "firstName": "Matej",
-      "lastName": "Oblak",
-      "email": "mo0123@gmail.com",
-      "role": "professor",
-      "publicKey": {
-        "curve": "secp256k1",
-        "data": {
-          "array": [3,-63,98,67,-51,-10,118,-101,-52,43,87,25,-104,-127,-78,28,-29,125,-20,-120,-94,125,-17,-49,-57,-111,29,-65,101,-95,110,-35,-93]
-        },
-        "unknownFields": {}
+    "name": "Student1",
+    "accounts": [
+      {
+        "email": "mv8849@gmail.com",
+        "mnemonic": ["miss", "baby", "step", "skirt", "viable", "dragon", "fork", "wool", "win", "tooth", "intact", "clever", "pottery", "guilt", "give", "citizen", "gym", "rally", "ethics", "jeans", "flag", "pave", "sing", "unknown"]
+        "passphrase": "Authentication"
       }
-  },
-  {
-      "firstName": "Tomaž",
-      "lastName": "Petrič",
-      "email": "tp3333@gmail.com",
-      "role": "student",
-      "publicKey": {
-        "curve": "secp256k1",
-        "data": {
-          "array": [2,-98,-106,8,-28,-90,104,108,99,-117,-71,12,-111,31,82,-73,35,86,-83,-126,-9,-119,-45,14,-58,-36,-36,9,70,-5,-100,-54,106]
-        },
-        "unknownFields": {}
-      }
-  },
-  {
-      "firstName": "Tjaša",
-      "lastName": "Rupnik",
-      "email": "tr1234@gmail.com",
-      "role": "university",
-      "publicKey": {
-        "curve": "secp256k1",
-        "data": {
-          "array": [2,-34,-51,-100,44,104,-72,91,-15,-25,-121,-20,111,-5,77,48,-89,53,31,-68,70,-69,121,59,-3,-48,-68,-112,13,-29,-53,59,100]
-        },
-        "unknownFields": {}
-      }
-  },
-  {
-      "firstName": "Nikolay",
-      "lastName": "Vasilev",
-      "email": "admin-edudid@gmail.com",
-      "role": "admin",
-      "publicKey": {
-        "curve": "secp256k1",
-        "data": {
-          "array": [2,55,45,-33,37,-40,55,-37,-9,-17,3,110,47,66,-104,90,-121,-91,-4,-99,8,27,48,62,-17,-39,31,80,-18,28,98,117,-96]
-        },
-        "unknownFields": {}
-      }
+    ]
   }
 ]

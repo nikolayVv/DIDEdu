@@ -1,0 +1,11 @@
+<div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" class="form-control" id="username" name="username" ng-model="formData.username">
+    <br />
+    <label for="password">Password</label>
+    <input type="password" class="form-control" id="password" name="password" ng-model="formData.password">
+</div>
+
+<a ng-click="register(formData)" class="btn btn-block btn-info">Register</a>
+<br />
+<a ui-sref="login">Login</a>

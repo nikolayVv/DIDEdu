@@ -1,0 +1,16 @@
+<div class="row pt-3">
+    <div class="card  w-100">
+        <input type="text" id="didTitle" class="form-control" name="didTitle" placeholder="DID title" ng-model="formData.didTitle"/>
+        <button ng-click="generateDID(formData)" type="button" class="btn btn-primary">
+            Generate DID
+        </button>
+    </div>
+    <div ng-repeat="did in didList" class="card w-100">
+        <div class="card-body">
+            <h4 class="card-title">{{did.title}}</h4>
+            <h5 class="card-text">{{did.did}}</h5>
+            <p class="card-text">{{did.status}}</p>
+        </div>
+
+    </div>
+</div>

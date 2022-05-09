@@ -1,78 +1,96 @@
-import com.did.service.didService.requests.PublicKey
-import com.google.gson.Gson
+import com.did.service.didService.repositories.nodeAuthApi
 import io.iohk.atala.prism.api.KeyGenerator
+import io.iohk.atala.prism.api.models.AtalaOperationId
+import io.iohk.atala.prism.api.node.NodePayloadGenerator
 import io.iohk.atala.prism.common.PrismSdkInternal
+import io.iohk.atala.prism.crypto.Sha256Digest
 import io.iohk.atala.prism.crypto.derivation.KeyDerivation
-import io.iohk.atala.prism.crypto.keys.*
+import io.iohk.atala.prism.identity.IssuingKeyUsage
 import io.iohk.atala.prism.identity.MasterKeyUsage
-import io.iohk.atala.prism.protos.CompressedECKeyData
-import io.iohk.atala.prism.protos.KeyUsage
-import org.h2.value.Value.JSON
-import pbandk.encodeToByteArray
-import pbandk.json.encodeToJsonString
-import java.security.KeyFactory
-import java.security.KeyPairGenerator
-import java.security.PrivateKey
-import java.security.spec.ECGenParameterSpec
-import java.security.spec.ECParameterSpec
-import java.security.spec.EllipticCurve
-import java.security.spec.X509EncodedKeySpec
-import java.util.Base64
+import io.iohk.atala.prism.identity.PrismDid
+import io.iohk.atala.prism.identity.RevocationKeyUsage
+import kotlinx.coroutines.runBlocking
+import reactor.kotlin.core.publisher.toMono
 
 @OptIn(PrismSdkInternal::class)
 fun main(args: Array<String>) {
-    val seed = KeyDerivation.binarySeed(KeyDerivation.randomMnemonicCode(), "passphrase")
+    val mnemonic = KeyDerivation.randomMnemonicCode()
+    val seed = KeyDerivation.binarySeed(mnemonic, "passphrase")
     val keyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, MasterKeyUsage, 0)
-    println(keyPair.publicKey)
-//    val key = "MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEKAsFhBG7oJV7QDV7kh4PEEiBI6FghVPzh0Jiuc0Q/L4ZXRjIh8ZQl6EGUjBEgxz6h8dXe50e+DTotQnSiqs29A=="
-//    println(key)
-//    val encoded = Base64.getDecoder().decode(key)
-//    val kf = KeyFactory.getInstance("EC")
-//    val spec = X509EncodedKeySpec(encoded)
-//    val publicKey = kf.generatePublic(spec) as ECPublicKey
 
-    val compressedData = keyPair.publicKey.toProto()
-    val compressedDataPrivate = keyPair.privateKey.getD()
+    //println(mnemonic.words.toString())
 
-    println(keyPair.privateKey.getD())
-    //println(compressedData)
-    //println()
-    val curve = compressedData.curve
-    val data = compressedData.data
-    val unknownFields = compressedData.unknownFields
-    val newCompressed = CompressedECKeyData(curve, data, unknownFields)
-    val gson = Gson()
-    val jsonData = gson.toJson(PublicKey(
-        compressedData.curve,
-        compressedData.data,
-        compressedData.unknownFields
-    ))
-    //println(jsonData)
-    val keys = gson.toJson(keyPair)
-    val private = gson.toJson(keyPair.privateKey.getD())
-    println(private)
-    //PrivateKey()
-    println(keys)
-    //println(keys)
-    //println(CompressedECKeyData(keys.curve, keys.data, keys.unknownFields))
-//    val kty = "EC".
-//    val d = "X4_l-QVlxgVF7txb_o_0noaElfkXClZZXb8KPRVxwk8"
-//    val crv = "secp256k1"
+
+    val masterKeyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, MasterKeyUsage, 0)
+    val issuingKeyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, IssuingKeyUsage, 0)
+    val revocationKeyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, RevocationKeyUsage, 0)
+
+    val longDID = PrismDid.buildExperimentalLongFormFromKeys(
+            masterKeyPair.publicKey,
+            issuingKeyPair.publicKey,
+            revocationKeyPair.publicKey
+        )
+
+    val didCanonical = longDID.asCanonical().did
+    val didLongForm = longDID.did
+
+    var nodePayloadGenerator = NodePayloadGenerator(
+        longDID,
+        mapOf(
+            PrismDid.DEFAULT_MASTER_KEY_ID to masterKeyPair.privateKey,
+            PrismDid.DEFAULT_ISSUING_KEY_ID to issuingKeyPair.privateKey,
+            PrismDid.DEFAULT_REVOCATION_KEY_ID to revocationKeyPair.privateKey
+        )
+    )
+    val createDidInfo = nodePayloadGenerator.createDid()
+    val createDidOperationId = runBlocking {
+        nodeAuthApi.createDid(
+            createDidInfo.payload,
+            longDID,
+            PrismDid.DEFAULT_MASTER_KEY_ID)
+    }
+    println(createDidOperationId.hexValue())
+    val hash = createDidOperationId.digest;
+    println(hash.hexValue)
+    val hex = hash.hexValue
+    val newDigest = Sha256Digest.fromHex(hex)
+    println(newDigest);
+    println(AtalaOperationId(newDigest).hexValue());
+
+
+//    //PUBLIC
+//    println("------- PUBLIC KEY START -------")
+//    println("KEY1: " + keyPair.publicKey.getHexEncoded())
+//    val compressedDataPublic = keyPair.publicKey.toProto()
+//    val curve = compressedDataPublic.curve
+//    val data = compressedDataPublic.data
+//    val unknownFields = compressedDataPublic.unknownFields
+//    println("KEY1CURVE: " + curve)
+//    println("KEY1DATA: " + data)
+//    println("KEY1UF: " + unknownFields)
+//    val newCompessedDataPublic = CompressedECKeyData(curve, data, unknownFields)
+//    val newPublicKey = newCompessedDataPublic.toModel();
+//    println("KEY2: " + newPublicKey.getHexEncoded())
+//    println("------- PUBLIC KEY END -------")
 //
-//    val seed = KeyDerivation.binarySeed(KeyDerivation.randomMnemonicCode(), "passphrase")
-//    val keyPair = KeyGenerator.deriveKeyFromFullPath(seed,0, MasterKeyUsage, 0)
-//    println(keyPair.publicKey.getCurvePoint())
-//    val points = keyPair.publicKey.getCurvePoint()
-//    val x = points.x
-//    val y = points.y
-//    println(keyPair.privateKey.getD())
 //
-//    println(Base64.getEncoder().encodeToString(keyPair.publicKey.getEncoded()))
-//    println(ECPoint(x, y))
+//    //PRIVATE
+//    println("------- PRIVATE KEY START -------")
+//    println("KEY1: " + keyPair.privateKey.getHexEncoded())
+//    // ByteArray
+//    val compressedDataPrivate = keyPair.privateKey.getD().toString()
+//    println("KEY1D: " + compressedDataPrivate)
 //
-//    val kgp = KeyPairGenerator.getInstance("EC")
-//    kgp.initialize(ECGenParameterSpec("secp256r1"))
-//    val kp = kgp.generateKeyPair()
-//    val publicKey = kp.public
-//    println(publicKey.encoded)
+//
+//    val params = AlgorithmParameters.getInstance("EC")
+//    params.init(ECGenParameterSpec("secp256k1"))
+//    val ecParameterSpec = params.getParameterSpec(ECParameterSpec::class.java)
+//    val privateKeySpec = ECPrivateKeySpec(compressedDataPrivate.toBigInteger(), ecParameterSpec)
+//    val keyFactory = KeyFactory.getInstance("EC")
+//    val newPrivateKey = keyFactory.generatePrivate(privateKeySpec) as PrivateKey
+//
+//    val newPrivateKeyPRISM = ECPrivateKey(newPrivateKey)
+//
+//    println("KEY1New: " + newPrivateKeyPRISM.getD())
+//    println("------- PRIVATE KEY END -------")
 }

@@ -6,12 +6,6 @@ const dataSchema = new mongoose.Schema({
     array: { type: [Number], required: true }
 });
 
-const publicKeySchema = new mongoose.Schema({
-    curve: { type: String, required: true },
-    data: { type: dataSchema, required: true },
-    unknownFields: { type: Object, required: true }
-});
-
 const obligationsGroupSchema = new mongoose.Schema({
     title: { type: String, required: true },
     obligations: { type: [String], default: [] }
@@ -35,7 +29,7 @@ const userSchema = new mongoose.Schema({
     hashValue: { type: String, required: true },
     randomValue: {type: String, required: true },
     registrationDate: { type: Date, default: Date.now },
-    publicKeys: { type: [publicKeySchema], default: [] },
+    dids: { type: [String], default: [] },
     courses: { type: [courseSchema], default: [] },
 });
 

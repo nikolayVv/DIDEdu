@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Title of the document</title>
+
+        <link href="../css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../css/popup.css" rel="stylesheet" />
+        <link href="../css/fontawesome.min.css" rel="stylesheet" />
+    </head>
+
+    <body ng-app="digitalwallet">
+        <div ng-controller="PopupCtrl" class="container">
+            <div class="pt-3 row text-center">
+                <div class="col-sm-6">
+                    <div id="form-container">
+                        <div class="page-header">
+                            Digital Wallet
+                        </div>
+                        <div ui-view></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../js/lib/angular.min.js"></script>
+        <script src="../js/lib/angular-ui-router.min.js"></script>
+        <script src="../js/app/popup.js"></script>
+    </body>
+</html>
