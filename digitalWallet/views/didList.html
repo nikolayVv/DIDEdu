@@ -5,12 +5,20 @@
             Generate DID
         </button>
     </div>
-    <div ng-repeat="did in didList" class="card w-100">
-        <div class="card-body">
+    <details ng-repeat="did in didList" class="card w-100">
+        <summary class="card-body">
             <h4 class="card-title">{{did.title}}</h4>
             <h5 class="card-text">{{did.did}}</h5>
-            <p class="card-text">{{did.status}}</p>
+            <p class="card-text">{{did.status === 'Pending' || did.status === 'Confirming' ? did.status + '...' : did.status}}</p>
+        </summary>
+        <div ng-repeat="credential in did.credentialsList" class="card w-100">
+            <div class="card-body bg-dark text-light">
+                <h6 class="card-text text-light">(Verifiable credential)</h6>
+                <h5 class="card-title">{{credential.title}}</h5>
+                <p class="card-text">{{credential.status === 'Pending' || credential.status === 'Confirming' ? credential.status + '...' : credential.status}}</p>
+                <button ng-if="credential.status === 'Success'" class="btn btn-sm btn-light">Verify</button>
+            </div>
         </div>
 
-    </div>
+    </details>
 </div>

@@ -50,8 +50,8 @@ export class AuthenticationService {
       if (this.isLoggedIn()) {
           const token: string | null = this.getToken();
           if (token) {
-              const { email, name, role } = JSON.parse(this.b64Utf8(token.split('.')[1]));
-              return { email, name, role } as User;
+              const { id_user, email, name, role, hasDid } = JSON.parse(this.b64Utf8(token.split('.')[1]));
+              return { id_user, email, name, role, hasDid } as User;
           }
       }
       return null;

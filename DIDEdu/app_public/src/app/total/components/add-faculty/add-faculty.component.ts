@@ -4,6 +4,7 @@ import {FooterService} from "../../services/footer.service";
 import {DideduDataService} from "../../services/didedu-data.service";
 import {AuthenticationService} from "../../services/authentication.service";
 import {Router} from "@angular/router";
+import {User} from "../../classes/user";
 
 @Component({
   selector: 'app-add-faculty',
@@ -11,6 +12,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./add-faculty.component.css']
 })
 export class AddFacultyComponent implements OnInit {
+  public currUser: User | null = null;
 
   constructor(
     private nav: NavbarService,
@@ -24,8 +26,13 @@ export class AddFacultyComponent implements OnInit {
     if (!this.authenticationService.isLoggedIn()) {
       this.router.navigateByUrl("login");
     } else {
-      this.nav.show();
-      this.footer.show();
+      this.currUser = this.authenticationService.getCurrentUser();
+      if (!this.currUser?.hasDid) {
+        this.router.navigateByUrl('didedu')
+      } else {
+        this.nav.show();
+        this.footer.show();
+      }
     }
   }
 

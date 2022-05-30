@@ -17,7 +17,11 @@ export class NavbarComponent implements OnInit {
 
   private currentActive: any
 
-  constructor(public router: Router, public nav: NavbarService, private authenticationService: AuthenticationService) { }
+  constructor(
+    public router: Router,
+    public nav: NavbarService,
+    private authenticationService: AuthenticationService
+  ) { }
 
   public getUrl(): string {
       return this.router.routerState.snapshot.url;

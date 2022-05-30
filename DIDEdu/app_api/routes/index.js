@@ -8,60 +8,60 @@ const authentication = jwt({
    algorithms: ["HS256"]
 });
 
-const ctrlUsers = require('../controllers/users');
 const ctrlAuthentication = require('../controllers/authentication');
 const ctrlUniversities = require('../controllers/universities');
-const ctrlFaculties = require('../controllers/faculties');
-const ctrlPrograms = require('../controllers/programs');
-const ctrlDegrees = require('../controllers/degrees');
+const ctrlIdentities = require('../controllers/identities');
+const ctrlUsers = require('../controllers/users');
+const ctrlCities = require('../controllers/cities');
 
 /* Authentication */
 router.post("/login", ctrlAuthentication.login);
-
-
-/* Users */
-router
-    .route('/users')
-    .get(ctrlUsers.getAllUsers)
-    .post(ctrlUsers.addUser);
-router
-    .route('/users/:idUser')
-    .get(ctrlUsers.getUserById)
-    .delete(authentication, ctrlUsers.deleteUser);
-router
-    .route("/universities/:idUniversity/controller")
-    .get(ctrlUsers.getUniversityController)
-    .post(ctrlUsers.addUniversityController);
-router
-    .route("/faculties/:idFaculty/controllers")
-    .get(ctrlUsers.getFacultyControllers)
-    .post(ctrlUsers.addFacultyController)
+router.post("/register", ctrlAuthentication.register);
 
 /* Universities */
 router
     .route("/universities")
     .get(ctrlUniversities.getAllUniversities)
-    .post(ctrlUniversities.addUniversity);
-
-router.get("/universities/:idUniversity", ctrlUniversities.getUniversityById);
-
-/* Faculties */
-router.get("/faculties", ctrlFaculties.getAllFaculties)
+    .post(ctrlUniversities.createUniversity)
 router
-    .route("/universities/:idUniversity/faculties")
-    .get(ctrlFaculties.getAllUniversityFaculties)
-    .post(ctrlFaculties.addUniversityFaculty)
+    .route("/universities/:idUniversity")
+    .get(ctrlUniversities.getUniversityById)
+router.post("/universities/filter", ctrlUniversities.getUniversitiesFiltered)
 
-/* Programs */
+/* Users */
 router
-    .route("/faculties/:idFaculty/programs")
-    .get(ctrlPrograms.getAllFacultyPrograms)
-    .post(ctrlPrograms.addFacultyProgram)
+    .route("/universities/controllers")
+    .post(ctrlAuthentication.addUniversityController)
 
-/* Degrees */
+/* Identities */
 router
-    .route("/programs/:idProgram/degrees")
-    .get(ctrlDegrees.getAllProgramDegrees)
-    .post(ctrlDegrees.addProgramDegree)
+    .route("/users/:idUser/identities")
+    .get(ctrlIdentities.getAllByUser)
+    .post(ctrlIdentities.addIdentity);
+
+// router.get('/users',ctrlUsers.getAllUsers);
+// router
+//     .route('/users/:idUser')
+//     .get(ctrlUsers.getUserById)
+//     .put(ctrlAuthentication.changePassword)
+//     .delete(ctrlUsers.deleteUser)
+//
+// /* Cities */
+// router
+//     .route('/cities')
+//     .get(ctrlCities.getAllCities)
+//     .post(ctrlCities.addCity);
+//
+// router
+//     .route('/cities/:zip')
+//     .get(ctrlCities.getCityByZip)
+//     .put(ctrlCities.editZip)
+//     .delete(ctrlCities.deleteZip);
+//
+// router
+//     .route('/cities/:cityName/zips')
+//     .get(ctrlCities.getZipsByCityName)
+//     .put(ctrlCities.editCity)
+//     .delete(ctrlCities.deleteCity);
 
 module.exports = router;

@@ -1,9 +1,15 @@
 export class University {
-  "_id": string;
+  "id_university": number;
   "title": string;
   "abbreviation": string;
   "country": string;
   "city": string;
-  "faculties": any[];
-  "controller": any;
+  "faculties": uniFaculty[];
+  "controllers": number;
+}
+
+class uniFaculty {
+  "id_faculty": number;
+  "title": string;
+  "abbreviation": string;
 }

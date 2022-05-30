@@ -1,5 +1,5 @@
 export class Faculty {
-  "_id": string;
+  "id_faculty": number;
   "title": string;
   "abbreviation": string;
   "address": string;

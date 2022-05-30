@@ -32,6 +32,17 @@
           <a class="nav-link tutorialSection {{getUrl() === '/didedu/addUniversity' ? 'active' : ''}}" routerLink="didedu/addUniversity">Add University</a>
         </li>
       </ul>
+      <ul *ngIf="isLoggedIn && user!!.role === 'universityController'" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+        <li class="nav-item">
+          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Faculties</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/addFaculty' ? 'active' : ''}}" routerLink="didedu/addFaculty">Add Faculty</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/editProfile' ? 'active' : ''}}" routerLink="didedu/users/{{user!!.id_user}}">Edit Profile</a>
+        </li>
+      </ul>
       <ul class="navbar-nav ms-auto">
         <a *ngIf="!isLoggedIn" routerLink="login" class="btn mainBtn pt-3 pb-3 pe-4 ps-4 mt-1 me-3 w-100">
           Log In
@@ -43,4 +54,11 @@
     </div>
   </div>
 </nav>
-<a *ngIf="!nav.visible" routerLink="" class="backBtn ps-3"><i class="containerText1  fa-solid fa-6x fa-angle-left"></i></a>
+<a *ngIf="!nav.visible && !isLoggedIn" routerLink="" class="backBtn ps-3">
+  <i class="containerText1  fa-solid fa-6x fa-angle-left"></i>
+</a>
+<a *ngIf="!nav.visible && isLoggedIn" routerLink="" (click)="logout()" class="backBtn ps-3">
+  <i class="containerText1  fa-solid fa-6x fa-angle-left"></i>
+</a>
+
+

@@ -15,10 +15,12 @@ chrome.runtime.onMessage.addListener(
                     passphrase: message.data.didTitle
                 }
                 ajaxBCCall("POST", "did/register", JSON.stringify(userRequest) , loggedInData.token, function (response) {
-                    if (response.message !== "Did is already on the blockchain") {
+                    console.log(response);
+                    if (response.message === "") {
                         let didRequest = {
                             title: userRequest.passphrase,
-                            did: response.did
+                            did: response.did,
+                            operationId: response.operationId
                         }
                         let threadData = {
                             operationId: response.operationId,
@@ -26,8 +28,7 @@ chrome.runtime.onMessage.addListener(
                             did: response.did
                         }
 
-
-                        ajaxDWCall("PUT", `user/${loggedInData.user._id}`, didRequest, loggedInData.token, function (response) {
+                        ajaxDWCall("PUT", `wallet/users/${loggedInData.user._id}`, didRequest, loggedInData.token, function (response) {
                             let isValid = true;
                             if (!response.message) {
                                 console.log(response);
@@ -38,21 +39,20 @@ chrome.runtime.onMessage.addListener(
                                 }
                                 statusThreadArray.push(newThread);
                             }
-                            sendResponse(response.dids);
                         });
                     }
                 });
                 return true;
             case "onPopupInit":
-                ajaxDWCall("GET", "user/me", {}, getStorageItem('user') ? getStorageItem('user').token : '', function (response) {
-                    if (response.username) {
+                ajaxDWCall("GET", "wallet/me", {}, getStorageItem('user') ? getStorageItem('user').token : '', async function (response) {
+                    if (response._id) {
                         sendResponse(response);
                     }
                 });
                 return true;
             case "login":
                 let userLoginCreds = message.data;
-                ajaxDWCall("POST", "user/login", userLoginCreds, '', function(response) {
+                ajaxDWCall("POST", "wallet/login", userLoginCreds, '', function(response) {
                     if (response.token) {
                         setStorageItem('user', response);
                         sendResponse(response);
@@ -61,7 +61,7 @@ chrome.runtime.onMessage.addListener(
                 return true;
             case "register":
                 let userRegisterCreds = message.data;
-                ajaxDWCall("POST", "user/register", userRegisterCreds, '', function(response) {
+                ajaxDWCall("POST", "wallet/register", userRegisterCreds, '', function(response) {
                         sendResponse(response);
                 });
                 return true;
@@ -126,10 +126,10 @@ function checkDidStatus(idOperation, idUser, did) {
         }
     }
     ajaxBCCall("GET", `did/${idOperation}/status`, {}, getStorageItem('user') ? getStorageItem('user').token : '', function (response) {
-        let status = response.responseText;
-        console.log(currThread, " - ", response.responseText);
-        if (response.responseText !== currThread.lastStatus) {
-            ajaxDWCall("PUT", `user/${idUser}/did/${did}`, { status: response.responseText }, getStorageItem('user') ? getStorageItem('user').token : '', function (response) {
+        let status = response.status;
+        console.log(currThread, " - ", status);
+        if (status !== currThread.lastStatus) {
+            ajaxDWCall("PUT", `wallet/users/${idUser}/did`, { did: did, status: status }, getStorageItem('user') ? getStorageItem('user').token : '', function (response) {
                 currThread.lastStatus = status;
                 if (status === "Success" || status === "Rejected" || status === "Unknown operation") {
                     statusThreadArray.splice(currIndex, 1);

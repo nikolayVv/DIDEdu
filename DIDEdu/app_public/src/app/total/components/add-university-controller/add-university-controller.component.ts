@@ -13,14 +13,18 @@ import {switchMap} from "rxjs";
 })
 export class AddUniversityControllerComponent implements OnInit {
   public formError: string = '';
+  public formSuccess: string = '';
 
   public controllerData = {
+    id_user: 0,
     name: '',
     surname: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: ''
+    role: '',
+    idUniversity: '',
+    hasDid: 0
   }
 
   constructor(
@@ -51,13 +55,18 @@ export class AddUniversityControllerComponent implements OnInit {
     this.path.paramMap
       .pipe(
         switchMap((params: ParamMap) => {
-          let idUniversity: string = (params.get('idUniversity') || '').toString();
-          return this.dideduDataService.registerUniversityController(idUniversity, this.controllerData);
+          this.controllerData.idUniversity = (params.get('idUniversity') || '').toString();
+          return this.dideduDataService.registerUniversityController(this.controllerData);
         })
       )
       .subscribe( {
-        next: (controller) => {
-          this.router.navigateByUrl('didedu');
+        next: (answer) => {
+          this.controllerData.name = '';
+          this.controllerData.surname = '';
+          this.controllerData.email = '';
+          this.controllerData.password = '';
+          this.controllerData.confirmPassword = '';
+          this.formSuccess = answer.message;
         },
         error: (error) => {
           this.formError = error;
@@ -69,8 +78,13 @@ export class AddUniversityControllerComponent implements OnInit {
     if (!this.authenticationService.isLoggedIn()) {
       this.router.navigateByUrl("login");
     } else {
-      this.nav.show();
-      this.footer.show();
+      let currUser = this.authenticationService.getCurrentUser();
+      if (!currUser?.hasDid) {
+        this.router.navigateByUrl('didedu')
+      } else {
+        this.nav.show();
+        this.footer.show();
+      }
     }
   }
 

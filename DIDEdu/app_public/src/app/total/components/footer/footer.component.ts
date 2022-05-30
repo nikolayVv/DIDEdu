@@ -12,7 +12,9 @@ export class FooterComponent implements OnInit {
   @Input() user: User | undefined | null;
   @Input() isLoggedIn: boolean | undefined;
 
-  constructor(public footer: FooterService, private authenticationService: AuthenticationService) { }
+  constructor(
+    public footer: FooterService,
+    private authenticationService: AuthenticationService) { }
 
   public logout(): void {
     this.authenticationService.logout();

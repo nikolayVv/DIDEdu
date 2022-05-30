@@ -12,6 +12,11 @@
           <i class="fas fa-exclamation-triangle pe-2 pt-0"></i>{{ formError }}
         </div>
       </div>
+      <div *ngIf="formSuccess" class="form-group pt-0 pe-3 pb-3 pt-0">
+        <div class="alert alert-success p-2" role="alert">
+          <i class="fas fa-check-circle pe-2 pt-0"></i>{{ formSuccess }}
+        </div>
+      </div>
       <div class="input-group mb-3 row">
         <div class="col col-xl-6">
           <label for="firstName" class="form-label"><b>First name</b></label>

@@ -1,6 +1,6 @@
 <!-- Register form start -->
 <div class="container-fluid  d-flex justify-content-center pt-3 mt-3 mb-4 pb-3">
-  <div class="mt-xl-5">
+  <div class="mt-xl-5 w-75">
     <form (ngSubmit)="sendData()" class="pb-1 ps-3 mt-5 bg-light" style="box-shadow: 4px 4px 12px 4px gray">
       <div class="input-group row">
         <div class="col col-sm-12 col-xl-12">
@@ -12,17 +12,20 @@
           <i class="fas fa-exclamation-triangle pe-2 pt-0"></i>{{ formError }}
         </div>
       </div>
+      <div *ngIf="formSuccess" class="form-group pt-0 pe-3 pb-3 pt-0">
+        <div class="alert alert-success p-2" role="alert">
+          <i class="fas fa-check-circle pe-2 pt-0"></i>{{ formSuccess }}
+        </div>
+      </div>
       <div class="input-group mb-4 row ">
-        <div class="col col-xl-12">
+        <div class="col col-xl-9">
           <label for="title" class="form-label"><b>Title</b></label>
           <input type="text" class="form-control" id="title" name="title" placeholder="Title" [(ngModel)]="universityData.title">
           <div class="invalid-feedback">
             This field is required
           </div>
         </div>
-      </div>
-      <div class="input-group mb-4 row ">
-        <div class="col col-xl-12">
+        <div class="col col-xl-3">
           <label for="abbreviation" class="form-label"><b>Abbreviation</b></label>
           <input type="text" class="form-control" id="abbreviation" name="abbreviation" placeholder="Abbreviation" [(ngModel)]="universityData.abbreviation">
           <div class="invalid-feedback">
@@ -31,16 +34,39 @@
         </div>
       </div>
       <div class="input-group mb-4 row ">
-        <div class="col col-xl-6">
+        <div class="col col-xl-5">
           <label for="country" class="form-label"><b>Country</b></label>
           <input type="text" class="form-control" id="country" name="country" placeholder="Country" [(ngModel)]="universityData.country">
           <div class="invalid-feedback">
             This field is required
           </div>
         </div>
-        <div class="col col-xl-6">
+        <div class="col col-xl-5">
           <label for="city" class="form-label"><b>City</b></label>
           <input type="text" class="form-control" id="city" name="city" placeholder="City" [(ngModel)]="universityData.city">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+        <div class="col col-xl-2">
+          <label for="zip" class="form-label"><b>Zip</b></label>
+          <input type="text" class="form-control" id="zip" name="zip" placeholder="Zip" [(ngModel)]="universityData.zip">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+      </div>
+      <div class="input-group mb-4 row ">
+        <div class="col col-xl-9">
+          <label for="street" class="form-label"><b>Street</b></label>
+          <input type="text" class="form-control" id="street" name="street" placeholder="Street" [(ngModel)]="universityData.street">
+          <div class="invalid-feedback">
+            This field is required
+          </div>
+        </div>
+        <div class="col col-xl-3">
+          <label for="houseNumber" class="form-label"><b>House number</b></label>
+          <input type="text" class="form-control" id="houseNumber" name="houseNumber" placeholder="House number" [(ngModel)]="universityData.houseNumber">
           <div class="invalid-feedback">
             This field is required
           </div>

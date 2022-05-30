@@ -15,6 +15,7 @@ import {throwError} from "rxjs";
 })
 export class AddUniversityComponent implements OnInit {
   public formError: string = '';
+  public formSuccess: string = '';
 
   constructor(
     private nav: NavbarService,
@@ -28,12 +29,16 @@ export class AddUniversityComponent implements OnInit {
     title: '',
     abbreviation: '',
     country: '',
-    city: ''
+    city: '',
+    zip: '',
+    street: '',
+    houseNumber: ''
   }
 
   public sendData(): void {
     this.formError = '';
-    if (!this.universityData.title || !this.universityData.abbreviation || !this.universityData.city || !this.universityData.country) {
+    this.formSuccess = '';
+    if (!this.universityData.title || !this.universityData.city || !this.universityData.country || !this.universityData.zip || !this.universityData.street || !this.universityData.houseNumber) {
       this.formError = 'All data is required, please try again!';
     } else {
       this.checkUserData();
@@ -44,8 +49,15 @@ export class AddUniversityComponent implements OnInit {
     this.dideduDataService
       .addUniversity(this.universityData)
       .subscribe({
-        next: (university) => {
-          this.router.navigateByUrl('didedu');
+        next: (answer) => {
+          this.formSuccess = answer.message;
+          this.universityData.houseNumber = '';
+          this.universityData.street = '';
+          this.universityData.zip = '';
+          this.universityData.city = '';
+          this.universityData.country = '';
+          this.universityData.abbreviation = '';
+          this.universityData.title = '';
         },
         error: (error) => {
           this.formError = error;
@@ -57,8 +69,13 @@ export class AddUniversityComponent implements OnInit {
     if (!this.authenticationService.isLoggedIn()) {
       this.router.navigateByUrl("login");
     } else {
-      this.nav.show();
-      this.footer.show();
+      let currUser = this.authenticationService.getCurrentUser();
+      if (!currUser?.hasDid) {
+        this.router.navigateByUrl('didedu')
+      } else {
+        this.nav.show();
+        this.footer.show();
+      }
     }
   }
 

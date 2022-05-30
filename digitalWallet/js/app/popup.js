@@ -21,6 +21,7 @@ digitalWallet.controller("PopupCtrl", ['$scope', '$state', function($scope, $sta
     $scope.onPopupInit = function() {
         chrome.runtime.sendMessage({ type: "onPopupInit"},
             function(response) {
+                console.log(response);
                 if (response) {
                     $scope.didList = response.didList;
                     $state.go('didList');

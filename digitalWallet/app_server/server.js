@@ -4,7 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const user = require('./routes/user');
+const index = require('./routes/index');
 const cors = require('cors');
 
 const app = express();
@@ -23,7 +23,17 @@ app.use(bodyParser.urlencoded({ limit: '200mb', extended: true }));
 
 app.use(cors({ origin: "*" }));
 
-app.use('/user', user);
+app.use("/wallet", (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    next();
+});
+
+app.use('/wallet', index);
 
 app.listen(port, () => {
    console.log(`Server is running on port ${port}`);

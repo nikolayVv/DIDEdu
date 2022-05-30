@@ -36,16 +36,21 @@ export class UniversityDetailsComponent implements OnInit {
       if (!this.authenticationService.isLoggedIn()) {
         this.router.navigateByUrl("login");
       } else {
-        this.nav.show();
-        this.footer.show();
-        this.path.paramMap
-          .pipe(
-            switchMap((params: ParamMap) => {
-              let idUniversity: string = (params.get('idUniversity') || '').toString();
-              return this.dideduDataService.getUniversityDetails(idUniversity);
-            })
-          )
-          .subscribe((university: University) => (this.university = university));
+        let currUser = this.authenticationService.getCurrentUser();
+        if (!currUser?.hasDid) {
+          this.router.navigateByUrl('didedu')
+        } else {
+          this.nav.show();
+          this.footer.show();
+          this.path.paramMap
+            .pipe(
+              switchMap((params: ParamMap) => {
+                let idUniversity: string = (params.get('idUniversity') || '').toString();
+                return this.dideduDataService.getUniversityDetails(idUniversity);
+              })
+            )
+            .subscribe((university: University) => (this.university = university));
+        }
       }
   }
 

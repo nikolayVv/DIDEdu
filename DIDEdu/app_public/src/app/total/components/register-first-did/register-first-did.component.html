@@ -1,0 +1,58 @@
+<div class="wrapper">
+  <div class="overlay" *ngIf="showSpinner">
+    <div class="spinner-wrapper">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+
+  <div class="loaded-content" [class.blurred]="showSpinner">
+    <ng-content></ng-content>
+  </div>
+</div>
+
+
+<!-- Information start -->
+<div class="container-fluid d-flex justify-content-center pt-4">
+  <div class="row">
+    <div class="col col-12 col-xl-12">
+      <h2 class="display-1 text-center mb-0">
+        Welcome to <span class="containerText1" style="text-shadow: 1px 1px black;">DIDEdu</span>!
+      </h2>
+      <h4 class="display-6 text-center mb-0 mt-3">
+        Connect your account with your wallet <br/>
+        to continue your
+        <span class="containerText1" style="text-shadow: 1px 1px black;">DID</span>
+        adventure
+      </h4>
+    </div>
+  </div>
+</div>
+<!-- Information end -->
+
+<!-- Login form start -->
+<div class="container-fluid d-flex justify-content-center pt-5 pb-3 mb-4">
+  <form (ngSubmit)="sendData()" class="pb-3 ps-3 w-50 pt-1" autocomplete="off">
+    <div *ngIf="formError" class="form-group">
+      <div class="alert alert-danger p-2" role="alert">
+        <i class="fas fa-exclamation-triangle pe-2"></i>{{ formError }}
+      </div>
+    </div>
+    <div *ngIf="formSuccess" class="form-group">
+      <div class="alert alert-success p-2" role="alert">
+        <i class="fas fa-check-circle pe-2"></i>{{ formSuccess }}
+      </div>
+    </div>
+    <div class="input-group mb-3 row">
+      <div class="col col-sm-12 col-xl-12">
+        <label for="did" class="form-label"><b>Insert your DID here</b></label>
+        <input type="text" class="form-control" id="did" name="did" aria-describedby="did" placeholder="did:example:123456789abcdefghi..." [(ngModel)]="did">
+      </div>
+    </div>
+    <div class="row pt-3 pb-4">
+      <div class="d-flex justify-content-center col col-xl-12">
+        <button type="submit" class="btn mainBtnOutline pt-2 me-3" style="border-radius: 25px"><h3>Connect</h3></button>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Login form end -->

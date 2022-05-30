@@ -1,0 +1,38 @@
+import {Component, OnInit, Output} from '@angular/core';
+import {AuthenticationService} from "../../services/authentication.service";
+import {User} from "../../classes/user";
+import {Router} from "@angular/router";
+import {NavbarService} from "../../services/navbar.service";
+import {FooterService} from "../../services/footer.service";
+import {DideduDataService} from "../../services/didedu-data.service";
+
+@Component({
+  selector: 'app-home-page',
+  templateUrl: './home-page.component.html',
+  styleUrls: ['./home-page.component.css']
+})
+export class HomePageComponent implements OnInit {
+  public currUser: User | null = null
+  public currDid: string = '';
+
+  constructor(
+    private nav: NavbarService,
+    private footer: FooterService,
+    private dideduDataService: DideduDataService,
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    if (!this.authenticationService.isLoggedIn()) {
+      this.router.navigateByUrl("login");
+    } else {
+      this.currUser = this.authenticationService.getCurrentUser();
+      if (this.currUser?.role === 'admin' || (this.currUser?.hasDid && this.currUser?.role !== 'admin' && this.currUser.hasDid)) {
+        this.nav.show();
+        this.footer.show();
+      }
+    }
+  }
+
+}

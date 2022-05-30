@@ -1,5 +1,32 @@
 const mongoose = require("mongoose");
 
+const credentialSchema = mongoose.Schema({
+  title: {
+    type: String,
+    required: true
+  },
+  credential: {
+    type: String,
+    required: true
+  },
+  status: {
+    type: String,
+    default: "Pending"
+  },
+  operationId: {
+    type: String,
+    required: true
+  },
+  hash: {
+    type: String,
+    required: true
+  },
+  batchId: {
+    type: String,
+    required: true
+  }
+})
+
 const didSchema = mongoose.Schema({
   title: {
     type: String,
@@ -12,6 +39,14 @@ const didSchema = mongoose.Schema({
   status: {
     type: String,
     default: "Pending"
+  },
+  credentialsList: {
+    type: [credentialSchema],
+    default: []
+  },
+  operationId: {
+    type: String,
+    required: true
   }
 })
 

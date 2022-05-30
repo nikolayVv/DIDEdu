@@ -1,21 +1,23 @@
-<div class="container-fluid  d-flex justify-content-center pt-5 mt-4 mb-4">
+<app-spinner *ngIf="!university"></app-spinner>
+
+<div *ngIf="university" class="container-fluid  d-flex justify-content-center pt-5 mt-4 mb-4">
   <form action="#" class="pb-1 w-75 ps-3 mt-5 bg-light" style="box-shadow: 4px 4px 12px 4px gray">
     <div class="input-group mb-3 row">
       <div class="col col-sm-12 col-xl-12">
-        <h1 class="text-center pt-3 mb-3 w-100">{{university!!.title}}</h1>
+        <h1 class="text-center pt-3 mb-3 w-100">{{university.title}}</h1>
       </div>
     </div>
-    <div class="input-group mb-3 row ">
+    <div class="input-group mb-3 row pt-3">
       <div class="col col-xl-6">
         <label for="country" class="form-label"><b>Country</b></label>
-        <input type="text" class="form-control" id="country" placeholder="Country" value="{{university!!.country}}" disabled>
+        <input type="text" class="form-control" id="country" placeholder="Country" value="{{university.country}}" disabled>
         <div class="invalid-feedback">
           This field is required
         </div>
       </div>
       <div class="col col-xl-6">
         <label for="city" class="form-label"><b>City</b></label>
-        <input type="text" class="form-control" id="city" placeholder="City" value="{{university!!.city}}" disabled>
+        <input type="text" class="form-control" id="city" placeholder="City" value="{{university.city}}" disabled>
         <div class="invalid-feedback">
           This field is required
         </div>
@@ -25,13 +27,13 @@
       <div class="col col-sm-12 col-xl-12">
         <label for="faculties" class="form-label"><b>Faculties</b></label>
         <ul id="faculties" class="scrollListSmall list-group list-group-flush pe-0">
-          <li class="list-group-item pe-0" *ngFor="let faculty of university!!.faculties">
+          <li class="list-group-item pe-0" *ngFor="let faculty of university.faculties">
             <div class="row me-3 pt-2 pb-2">
               <div class="col col-xl-8 pt-2">
-                <h6 class="m-0">{{faculty.title}} <span class="containerText1">({{faculty.controllers.length}} Controllers)</span></h6>
+                <h6 class="m-0">{{faculty.title}} </h6>
               </div>
               <div class="col col-xl-2 ms-auto d-flex justify-content-end">
-                <a href="/didedu/universities/{{university!!._id}}/faculties{{faculty._id}}">
+                <a href="/didedu/universities/{{university.id_university}}/faculties{{faculty.id_faculty}}">
                   <button type="button" class="btn btn-sm btn-outline-danger">
                     View Faculty
                   </button>
@@ -40,24 +42,28 @@
             </div>
           </li>
         </ul>
-        <p *ngIf="university!!.faculties.length == 0">There are no faculties yet!</p>
+        <p *ngIf="university.faculties.length == 0">There are no faculties yet!</p>
       </div>
     </div>
     <div class="input-group mb-3 row">
       <div class="col col-sm-12 col-xl-12">
-        <label for="controller" class="form-label"><b>Controller</b></label>
-        <div id="controller" class="row me-3 pt-2 pb-2">
-          <div class="col col-xl-8 pt-2">
-            <h6 class="m-0">{{university!!.controller.name}} {{university!!.controller.surname}} <span class="containerText1">({{university!!.controller.email}})</span></h6>
-          </div>
-          <div class="col col-xl-2 ms-auto d-flex justify-content-end">
-            <a href="/didedu/universities/{{university!!.controller._id}}/controller">
-              <button type="button" class="btn btn-sm btn-outline-danger">
-                View Controller
-              </button>
-            </a>
-          </div>
-        </div>
+        <p for="faculties" class="form-label"><b>Controllers: </b> {{university.controllers}}</p>
+      </div>
+    </div>
+    <div class="input-group mb-3 row mt-5">
+      <div class="col col-sm-6 col-xl-6 d-flex justify-content-start">
+        <a routerLink="/didedu/universities/{{university.id_university}}/addController">
+          <button class="btn btn-lg btn-danger">
+            Delete University
+          </button>
+        </a>
+      </div>
+      <div class="col col-sm-6 col-xl-6 d-flex justify-content-end">
+          <a routerLink="/didedu/universities/{{university.id_university}}/addController">
+            <button class="btn btn-lg btn-outline-danger">
+              Add Controller
+            </button>
+          </a>
       </div>
     </div>
   </form>

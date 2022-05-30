@@ -75,10 +75,15 @@
     <div class="row">
       <div class="col col-xl-10 pt-3">
         <p class="mb-0">
-          You are now logged in as <a href="{{user!!.role === 'admin' ? 'didedu' : ''}}" class="containerText1">Nikolay Vasilev</a>
+          You are now logged in as <a href="{{user!!.role === 'admin' ? 'didedu' : ''}}" class="containerText1">{{user!!.name}}</a>
         </p>
         <p *ngIf="user!!.role === 'admin'" class="pt-3">
           <a routerLink="didedu" class="containerText1">Home</a> |
+          <a routerLink="" class="containerText1">Log out</a>
+        </p>
+        <p *ngIf="user!!.role === 'universityController'" class="pt-3">
+          <a routerLink="didedu" class="containerText1">Home</a> |
+          <a routerLink="didedu/editProfile" class="containerText1">Profile</a> |
           <a routerLink="" class="containerText1">Log out</a>
         </p>
         <p class="mb-0 pt-3">

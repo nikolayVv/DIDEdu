@@ -29,8 +29,13 @@ export class UserDetailsComponent implements OnInit {
     if (!this.authenticationService.isLoggedIn()) {
       this.router.navigateByUrl("login");
     } else {
-      this.nav.show();
-      this.footer.show();
+      let currUser = this.authenticationService.getCurrentUser();
+      if (!currUser?.hasDid) {
+        this.router.navigateByUrl('didedu')
+      } else {
+        this.nav.show();
+        this.footer.show();
+      }
     }
   }
 

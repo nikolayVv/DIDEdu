@@ -131,41 +131,11 @@ router.post(
   }
 );
 
-router.put("/:idUser/did/:did", auth, async(req, res) => {
-  let idUser = req.params.idUser;
-  let did = req.params.did;
-  if (!idUser || !did) {
-    return res.status(404).json({
-      message: "Couldn't find user or did, idUniversity and did are required parameters."
-    });
-  }
-  try {
-    const user = await User.findById(idUser);
-    if (!user) {
-      return res.status(404).json({
-        message: "Couldn't find user with idUser"
-      });
-    }
-    for (let i = 0; i < user.didList.length ; i++) {
-      if (user.didList[i].did === did) {
-        user.didList[i].status = req.body.status;
-        await user.save();
-        break;
-      }
-    }
-    res.json(user.didList);
-  } catch (e) {
-    res.status(500).json({
-      message: "Error in Fetching user"
-    });
-  }
-})
-
-router.put("/:idUser", auth, async(req, res) => {
+router.put("/users/:idUser", auth, async(req, res) => {
   let idUser = req.params.idUser;
   if (!idUser) {
     return res.status(404).json({
-      message: "Couldn't find user, idUniversity is required parameter."
+      message: "Couldn't find user, idUser is required parameter."
     });
   }
   try {
@@ -196,13 +166,118 @@ router.put("/:idUser", auth, async(req, res) => {
   }
 })
 
+router.put("/users/:idUser/did/vc", async(req, res) => {
+  let idUser = req.params.idUser;
+  let did = req.body.did;
+  let hash = req.body.hash;
+  if (!idUser || !did || !hash) {
+    return res.status(404).json({
+      message: "Couldn't find user or did, idUser, hash and did are required parameters."
+    });
+  }
+  try {
+    const user = await User.findById(idUser);
+    if (!user) {
+      return res.status(404).json({
+        message: "Couldn't find user with idUser"
+      });
+    }
+
+    for (let i = 0; i < user.didList.length ; i++) {
+      if (user.didList[i].did === did) {
+        for (let j = 0; j < user.didList[i].credentialsList.length; j++) {
+          if (user.didList[i].credentialsList[j].hash === hash) {
+            user.didList[i].credentialsList[j].status = req.body.status;
+            await user.save();
+            break;
+          }
+        }
+      }
+    }
+    res.json(user);
+  } catch (e) {
+    res.status(500).json({
+      message: "Error in Fetching user"
+    });
+  }
+})
+
+router.put("/users/:idUser/did", auth, async(req, res) => {
+  let idUser = req.params.idUser;
+  let did = req.body.did;
+  if (!idUser || !did) {
+    return res.status(404).json({
+      message: "Couldn't find user or did, idUser and did are required parameters."
+    });
+  }
+  try {
+    const user = await User.findById(idUser);
+    if (!user) {
+      return res.status(404).json({
+        message: "Couldn't find user with idUser"
+      });
+    }
+
+    for (let i = 0; i < user.didList.length ; i++) {
+      if (user.didList[i].did === did) {
+        user.didList[i].status = req.body.status;
+        await user.save();
+        break;
+      }
+    }
+    res.json(user.didList);
+  } catch (e) {
+    res.status(500).json({
+      message: "Error in Fetching user"
+    });
+  }
+})
+
+router.put("/did/vc", async (req, res) => {
+  if (!req.body.did) {
+    return res.status(404).json({
+      message: "DID is required"
+    });
+  }
+
+  try {
+    const user = await User.findOne({ didList: { $elemMatch: { did: req.body.did } } });
+    if (!user) {
+      return res.status(404).json({
+        message: `Couldn't find user with did '${req.body.did}'`
+      });
+    }
+    for (let i = 0; i < user.didList.length; i++) {
+      if (user.didList[i].did === req.body.did) {
+        let valid = true;
+        for (let j = 0; j < user.didList[i].credentialsList.length; j++) {
+            if (user.didList[i].credentialsList[j].title === req.body.credentialData.title) {
+                valid = false;
+                break;
+            }
+        }
+        if (valid) {
+          user.didList[i].credentialsList.push(req.body.credentialData);
+          await user.save();
+          break;
+        } else {
+          return res.status(400).json({ message: 'The credential for this DID is already issued!' })
+        }
+      }
+    }
+    res.status(200).json(user);
+  } catch (e) {
+    res.status(500).json({ message: "Error in sending credential to the wallet" })
+  }
+});
+
 router.get("/me", auth, async (req, res) => {
   try {
     // request.user is getting fetched from Middleware after token authentication
     const user = await User.findById(req.user.id);
     res.json(user);
   } catch (e) {
-    res.send({ message: "Error in Fetching user" });
+    res.status(500).json({ message: "Error in Fetching user" });
   }
 });
 

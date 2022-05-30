@@ -3,23 +3,23 @@
   <div class="form-outline pt-5 p-2 ps-3 pe-3 bg-light">
     <form action="#" class="m-0 p-0">
       <div class="row input-group m-0 p-0">
-        <input type="search" id="searchInput" class="form-control rounded" placeholder='Search by name...'>
+        <input type="search" id="searchInput" class="form-control rounded" name="filter" placeholder="Search by {{currFilter}}..." (input)="filter()" [(ngModel)]="currInput">
       </div>
-      <div class="row row-xl-12 input-group pt-2 justify-content-center m-0 p-0">
+      <div class="row row-xl-12 input-group pt-2  m-0 p-0">
         <div class="col col-xl-4 form-check">
-          <input class="form-check-input" type="radio" name="universitySearch" id="searchByName" checked>
+          <input class="form-check-input" type="radio" name="universitySearch" id="searchByName" checked (click)="changeFilter('name')">
           <label class="form-check-label" for="searchByName">
             Search by name
           </label>
         </div>
         <div class="col col-xl-4 form-check d-flex justify-content-center">
-          <input class="form-check-input" type="radio" name="universitySearch" id="searchByCountry">
+          <input class="form-check-input" type="radio" name="universitySearch" id="searchByCountry" (click)="changeFilter('country')">
           <label class="form-check-label ps-2" for="searchByCountry">
             Search by country
           </label>
         </div>
         <div class="col col-xl-4 form-check d-flex justify-content-end">
-          <input class="form-check-input" type="radio" name="universitySearch" id="searchByCity">
+          <input class="form-check-input" type="radio" name="universitySearch" id="searchByCity" (click)="changeFilter('city')">
           <label class="form-check-label ps-2" for="searchByCity">
             Search by city
           </label>
@@ -28,28 +28,19 @@
     </form>
   </div>
   <div class="row ps-3 pe-2">
+    <div *ngIf="errorMessage" class="d-flex justify-content-center col col-xl-12">
+      <h2>{{ errorMessage }}</h2>
+    </div>
     <ul class="scrollListBig list-group list-group-flush pe-0">
       <li class="list-group-item pe-0" *ngFor="let university of universities">
         <div class="row me-3 pt-2 pb-2">
           <div class="col col-xl-8 pt-2">
-            <h6 class="m-0">{{university.title}}{{university.abbreviation ? ', ' + university.abbreviation : ''}} <span class="containerText1">({{university.country}}, {{university.city}}) </span>- {{university.faculties.length != 1 ? university.faculties.length + ' faculties' : '1 faculty'}}</h6>
+            <h6 class="m-0">{{university.title}}{{university.abbreviation ? ', ' + university.abbreviation : ''}}</h6>
           </div>
           <div class="col col-xl-2 ms-auto d-flex justify-content-end">
-            <a href="#">
-              <button  class="btn btn-sm btn-danger me-3">
-                Delete University
-              </button>
-            </a>
-          </div>
-          <div class="col col-xl-2 ms-auto d-flex justify-content-end">
-            <a *ngIf="university.controller !== null" routerLink="/didedu/universities/{{university._id}}">
+            <a routerLink="/didedu/universities/{{university.id_university}}">
                 <button class="btn btn-sm btn-outline-danger">
-                  View University
-                </button>
-            </a>
-            <a *ngIf="university.controller === null" routerLink="/didedu/universities/{{university._id}}/addController">
-                <button  class="btn btn-sm btn-outline-danger">
-                  Add Controller
+                  Edit University
                 </button>
             </a>
           </div>

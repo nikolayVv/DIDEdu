@@ -4,7 +4,12 @@
 
 export const environment = {
   apiUrl: 'http://localhost:3000/api',
-  didUrl: 'http://localhost:3080/did',
+  didUrl: 'http://localhost:8080/did',
+  walletUrl: 'http://localhost:8000/wallet',
+  WALLET_USERNAME: 'DIDEdu123',
+  WALLET_PASSWORD: 'Assasin2000!!!',
+  AUTH_CREDENTIAL_NAME: 'DIDEdu-Auth',
+  AUTH_CREDENTIAL_PASSPHRASE: 'DIDEdu-Authentication',
   production: false,
 };
 
