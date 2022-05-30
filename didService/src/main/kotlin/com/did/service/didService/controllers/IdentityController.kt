@@ -9,6 +9,7 @@ import io.iohk.atala.prism.api.VerificationError
 import io.iohk.atala.prism.api.models.AtalaOperationId
 import io.iohk.atala.prism.api.models.AtalaOperationStatus
 import io.iohk.atala.prism.api.node.NodePayloadGenerator
+import io.iohk.atala.prism.api.node.PrismDidState
 import io.iohk.atala.prism.common.PrismSdkInternal
 import io.iohk.atala.prism.credentials.CredentialBatchId
 import io.iohk.atala.prism.credentials.json.JsonBasedCredential
@@ -17,12 +18,21 @@ import io.iohk.atala.prism.crypto.Sha256Digest
 import io.iohk.atala.prism.crypto.derivation.KeyDerivation
 import io.iohk.atala.prism.crypto.derivation.MnemonicCode
 import io.iohk.atala.prism.crypto.keys.ECKeyPair
+import io.iohk.atala.prism.crypto.keys.ECPublicKey
+import io.iohk.atala.prism.crypto.keys.toModel
+import io.iohk.atala.prism.crypto.keys.toProto
 import io.iohk.atala.prism.identity.*
+import io.iohk.atala.prism.protos.CompressedECKeyData
+import io.iohk.atala.prism.protos.models.toProto
 import kotlinx.serialization.json.*
+import org.h2.value.Value.JSON
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
+import pbandk.ByteArr
+import reactor.kotlin.core.publisher.toMono
+import java.security.PublicKey
 import java.util.*
 import javax.validation.Valid
 
@@ -111,6 +121,7 @@ class IdentityController {
         )
     }
 
+    @OptIn(PrismSdkInternal::class)
     @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca"])
     @PostMapping("/didDocument")
     suspend fun readDid(
@@ -121,17 +132,7 @@ class IdentityController {
         if (request.did.trim().isBlank()) {
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "All the data is required!")
         }
-        val mainDid = try {
-            Did.fromString(request.did)
-        } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "illegal DID: ${request.did}", e)
-        }
-
-        val model = try {
-            identityRepository.readFromBlockchain(mainDid)
-        } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the did from the blockchain.", e)
-        }
+        val model = getModel(request.did)
 
         var message = "Did document successfully retrieved from the blockchain!"
         var didDocument: DidDataModel? = null
@@ -195,6 +196,7 @@ class IdentityController {
 
     }
 
+    @OptIn(PrismSdkInternal::class)
     @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca", "http://localhost:4200"])
     @PostMapping("/issue/credential")
     suspend fun issueCredential(
@@ -289,7 +291,7 @@ class IdentityController {
             credential = json.toString(),
             operationId = id,
             hash = hash,
-            batchId = issueCredentialsInfo.batchId.toString()
+            batchId = issueCredentialsInfo.batchId.id,
         )
     }
 
@@ -413,81 +415,128 @@ class IdentityController {
     }
 
     // TODO
-    @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca"])
+    @OptIn(PrismSdkInternal::class)
+    @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca", "http://localhost:4200"])
     @PostMapping("/verify/credential")
     suspend fun verifyCredential(
         @RequestBody @Valid request: VerifyCredentialRequest
     ): VerifyCredentialResponse {
-        println("INSIDE")
         val json = try {
             Json.parseToJsonElement(request.credential).jsonObject
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't revert string to json", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't revert string to json!", e)
         }
-        println("INSIDE")
 
         val credential = try {
             JsonBasedCredential.fromString(json["encodedSignedCredential"]?.jsonPrimitive?.content!!)
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the credential", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the credential!", e)
         }
         val proof = try {
             MerkleInclusionProof.decode(json["proof"]?.jsonObject.toString())
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the proof", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the proof!", e)
         }
         val batchId = try {
             CredentialBatchId.fromString(request.batchId)
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid batchId", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid batchId!", e)
         }
+        if (batchId === null) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't generate batch!")
+        }
+
         val credentialHash = try {
             Sha256Digest.fromHex(request.credentialHash)
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credential hash", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credential hash!", e)
         }
-
-        println("cred: $credential")
-        println("proof: $proof")
-        println()
 
         val status = try {
             identityRepository.verifyCredentialFromBlockchain(credential, proof)
         } catch (e: Exception) {
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There was an error verifying the credential", e)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There was an error verifying the credential from the blockchain!", e)
         }
 
-        // Check if it is on th blockchain
-        println("result: $status")
-        var message = "Valid"
-        var errorMessage = ""
-        val lastSyncBlock = Date(status.lastSyncBlockTimestamp?.seconds!! * 1000).toString()
+        // Check if it is on the blockchain
         if (!status.verificationErrors.isEmpty()) {
-            message = "Not Valid"
-            //TODO -> check if it is revoked -> get credential revocation time
             val revocationTime = try {
-                identityRepository.checkRevocationTime(batchId!!, credentialHash)
+                identityRepository.checkRevocationTime(batchId, credentialHash)
             } catch (e: Exception) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't get the revocation time from the blockchain", e)
             }
-            if (status.verificationErrors.contains(VerificationError.CredentialWasRevokedOn(
-                revocationTime.ledgerData!!.timestampInfo
-            ))) {
-                message = "The credential is revoked"
+
+            if (revocationTime !== null && status.verificationErrors.contains(VerificationError.CredentialWasRevokedOn(revocationTime.ledgerData!!.timestampInfo))) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential is revoked!")
+            } else if (revocationTime !== null && status.verificationErrors.contains(VerificationError.BatchWasRevokedOn(revocationTime.ledgerData!!.timestampInfo))) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The batch is revoked!")
+            } else if (status.verificationErrors.contains(VerificationError.IssuerDidNotFoundInCredential)) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't find the issuer's did on the chain!")
+            } else if (status.verificationErrors.contains(VerificationError.InvalidMerkleProof)) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid proof!")
+            } else if (status.verificationErrors.contains(VerificationError.BatchNotFoundOnChain(batchId.id))) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't find the batch on the chain!")
+            } else if (status.verificationErrors.contains(VerificationError.IssuerKeyNotFoundInCredential)) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't find the issuer's key in the credential!")
+            } else {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, status.verificationErrors[0].errorMessage)
             }
-            //TODO -> check if the issuer signed it
-            //TODO -> check if the holder is has that credential
-            errorMessage = status.verificationErrors[0].errorMessage
         }
 
-        //println(holderSignedCredential.isValidSignature(keys[PrismDid.DEFAULT_ISSUING_KEY_ID]?.publicKey!!))
-        //println(holderSignedCredential.isValidSignature(keys[PrismDid.DEFAULT_MASTER_KEY_ID]?.publicKey!!))
+        val model = getModel(request.issuerDid)
+        val issuerPublicKey = model!!.toProto().publicKeys.find { it.id.equals(PrismDid.DEFAULT_ISSUING_KEY_ID) }
+        val ECIssuerPublicKey = issuerPublicKey!!.compressedEcKeyData!!.toModel()
+        if (!credential.isValidSignature(ECIssuerPublicKey)) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential is not signed by the DIDEdu issuing key!")
+        }
 
+        val credentials = credential.content.getField("credentialSubject")!!.jsonObject.entries
+        var emailValid = false
+        var idValid = false
+        for (credentialData in credentials) {
+            if (credentialData.key.equals("userId")) {
+                if (credentialData.value.toString().equals("\"${request.userId}\"")) {
+                    idValid = true
+                } else {
+                    break
+                }
+            }
+            if (credentialData.key.equals("userEmail")) {
+                if (credentialData.value.toString().equals("\"${request.userEmail}\"")) {
+                    emailValid = true
+                } else {
+                    break
+                }
+            }
+        }
+        if (!idValid || !emailValid) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The account data in the credential doesn't match with the account data in the database!")
+        }
+        println(credentials)
+        //TODO -> Check for one more key (sign with 2 keys - 1 for issuer, 1 for website)
+        val holderDid = credentials.last().value.toString()
+        if (!holderDid.equals("\"${request.holderDid}\"")) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The holder DID in the credential doesn't match with the holder DID in the database!")
+        }
+
+        val credentialName = credentials.first().value.toString()
+        if (!credentialName.equals("\"${request.credentialName}\"")) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential name in the credential doesn't match with the credential name in the database!")
+        }
+        var token = ""
+        if (credentialName.equals("\"DIDEdu-Auth\"")) {
+            for (credentialData in credentials) {
+                if (credentialData.key.equals("didedu-token")) {
+                    token = credentialData.value.toString().replace("\"", "")
+                    break;
+                }
+            }
+        }
 
         return VerifyCredentialResponse(
-            message = message,
-            errorMessage = errorMessage,
-            lastSyncBlock = lastSyncBlock
+            message = "Valid",
+            lastSyncBlock = Date(status.lastSyncBlockTimestamp?.seconds!! * 1000).toString(),
+            token = token
         )
     }
 
@@ -510,5 +559,21 @@ class IdentityController {
             Pair(PrismDid.DEFAULT_ISSUING_KEY_ID, issuingKeyPair),
             Pair(PrismDid.DEFAULT_REVOCATION_KEY_ID, revocationKeyPair)
         )
+    }
+
+    private fun getModel(
+        did: String
+    ): PrismDidDataModel? {
+        val mainDid = try {
+            Did.fromString(did)
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "illegal DID: ${did}", e)
+        }
+
+        return try {
+            identityRepository.readFromBlockchain(mainDid)
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the did from the blockchain.", e)
+        }
     }
 }

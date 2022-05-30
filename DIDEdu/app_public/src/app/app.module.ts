@@ -23,6 +23,7 @@ import { FacultyDetailsComponent } from './total/components/faculty-details/facu
 import { HomePageComponent } from './total/components/home-page/home-page.component';
 import { SpinnerComponent } from './total/components/spinner/spinner.component';
 import { RegisterFirstDidComponent } from './total/components/register-first-did/register-first-did.component';
+import { WalletLoginComponent } from './total/components/wallet-login/wallet-login.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { RegisterFirstDidComponent } from './total/components/register-first-did
     HomePageComponent,
     SpinnerComponent,
     RegisterFirstDidComponent,
+    WalletLoginComponent,
   ],
   imports: [
     BrowserModule,

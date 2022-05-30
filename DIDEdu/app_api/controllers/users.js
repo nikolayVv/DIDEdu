@@ -57,8 +57,36 @@ const deleteUser = (req, res) => {
     });
 };
 
+const getUserByDID = (req, res) => {
+    if (!req.body.did) {
+        return res.status(400).json({ message: "All the data is required." });
+    }
+
+    console.log(req.body.did)
+    connection.query(`SELECT * FROM identity WHERE did='${req.body.did}'`, (error, identities) => {
+        if (error) {
+            return res.status(500).json(error);
+        }
+        if (!identities[0]) {
+            return res.status(404).json({message: "Couldn't find identity with the given DID."})
+        }
+
+        connection.query(`SELECT * FROM user WHERE id_user='${identities[0].user}'`, (error, users) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
+            if (!users[0]) {
+                return res.status(404).json({message: "Couldn't find user with the given ID."})
+            }
+
+            res.status(200).json(users[0]);
+        });
+    })
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
-    deleteUser
+    deleteUser,
+    getUserByDID
 };

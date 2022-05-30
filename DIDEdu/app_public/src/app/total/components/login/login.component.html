@@ -23,6 +23,7 @@
 </div>
 <!-- Information end -->
 
+<app-wallet-login [display]="display" (credentialsEvent)="checkCredential($event)" (closeEvent)="onCloseHandled()"></app-wallet-login>
 
 <!-- Login form start -->
 <div class="container-fluid d-flex justify-content-center pt-5">

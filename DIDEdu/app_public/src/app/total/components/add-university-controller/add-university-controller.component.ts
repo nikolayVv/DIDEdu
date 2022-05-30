@@ -78,13 +78,8 @@ export class AddUniversityControllerComponent implements OnInit {
     if (!this.authenticationService.isLoggedIn()) {
       this.router.navigateByUrl("login");
     } else {
-      let currUser = this.authenticationService.getCurrentUser();
-      if (!currUser?.hasDid) {
-        this.router.navigateByUrl('didedu')
-      } else {
-        this.nav.show();
-        this.footer.show();
-      }
+      this.nav.show();
+      this.footer.show();
     }
   }
 

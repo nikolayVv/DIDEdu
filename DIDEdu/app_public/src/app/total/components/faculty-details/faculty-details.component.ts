@@ -27,12 +27,16 @@ export class FacultyDetailsComponent implements OnInit {
       this.router.navigateByUrl("login");
     } else {
       let currUser = this.authenticationService.getCurrentUser();
-      if (!currUser?.hasDid) {
-        this.router.navigateByUrl('didedu')
-      } else {
-        this.nav.show();
-        this.footer.show();
-      }
+      this.dideduDataService
+        .getDIDs(currUser!!.id_user.toString())
+        .subscribe((dids) => {
+          if (dids.length > 0) {
+            this.nav.show();
+            this.footer.show();
+          } else {
+            this.router.navigateByUrl('didedu')
+          }
+        })
     }
   }
 

@@ -75,14 +75,7 @@ router.post(
   }
 );
 
-router.post(
-  "/login",
-  [
-    check("password", "Please enter a valid password").isLength({
-      min: 6
-    })
-  ],
-  async (req, res) => {
+router.post("/login", async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -97,10 +90,15 @@ router.post(
         username
       });
 
+      if (!user)
+        return res.status(401).json({
+          message: "Wrong digital wallet credentials! Please try again!"
+        });
+
       const isMatch = await bcrypt.compare(password, user.password);
-      if (!user || !isMatch)
-        return res.status(400).json({
-          message: "Wrong credentials!"
+      if (!isMatch)
+        return res.status(401).json({
+          message: "Wrong digital wallet credentials! Please try again!"
         });
 
       const payload = {

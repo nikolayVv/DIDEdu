@@ -144,15 +144,12 @@ const generateJwt = function (user) {
     const validUntil = new Date();
     validUntil.setDate(validUntil.getDate() + 1);
 
-    //TODO add public key to the token or maybe DID?
     return jwt.sign(
         {
             id_user: user.id_user,
             email: user.email,
             name: user.name + " " + user.surname,
-            role: user.role,
-            hasDid: user.has_did,
-            exp: parseInt(validUntil.getTime() / 1000)
+            role: user.role
         },
         process.env.JWT_PASSWORD
     )

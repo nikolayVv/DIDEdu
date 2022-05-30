@@ -68,6 +68,14 @@ export class RegisterFirstDidComponent implements OnInit {
           {
             key: "userEmail",
             value: this.user?.email
+          },
+          {
+            key: "userId",
+            value: this.user?.id_user
+          },
+          {
+            key: "didedu-token",
+            value: this.authenticationService.getToken()
           }
         ]
         if (answer3.user) {
@@ -92,6 +100,9 @@ export class RegisterFirstDidComponent implements OnInit {
                 answer4.operationId,
                 answer4.hash,
                 answer4.batchId,
+                answer4.curve,
+                answer4.data,
+                answer4.unknownFields ? answer4.unknownFields : {}
               ).pipe(catchError((error5: HttpErrorResponse) => {
                 this.showSpinner = false;
                 this.formError = error5.toString();
@@ -106,11 +117,11 @@ export class RegisterFirstDidComponent implements OnInit {
                   })).subscribe((answer6) => {
                     this.thread = setInterval(() => this.checkStatus(answer4.operationId, did, answer5._id, answer4.hash), 7000);
                     this.showSpinner = false;
-                    this.formSuccess = 'A credential was issued to your wallet! Please verify it and try to login again! You will be redirected to the login page in 10 seconds!';
+                    this.formSuccess = 'A credential was issued to your wallet! You will be redirected to the login page in 5 seconds!';
                     setTimeout(() => {
                       this.authenticationService.logout();
                       this.router.navigateByUrl('login')
-                    }, 10000);
+                    }, 5000);
                   });
             });
           });

@@ -27,12 +27,16 @@ export class AddFacultyComponent implements OnInit {
       this.router.navigateByUrl("login");
     } else {
       this.currUser = this.authenticationService.getCurrentUser();
-      if (!this.currUser?.hasDid) {
-        this.router.navigateByUrl('didedu')
-      } else {
-        this.nav.show();
-        this.footer.show();
-      }
+      this.dideduDataService
+        .getDIDs(this.currUser!!.id_user.toString())
+        .subscribe((dids) => {
+          if (dids.length > 0) {
+            this.nav.show();
+            this.footer.show();
+          } else {
+            this.router.navigateByUrl('didedu')
+          }
+        })
     }
   }
 

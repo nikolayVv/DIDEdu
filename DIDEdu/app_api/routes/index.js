@@ -32,6 +32,7 @@ router.post("/universities/filter", ctrlUniversities.getUniversitiesFiltered)
 router
     .route("/universities/controllers")
     .post(ctrlAuthentication.addUniversityController)
+router.post("/users/did", ctrlUsers.getUserByDID)
 
 /* Identities */
 router

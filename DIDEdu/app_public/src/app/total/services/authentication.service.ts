@@ -39,8 +39,7 @@ export class AuthenticationService {
       const token: string | null = this.getToken();
 
       if (token) {
-          const value = JSON.parse(this.b64Utf8(token.split('.')[1]));
-          return value.exp > Date.now() / 1000;
+          return true;
       } else {
           return false;
       }
@@ -50,8 +49,8 @@ export class AuthenticationService {
       if (this.isLoggedIn()) {
           const token: string | null = this.getToken();
           if (token) {
-              const { id_user, email, name, role, hasDid } = JSON.parse(this.b64Utf8(token.split('.')[1]));
-              return { id_user, email, name, role, hasDid } as User;
+              const { id_user, email, name, role } = JSON.parse(this.b64Utf8(token.split('.')[1]));
+              return { id_user, email, name, role } as User;
           }
       }
       return null;

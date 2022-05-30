@@ -5,11 +5,12 @@ import io.iohk.atala.prism.api.node.NodePayloadGenerator
 import io.iohk.atala.prism.common.PrismSdkInternal
 import io.iohk.atala.prism.crypto.Sha256Digest
 import io.iohk.atala.prism.crypto.derivation.KeyDerivation
-import io.iohk.atala.prism.identity.IssuingKeyUsage
-import io.iohk.atala.prism.identity.MasterKeyUsage
-import io.iohk.atala.prism.identity.PrismDid
-import io.iohk.atala.prism.identity.RevocationKeyUsage
+import io.iohk.atala.prism.crypto.keys.ECPublicKey
+import io.iohk.atala.prism.crypto.keys.toProto
+import io.iohk.atala.prism.identity.*
+import io.iohk.atala.prism.protos.PublicKey
 import kotlinx.coroutines.runBlocking
+import pbandk.decodeFromByteArray
 import reactor.kotlin.core.publisher.toMono
 
 @OptIn(PrismSdkInternal::class)
@@ -34,28 +35,34 @@ fun main(args: Array<String>) {
     val didCanonical = longDID.asCanonical().did
     val didLongForm = longDID.did
 
-    var nodePayloadGenerator = NodePayloadGenerator(
-        longDID,
-        mapOf(
-            PrismDid.DEFAULT_MASTER_KEY_ID to masterKeyPair.privateKey,
-            PrismDid.DEFAULT_ISSUING_KEY_ID to issuingKeyPair.privateKey,
-            PrismDid.DEFAULT_REVOCATION_KEY_ID to revocationKeyPair.privateKey
-        )
-    )
-    val createDidInfo = nodePayloadGenerator.createDid()
-    val createDidOperationId = runBlocking {
-        nodeAuthApi.createDid(
-            createDidInfo.payload,
-            longDID,
-            PrismDid.DEFAULT_MASTER_KEY_ID)
-    }
-    println(createDidOperationId.hexValue())
-    val hash = createDidOperationId.digest;
-    println(hash.hexValue)
-    val hex = hash.hexValue
-    val newDigest = Sha256Digest.fromHex(hex)
-    println(newDigest);
-    println(AtalaOperationId(newDigest).hexValue());
+    val hex = issuingKeyPair.publicKey.getHexEncoded()
+    println(issuingKeyPair.publicKey.toProto())
+
+
+
+
+//    var nodePayloadGenerator = NodePayloadGenerator(
+//        longDID,
+//        mapOf(
+//            PrismDid.DEFAULT_MASTER_KEY_ID to masterKeyPair.privateKey,
+//            PrismDid.DEFAULT_ISSUING_KEY_ID to issuingKeyPair.privateKey,
+//            PrismDid.DEFAULT_REVOCATION_KEY_ID to revocationKeyPair.privateKey
+//        )
+//    )
+//    val createDidInfo = nodePayloadGenerator.createDid()
+//    val createDidOperationId = runBlocking {
+//        nodeAuthApi.createDid(
+//            createDidInfo.payload,
+//            longDID,
+//            PrismDid.DEFAULT_MASTER_KEY_ID)
+//    }
+//    println(createDidOperationId.hexValue())
+//    val hash = createDidOperationId.digest;
+//    println(hash.hexValue)
+//    val hex = hash.hexValue
+    //val newDigest = Sha256Digest.fromHex(hex)
+//    println(newDigest);
+//    println(AtalaOperationId(newDigest).hexValue());
 
 
 //    //PUBLIC

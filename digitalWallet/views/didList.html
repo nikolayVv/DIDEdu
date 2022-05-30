@@ -16,7 +16,6 @@
                 <h6 class="card-text text-light">(Verifiable credential)</h6>
                 <h5 class="card-title">{{credential.title}}</h5>
                 <p class="card-text">{{credential.status === 'Pending' || credential.status === 'Confirming' ? credential.status + '...' : credential.status}}</p>
-                <button ng-if="credential.status === 'Success'" class="btn btn-sm btn-light">Verify</button>
             </div>
         </div>
 

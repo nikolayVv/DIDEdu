@@ -1,0 +1,38 @@
+<div class="modal pt-5 mt-5" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Digital Wallet - Login</h4>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="submit()" class="pb-1 ps-3" autocomplete="off">
+          <div *ngIf="formError" class="form-group">
+            <div class="alert alert-danger p-2 mt-4" role="alert">
+              <i class="fas fa-exclamation-triangle pe-2"></i>{{ formError }}
+            </div>
+          </div>
+          <div class="input-group mb-4 row">
+            <div class="col col-sm-12 col-xl-12">
+              <label for="username" class="form-label"><b>Username</b></label>
+              <input type="text" class="form-control" id="username" name="username" aria-describedby="username" placeholder="Username" [(ngModel)]="walletCredentials.username">
+            </div>
+          </div>
+          <div class="input-group mb-4 row">
+            <div class="col col-sm-12 col-xl-12">
+              <label for="password" class="form-label"><b>Password</b></label>
+              <input type="password" class="form-control" id="password" name="password" aria-describedby="password" placeholder="Password" [(ngModel)]="walletCredentials.password">
+            </div>
+          </div>
+          <div class="row pt-3 pb-4">
+            <div class="d-flex justify-content-start col col-xl-6">
+              <button type="button" class="btn mainBtn pt-2 me-3" style="border-radius: 25px" (click)="close()"><h4>Cancel</h4></button>
+            </div>
+            <div class="d-flex justify-content-end col col-xl-6">
+              <button type="submit" class="btn mainBtnOutline pt-2 me-3" style="border-radius: 25px"><h4>Submit</h4></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 <app-list-universities *ngIf="currUser!!.role === 'admin'"></app-list-universities>
 
-<app-list-universities *ngIf="currDid && currUser!!.hasDid && currUser!!.role === 'universityController'"></app-list-universities>
+<app-list-universities *ngIf="currDid && hasDid && currUser!!.role === 'universityController'"></app-list-universities>
 
-<app-register-first-did [user]="currUser" *ngIf="!currUser!!.hasDid && currUser!!.role !== 'admin'"></app-register-first-did>
+<app-register-first-did [user]="currUser" *ngIf="!hasDid && currUser!!.role !== 'admin'"></app-register-first-did>

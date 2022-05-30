@@ -8,6 +8,7 @@ import { ResultAuthentication } from "../classes/result-authentication";
 import { BROWSER_STORAGE } from "../classes/storage";
 import { environment } from "../../../environments/environment";
 import {Identity} from "../classes/identity";
+import has = Reflect.has;
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,15 @@ export class DideduDataService {
   private apiUrl = environment.apiUrl;
   private didUrl = environment.didUrl;
   private walletUrl = environment.walletUrl;
+
+  /* Authentication */
+  public login(user: User): Observable<ResultAuthentication> {
+    return this.authentication('login', user);
+  }
+
+  public registerUniversityController(user: User): Observable<ResultAuthentication> {
+    return this.authentication(`universities/controllers`, user);
+  }
 
   /* Universities */
   public getAllUniversities(): Observable<University[]> {
@@ -75,13 +85,13 @@ export class DideduDataService {
         .pipe(retry(1), catchError(this.handleError));
   }
 
-  /* Authentication */
-  public login(user: User): Observable<ResultAuthentication> {
-      return this.authentication('login', user);
-  }
+  /* Users */
+  public getUserByDID(did: string): Observable<User> {
+      const url: string = `${this.apiUrl}/users/did`;
 
-  public registerUniversityController(user: User): Observable<ResultAuthentication> {
-      return this.authentication(`universities/controllers`, user);
+      return this.http
+        .post<User>(url, { did: did })
+        .pipe(retry(1), catchError(this.handleError));
   }
 
   /* DID */
@@ -117,7 +127,6 @@ export class DideduDataService {
         .pipe(retry(1), catchError(this.handleError));
   }
 
-
   public issueCredential(
     username: string,
     mnemonic: string[],
@@ -134,6 +143,31 @@ export class DideduDataService {
           passphrase: passphrase,
           didHolder: didHolder,
           data: data
+        }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public verifyCredential(
+    credential: string,
+    hash: string,
+    batchId: string,
+    issuerDid: string,
+    userEmail: string,
+    userId: string,
+    holderDid: string,
+    credentialName: string
+  ): Observable<any> {
+      const url: string = `${this.didUrl}/verify/credential`;
+
+      return this.http
+        .post(url, {
+            credential: credential,
+            credentialHash: hash,
+            batchId: batchId,
+            issuerDid: issuerDid,
+            userEmail: userEmail,
+            userId: userId,
+            holderDid: holderDid,
+            credentialName: credentialName
         }).pipe(retry(1), catchError(this.handleError));
   }
 
@@ -155,7 +189,10 @@ export class DideduDataService {
     credential: string,
     operationId: string,
     hash: string,
-    batchId: string
+    batchId: string,
+    curve: string,
+    data: number[],
+    unknownFields: any
   ): Observable<any> {
       const url: string = `${this.walletUrl}/did/vc`;
 
@@ -167,7 +204,10 @@ export class DideduDataService {
             credential,
             operationId,
             hash,
-            batchId
+            batchId,
+            curve,
+            data,
+            unknownFields
           }
         }).pipe(retry(1), catchError(this.handleError));
   }

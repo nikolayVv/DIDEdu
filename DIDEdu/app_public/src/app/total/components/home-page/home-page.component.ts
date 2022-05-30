@@ -14,6 +14,7 @@ import {DideduDataService} from "../../services/didedu-data.service";
 export class HomePageComponent implements OnInit {
   public currUser: User | null = null
   public currDid: string = '';
+  public hasDid: boolean = false;
 
   constructor(
     private nav: NavbarService,
@@ -28,10 +29,16 @@ export class HomePageComponent implements OnInit {
       this.router.navigateByUrl("login");
     } else {
       this.currUser = this.authenticationService.getCurrentUser();
-      if (this.currUser?.role === 'admin' || (this.currUser?.hasDid && this.currUser?.role !== 'admin' && this.currUser.hasDid)) {
-        this.nav.show();
-        this.footer.show();
-      }
+      this.dideduDataService
+        .getDIDs(this.currUser!!.id_user.toString())
+        .subscribe((dids) => {
+          console.log(dids);
+          if (this.currUser?.role === 'admin' || (dids.length > 0 && this.currUser?.role !== 'admin')) {
+            this.hasDid = true;
+            this.nav.show();
+            this.footer.show();
+          }
+        });
     }
   }
 
