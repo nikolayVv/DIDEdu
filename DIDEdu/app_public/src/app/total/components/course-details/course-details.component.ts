@@ -118,6 +118,7 @@ export class CourseDetailsComponent implements OnInit {
                     did.credentialsList.forEach((credential: any) => {
                       this.currCredentials.push({
                         title: credential.title,
+                        did: did.did,
                         credential: credential.credential,
                         batchId: credential.batchId
                       });

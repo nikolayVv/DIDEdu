@@ -6,5 +6,6 @@ export class Credential {
 export class CredentialPresent {
   'title': string;
   'credential': string;
+  'did': string;
   'batchId': string;
 }

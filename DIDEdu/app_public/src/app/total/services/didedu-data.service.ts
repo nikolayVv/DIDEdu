@@ -14,6 +14,7 @@ import {Program} from "../classes/program";
 import {Course, CourseDetails} from "../classes/course";
 import {ObligationsGroup} from "../classes/obligation";
 import {Holder} from "../classes/holder";
+import {CredentialPresent} from "../classes/credential";
 
 @Injectable({
   providedIn: 'root'
@@ -288,6 +289,54 @@ export class DideduDataService {
         }).pipe(retry(1), catchError(this.handleError));
   }
 
+  public issueBatch(
+    username: string,
+    mnemonic: string[],
+    passphrase: string,
+    data: any
+  ): Observable<any> {
+    const url: string = `${this.didUrl}/issue/batch`;
+
+    return this.http
+      .post(url, {
+        username: username,
+        mnemonic: mnemonic,
+        passphrase: passphrase,
+        data: data
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public issuePresentation(
+    title: string,
+    subjectTitle: string,
+    username: string,
+    mnemonic: string[],
+    passphrase: string,
+    didHolders: string[],
+    credentials: CredentialPresent[],
+    userEmail: string,
+    userId: string,
+    adminDid: string,
+    role: string = ''
+  ): Observable<any> {
+    const url: string = `${this.didUrl}/issue/presentation`;
+
+    return this.http
+      .post(url, {
+        title: title,
+        subjectTitle: subjectTitle,
+        username: username,
+        mnemonic: mnemonic,
+        passphrase: passphrase,
+        didHolders: didHolders,
+        credentials: credentials,
+        userEmail: userEmail,
+        userId: userId,
+        adminDid: adminDid,
+        role: role
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
   public verifyCredential(
     credential: string,
     batchId: string,
@@ -333,23 +382,6 @@ export class DideduDataService {
         holderDid: holderDid,
         hash: hash,
         batchId: batchId
-      }).pipe(retry(1), catchError(this.handleError));
-  }
-
-  public issueBatch(
-    username: string,
-    mnemonic: string[],
-    passphrase: string,
-    data: any
-  ): Observable<any> {
-    const url: string = `${this.didUrl}/issue/batch`;
-
-    return this.http
-      .post(url, {
-        username: username,
-        mnemonic: mnemonic,
-        passphrase: passphrase,
-        data: data
       }).pipe(retry(1), catchError(this.handleError));
   }
 

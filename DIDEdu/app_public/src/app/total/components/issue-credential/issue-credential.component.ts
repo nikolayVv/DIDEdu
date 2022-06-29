@@ -54,7 +54,8 @@ export class IssueCredentialComponent implements OnInit {
     type: 0,
     exam: 0,
     credentials: [],
-    valid: false
+    validAuth: false,
+    validEnroll: false
   }
 
   //Credential will have
@@ -113,25 +114,107 @@ export class IssueCredentialComponent implements OnInit {
   }
 
   public submitPresentation(): void {
+    this.disabled = 'disabled'
     this.formError = '';
 
-    if (this.presentationCredential.credentials.length === 0) {
+    if (this.presentationCredential.credentials.length === 0 || this.presentationCredential.credentials.length === 2 && this.presentationCredential.validAuth && this.presentationCredential.validEnroll) {
+      this.disabled = '';
       this.formError = 'You must choose at least one credential to add to the presentation!';
-    } else if (!this.presentationCredential.valid) {
+    } else if (!this.presentationCredential.validAuth) {
+      this.disabled = '';
       this.formError = 'The authentication credential for DIDEdu is required!';
+    } else if (!this.presentationCredential.validEnroll) {
+      this.disabled = '';
+      this.formError = `The enrollment credential for the course '${this.course?.title} is required'!`;
     } else if (this.presentationCredential.type === 0) {
+      this.disabled = '';
       this.formError = 'You must choose presentation type!';
     } else if (this.presentationCredential.type === '1' && this.presentationCredential.exam === 0) {
+      this.disabled = '';
       this.formError = 'You must choose exam which you to apply for!';
     } else {
+      let didHolders: string[] = []
+      this.course?.professors.forEach(professor => {
+        didHolders.push(professor.did);
+      })
+      this.dideduDataService
+        .getWalletAcc(environment.WALLET_USERNAME, environment.WALLET_PASSWORD)
+        .pipe(catchError((error: HttpErrorResponse) => {
+          this.disabled = '';
+          this.formError = error.toString();
+          return throwError(() => error);
+        })).subscribe((answer) => {
+          let presType = '';
+
+          switch (this.presentationCredential.type) {
+            case '1':
+              presType = `Exam (${this.presentationCredential.exam})`
+              break;
+            case '2':
+              presType = 'Course end'
+              break;
+            case '3':
+              presType = 'Year end'
+              break;
+            case '4':
+              presType = 'Program end'
+              break;
+          }
+          this.dideduDataService
+            .issuePresentation(
+              `${this.user?.name}(${this.user?.id_user}) - ${presType}, Presentation`,
+              `${this.course?.title} (Enrollment)`,
+              this.username,
+              this.mnemonic,
+              this.passphrase,
+              didHolders,
+              this.presentationCredential.credentials,
+              this.user?.email!!,
+              this.user?.id_user.toString()!!,
+              answer.user.didList[0].did,
+              this.user?.role
+            ).pipe(catchError((error2: HttpErrorResponse) => {
+            this.disabled = '';
+            this.formError = error2.toString();
+            return throwError(() => error2);
+          })).subscribe(answer2 => {
+            this.dideduDataService
+              .changeObligationStatus(this.currObligation?.id_obligation!!, 'Issued')
+              .subscribe(async (answer3) => {
+                await Promise.all(didHolders.map(async (did, index) => {
+                  await this.dideduDataService
+                    .addCredentialToAcc(
+                      did,
+                      `${this.user?.name}(${this.user?.id_user}) - ${presType}, Presentation`,
+                      answer2.credentials[index],
+                      answer2.operationId,
+                      answer2.hash,
+                      answer2.batchId
+                    ).subscribe((answer4) => {
+                      let newThread = new Thread();
+                      newThread.currThread = setInterval(() => this.checkStatus(answer2.operationId, did, answer4._id, answer2.hash), 7000);
+                      newThread.currStatus = '';
+                      newThread.did = did;
+                      this.statusThreadArray.push(newThread);
+                    })
+                })); 
+                this.disabled = '';
+                this.credentialsEvent.emit();
+                this.cleanModal();
+              })
+          });
+      });
+
 
     }
   }
 
   public submitCredential(): void {
+    this.disabled = 'disabled';
     this.formError = '';
 
     if (this.obligationCredential.holders.length === 0) {
+      this.disabled = '';
       this.formError = 'You need to choose at least one student to issue the credential to!';
     } else {
       this.dideduDataService
@@ -393,7 +476,10 @@ export class IssueCredentialComponent implements OnInit {
 
   public removeCredential(credential: CredentialPresent, index: number): void {
     if (credential.title === 'DIDEdu-Auth') {
-      this.presentationCredential.valid = false;
+      this.presentationCredential.validAuth = false;
+    }
+    if (credential.title === `${this.course?.title} (Enrollment)`) {
+      this.presentationCredential.validEnroll = false;
     }
     this.presentationCredential.credentials.splice(index, 1);
     this.credentials.push(credential);
@@ -401,23 +487,11 @@ export class IssueCredentialComponent implements OnInit {
 
   public addCredential(credential: CredentialPresent, index: number): void {
     if (credential.title === 'DIDEdu-Auth') {
-      this.presentationCredential.valid = true;
+      this.presentationCredential.validAuth = true;
     }
-    // this.dideduDataService
-    //   .issuePresentation(
-    //
-    //   ).pipe(catchError((error: HttpErrorResponse) => {
-    //     this.disabled = '';
-    //     this.formError = error.toString();
-    //     return throwError(() => error);
-    //   })).subscribe(presentation => {
-    //     console.log(presentation);
-    //     console.log(this.mnemonic);
-    //     console.log(this.username);
-    //     console.log(this.passphrase);
-    //     // this.dideduDataService
-    //     //   .issueCredential()
-    //});
+    if (credential.title === `${this.course?.title} (Enrollment)`) {
+      this.presentationCredential.validEnroll = true;
+    }
     this.credentials.splice(index, 1);
     this.presentationCredential.credentials.push(credential);
   }
@@ -435,6 +509,11 @@ export class IssueCredentialComponent implements OnInit {
     this.obligationCredential.holders = [];
     this.obligationCredential.minVal = 0;
     this.obligationCredential.maxVal = 0;
+    this.presentationCredential.validAuth = false;
+    this.presentationCredential.validEnroll = false;
+    this.presentationCredential.exam = 0;
+    this.presentationCredential.type = 0;
+    this.presentationCredential.credentials = [];
   }
 
   private checkStatus = (operationId: string, did: string, idUser: string, credentialHash: string) => {

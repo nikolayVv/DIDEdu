@@ -35,6 +35,7 @@ import reactor.kotlin.core.publisher.toMono
 import java.security.PublicKey
 import java.util.*
 import javax.validation.Valid
+import kotlin.math.max
 
 @RestController
 @RequestMapping("/did", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -380,6 +381,267 @@ class IdentityController {
         )
     }
 
+    @OptIn(PrismSdkInternal::class)
+    @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca", "http://localhost:4200"])
+    @PostMapping("/issue/presentation")
+    suspend fun issuePresentation(
+        @RequestBody @Valid request: IssuePresentationRequest
+    ): IssueBatchResponse {
+        val keys = try {
+            prepareKeysFromMnemonic(MnemonicCode(request.mnemonic), request.username + request.passphrase)
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There was an error generating the keys.", e)
+        }
+
+        val unpublishedDID = try {
+            PrismDid.buildExperimentalLongFormFromKeys(
+                keys[PrismDid.DEFAULT_MASTER_KEY_ID]?.publicKey!!,
+                keys[PrismDid.DEFAULT_ISSUING_KEY_ID]?.publicKey!!,
+                keys[PrismDid.DEFAULT_REVOCATION_KEY_ID]?.publicKey!!
+            )
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't create DID from Public keys.", e)
+        }
+
+        val contents = mutableListOf<Pair<String, JsonPrimitive>>()
+        contents.add(Pair("credentialName", JsonPrimitive(request.title)))
+
+        var isAuth = false
+        var isEnrolled = false
+        var index = 1
+
+        for (credentialData in request.credentials) {
+            //verify each
+            val json = try {
+                Json.parseToJsonElement(credentialData.credential).jsonObject
+            } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't revert string to json!", e)
+            }
+
+            val credential = try {
+                JsonBasedCredential.fromString(json["encodedSignedCredential"]?.jsonPrimitive?.content!!)
+            } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the credential!", e)
+            }
+            val proof = try {
+                MerkleInclusionProof.decode(json["proof"]?.jsonObject.toString())
+            } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't read the proof!", e)
+            }
+            val batchId = try {
+                CredentialBatchId.fromString(credentialData.batchId)
+            } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid batchId!", e)
+            }
+            if (batchId === null) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't generate batch!")
+            }
+            val credentialHash = proof.hash
+
+
+            val status = try {
+                identityRepository.verifyCredentialFromBlockchain(credential, proof)
+            } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "There was an error verifying the credential from the blockchain!", e)
+            }
+
+            // Check if it is on the blockchain
+            if (!status.verificationErrors.isEmpty()) {
+                val revocationTime = try {
+                    identityRepository.checkRevocationTime(batchId, credentialHash)
+                } catch (e: Exception) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't get the revocation time from the blockchain", e)
+                }
+
+                if (revocationTime !== null && status.verificationErrors.contains(VerificationError.CredentialWasRevokedOn(revocationTime.ledgerData!!.timestampInfo))) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential is revoked!")
+                } else if (revocationTime !== null && status.verificationErrors.contains(VerificationError.BatchWasRevokedOn(revocationTime.ledgerData!!.timestampInfo))) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The batch is revoked!")
+                } else if (status.verificationErrors.contains(VerificationError.IssuerDidNotFoundInCredential)) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't find the issuer's did on the chain!")
+                } else if (status.verificationErrors.contains(VerificationError.InvalidMerkleProof)) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid proof!")
+                } else if (status.verificationErrors.contains(VerificationError.BatchNotFoundOnChain(batchId.id))) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't find the batch on the chain!")
+                } else if (status.verificationErrors.contains(VerificationError.IssuerKeyNotFoundInCredential)) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't find the issuer's key in the credential!")
+                } else {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, status.verificationErrors[0].errorMessage)
+                }
+            }
+
+            val credentials = credential.content.getField("credentialSubject")!!.jsonObject.entries
+
+            val credentialName = credentials.first().value.toString()
+            if (!credentialName.equals("\"${credentialData.title}\"")) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential name in the credential doesn't match with the credential name in the database!")
+            }
+
+            var isSigned = false
+
+            if (credentialName.equals("\"DIDEdu-Auth\"") || credentialName.equals("\"${request.subjectTitle}\"")) {
+                val model = getModel(request.adminDid)
+                val issuerPublicKey = model!!.toProto().publicKeys.find { it.id.equals(PrismDid.DEFAULT_ISSUING_KEY_ID) }
+                val ECIssuerPublicKey = issuerPublicKey!!.compressedEcKeyData!!.toModel()
+                if (!credential.isValidSignature(ECIssuerPublicKey)) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential '${credentialData.title}' is not signed by the DIDEdu issuing key!")
+                } else {
+                    if (credentialName.equals("\"DIDEdu-Auth\"")) {
+                        isAuth = true
+                    } else {
+                        isEnrolled = true
+                    }
+                }
+            } else {
+                for (signerDid in request.didHolders) {
+                    val model = getModel(signerDid)
+                    val issuerPublicKey = model!!.toProto().publicKeys.find { it.id.equals(PrismDid.DEFAULT_ISSUING_KEY_ID) }
+                    val ECIssuerPublicKey = issuerPublicKey!!.compressedEcKeyData!!.toModel()
+                    if (credential.isValidSignature(ECIssuerPublicKey)) {
+                        isSigned = true
+                        break
+                    }
+                }
+
+                if (!isSigned) {
+                    throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential '${credentialData.title}' is not signed by any of the professors in the course!")
+                }
+            }
+
+            var emailValid = false
+            var idValid = false
+            var roleValid = true
+            var minValue = 0.0f
+            var maxValue = 0.0f
+            var value = 0.0f
+
+            for (data in credentials) {
+                if (data.key.equals("userId")) {
+                    if (data.value.toString().equals("\"${request.userId}\"")) {
+                        idValid = true
+                    } else {
+                        break
+                    }
+                }
+                if (data.key.equals("minValue")) {
+                    minValue = data.value.toString().replace("\"", "").toFloat()
+                }
+                if (data.key.equals("maxValue")) {
+                    maxValue = data.value.toString().replace("\"", "").toFloat()
+                }
+                if (data.key.equals("value")) {
+                    value = data.value.toString().replace("\"", "").toFloat()
+                }
+                if (data.key.equals("userEmail")) {
+                    if (data.value.toString().equals("\"${request.userEmail}\"")) {
+                        emailValid = true
+                    } else {
+                        break
+                    }
+                }
+                if (data.key.equals("role")) {
+                    if (!data.value.toString().equals("\"${request.role}\"")) {
+                        roleValid = false
+                        break
+                    }
+                }
+            }
+            if (!idValid || !emailValid || !roleValid) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The account data in the credential '${credentialData.title}' doesn't match with the account data in the database!")
+            }
+
+            var resultWords = ""
+            var resultPercent = ""
+            if (!credentialName.equals("\"DIDEdu-Auth\"") && !credentialName.equals("\"${request.subjectTitle}\"")) {
+                resultPercent = "%.2f".format((value/maxValue)*100)
+                if (value >= minValue) {
+                    resultWords = "Passed"
+                } else {
+                    resultWords = "Failed"
+                }
+
+                contents.add(Pair("credentialName(${index})", JsonPrimitive(credentialName)))
+                contents.add(Pair("credentialValuePercent(${index})", JsonPrimitive(resultPercent)))
+                contents.add(Pair("credentialValueWords(${index})", JsonPrimitive(resultWords)))
+                index++
+            }
+
+            val holderDid = credentials.last().value.toString()
+            if (!holderDid.equals("\"${credentialData.did}\"")) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The holder DID in the credential '${credentialData.title}' doesn't match the holder DID in the database!")
+            }
+        }
+        if (!isEnrolled && !isAuth) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The enrollment or authentication credential is missing")
+        }
+
+        val content = JsonObject(contents.toMap())
+        val claims = mutableListOf<CredentialClaim>()
+
+        for (did in request.didHolders) {
+            val holderDid = try { Did.fromString(did) } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "illegal DID: ${did}", e)
+            }
+            val holderPrismDid = try { PrismDid.fromDid(holderDid) } catch (e: Exception) {
+                throw ResponseStatusException(HttpStatus.BAD_REQUEST, "not a Prism DID: $holderDid", e)
+            }
+
+            val credentialClaim = CredentialClaim(
+                subjectDid = holderPrismDid,
+                content = content
+            )
+            claims.add(credentialClaim)
+        }
+
+        val issuerNodePayloadGenerator = NodePayloadGenerator(
+            unpublishedDID,
+            mapOf(PrismDid.DEFAULT_ISSUING_KEY_ID to keys[PrismDid.DEFAULT_ISSUING_KEY_ID]?.privateKey!!)
+        )
+
+        val issueCredentialsInfo = issuerNodePayloadGenerator.issueCredentials(
+            PrismDid.DEFAULT_ISSUING_KEY_ID,
+            claims.toTypedArray()
+        )
+
+        var operationId = try {
+            identityRepository.issueCredentialToBlockchain(unpublishedDID, issueCredentialsInfo)
+        } catch (e: Exception) {
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Couldn't add the credential on the blockchain.", e)
+        }
+        var message = "Presentation was successfully issued!"
+
+        var id = ""
+        if (operationId !== null) {
+            id = operationId.digest.hexValue
+        } else {
+            message = "There was a problem, when trying to add the credential on the blockchain!"
+        }
+
+
+        var json: MutableList<String> = mutableListOf()
+        var hash = ""
+        if (issueCredentialsInfo !== null) {
+            hash = issueCredentialsInfo.operationHash.hexValue
+            for (info in issueCredentialsInfo.credentialsAndProofs) {
+                println(" - ${info.signedCredential.hash().hexValue}")
+                json.add(JsonObject(mapOf(
+                    "encodedSignedCredential" to JsonPrimitive(info.signedCredential.canonicalForm),
+                    "proof" to Json.parseToJsonElement(info.inclusionProof.encode())
+                )).toString())
+            }
+        } else {
+            message = "There was a problem, when trying to create the credential!"
+        }
+
+        return IssueBatchResponse(
+            message= message,
+            credentials = json,
+            operationId = id,
+            hash = hash,
+            batchId = issueCredentialsInfo.batchId.id,
+        )
+    }
+
     @CrossOrigin(origins = ["chrome-extension://dmfpnaafelnjlbkhmococamijdjedcca", "http://localhost:4200"])
     @PostMapping("/revoke/credential")
     suspend fun revokeCredential(
@@ -511,6 +773,7 @@ class IdentityController {
 //            result = result
 //        )
 //    }
+
 
     // TODO
     @OptIn(PrismSdkInternal::class)
