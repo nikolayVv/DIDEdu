@@ -28,7 +28,11 @@ export class ListUniversitiesComponent implements OnInit {
   private getUniversities(): void {
       this.dideduDataService
         .getAllUniversities()
-        .subscribe((foundUniversities) => (this.universities = foundUniversities))
+        .pipe(catchError((error: HttpErrorResponse) => {
+          this.errorMessage = error.toString();
+          this.universities = [];
+          return throwError(() => error);
+        })).subscribe((foundUniversities) => (this.universities = foundUniversities))
   }
 
   public changeFilter(filter: string): void {

@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
       name: '',
       password: '',
       role: '',
-      hasDid: 0
+      hasDid: 0,
+      did: ''
   }
 
   public walletCredentials = {
@@ -102,6 +103,7 @@ export class LoginComponent implements OnInit {
       this.dideduDataService
         .checkStatus(authCredential.operationId)
         .pipe(catchError((error: HttpErrorResponse) => {
+          this.showSpinner = false;
           this.formError = error.toString();
           return throwError(() => error);
         })).subscribe((answer) => {
@@ -122,6 +124,7 @@ export class LoginComponent implements OnInit {
             this.dideduDataService
               .getUserByDID(did)
               .pipe(catchError((error2: HttpErrorResponse) => {
+                this.showSpinner = false;
                 this.formError = error2.toString();
                 return throwError(() => error2);
               })).subscribe((answer2) => {
@@ -135,7 +138,6 @@ export class LoginComponent implements OnInit {
                   this.dideduDataService
                     .verifyCredential(
                       authCredential.credential,
-                      authCredential.hash,
                       authCredential.batchId,
                       answer3.user.didList[0].did,
                       answer2.email,

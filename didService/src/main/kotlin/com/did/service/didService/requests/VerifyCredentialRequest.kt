@@ -10,9 +10,6 @@ data class VerifyCredentialRequest(
     val credential: String,
 
     @field:NotEmpty
-    var credentialHash: String,
-
-    @field:NotEmpty
     var batchId: String,
 
     @field:NotEmpty
@@ -28,5 +25,7 @@ data class VerifyCredentialRequest(
     var holderDid: String,
 
     @field:NotEmpty
-    var credentialName: String
+    var credentialName: String,
+
+    var role: String
 )

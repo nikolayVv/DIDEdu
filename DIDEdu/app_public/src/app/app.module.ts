@@ -24,6 +24,12 @@ import { HomePageComponent } from './total/components/home-page/home-page.compon
 import { SpinnerComponent } from './total/components/spinner/spinner.component';
 import { RegisterFirstDidComponent } from './total/components/register-first-did/register-first-did.component';
 import { WalletLoginComponent } from './total/components/wallet-login/wallet-login.component';
+import { ListFacultiesComponent } from './total/components/list-faculties/list-faculties.component';
+import { ListCoursesComponent } from './total/components/list-courses/list-courses.component';
+import { CourseDetailsComponent } from './total/components/course-details/course-details.component';
+import { SidebarComponent } from './total/components/sidebar/sidebar.component';
+import { IssueCredentialComponent } from './total/components/issue-credential/issue-credential.component';
+import { PercentagePipe } from './total/pipes/percentage.pipe';
 
 @NgModule({
   declarations: [
@@ -44,6 +50,12 @@ import { WalletLoginComponent } from './total/components/wallet-login/wallet-log
     SpinnerComponent,
     RegisterFirstDidComponent,
     WalletLoginComponent,
+    ListFacultiesComponent,
+    ListCoursesComponent,
+    CourseDetailsComponent,
+    SidebarComponent,
+    IssueCredentialComponent,
+    PercentagePipe,
   ],
   imports: [
     BrowserModule,

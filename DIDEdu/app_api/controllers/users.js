@@ -62,7 +62,6 @@ const getUserByDID = (req, res) => {
         return res.status(400).json({ message: "All the data is required." });
     }
 
-    console.log(req.body.did)
     connection.query(`SELECT * FROM identity WHERE did='${req.body.did}'`, (error, identities) => {
         if (error) {
             return res.status(500).json(error);
@@ -82,11 +81,50 @@ const getUserByDID = (req, res) => {
             res.status(200).json(users[0]);
         });
     })
+};
+
+const getStudentsByCourse = (req, res) => {
+    let idCourse = req.params.idCourse;
+    if (!idCourse) {
+        return res.status(404).json({ message: "Couldn't find course, idCourse is required parameter." });
+    }
+
+    connection.query(`SELECT * FROM course WHERE id_course='${idCourse}'`, (error, courses) => {
+        if (error) {
+            return res.status(500).json(error);
+        }
+        if (!courses[0]) {
+            return res.status(404).json({message: "Couldn't find course with the given ID."})
+        }
+
+        connection.query(`SELECT user FROM student WHERE course='${idCourse}'`, (error, students) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
+            if (students.length === 0) {
+                return res.status(404).json({ message: `No students found for course '${courses[0].title}'.` });
+            }
+
+            let ids = [];
+            students.forEach(student => {
+                ids.push(student.user);
+            });
+
+            connection.query(`SELECT * FROM user WHERE id_user IN (${ids.join()})`, (error, users) => {
+                if (error) {
+                    return res.status(500).json(error);
+                }
+
+                res.status(200).json(users);
+            });
+        })
+    });
 }
 
 module.exports = {
     getAllUsers,
     getUserById,
     deleteUser,
-    getUserByDID
+    getUserByDID,
+    getStudentsByCourse
 };

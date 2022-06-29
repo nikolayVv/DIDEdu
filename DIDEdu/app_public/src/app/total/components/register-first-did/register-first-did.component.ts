@@ -53,83 +53,96 @@ export class RegisterFirstDidComponent implements OnInit {
         this.formError = error1.toString();
         return throwError(() => error1);
       })).subscribe((answer1) => {
-      this.dideduDataService
-        .getWalletAcc(environment.WALLET_USERNAME, environment.WALLET_PASSWORD)
-        .pipe(catchError((error3: HttpErrorResponse) => {
-          this.showSpinner = false;
-          this.formError = error3.toString();
-          return throwError(() => error3);
-        })).subscribe((answer3) => {
-        let credential = [
-          {
-            key: "credentialName",
-            value: environment.AUTH_CREDENTIAL_NAME,
-          },
-          {
-            key: "userEmail",
-            value: this.user?.email
-          },
-          {
-            key: "userId",
-            value: this.user?.id_user
-          },
-          {
-            key: "didedu-token",
-            value: this.authenticationService.getToken()
-          }
-        ]
-        if (answer3.user) {
-          this.dideduDataService
-            .issueCredential(
-              answer3.user.username,
-              answer3.user.mnemonic,
-              environment.AUTH_CREDENTIAL_PASSPHRASE,
-              did,
-              credential
-            ).pipe(catchError((error4: HttpErrorResponse) => {
-            this.showSpinner = false;
-            this.formError = error4.toString();
-            return throwError(() => error4);
-          })).subscribe((answer4) => {
-            //Add in the user's acc
-            this.dideduDataService
-              .addCredentialToAcc(
-                did,
-                environment.AUTH_CREDENTIAL_NAME,
-                answer4.credential,
-                answer4.operationId,
-                answer4.hash,
-                answer4.batchId,
-                answer4.curve,
-                answer4.data,
-                answer4.unknownFields ? answer4.unknownFields : {}
-              ).pipe(catchError((error5: HttpErrorResponse) => {
-                this.showSpinner = false;
-                this.formError = error5.toString();
-                return throwError(() => error5);
-              })).subscribe((answer5) => {
-                this.dideduDataService
-                  .addDID(this.user!!.id_user.toString(), did)
-                  .pipe(catchError((error6: HttpErrorResponse) => {
+        this.dideduDataService
+          .getAllDIDs()
+          .subscribe((answer2) => {
+            let alreadyIn = false;
+            for (let i = 0; i < answer2.length; i++) {
+              if (answer2[i].did === did && answer2[i].title === 'Auth') {
+                alreadyIn = true;
+                break;
+              }
+            }
+            if (alreadyIn) {
+              this.showSpinner = false;
+              this.formError = `The did '${did}' is already in the database!`;
+            } else {
+              this.dideduDataService
+                .getWalletAcc(environment.WALLET_USERNAME, environment.WALLET_PASSWORD)
+                .pipe(catchError((error3: HttpErrorResponse) => {
+                  this.showSpinner = false;
+                  this.formError = error3.toString();
+                  return throwError(() => error3);
+                })).subscribe((answer3) => {
+                let credential = [
+                  {
+                    key: "credentialName",
+                    value: environment.AUTH_CREDENTIAL_NAME,
+                  },
+                  {
+                    key: "userEmail",
+                    value: this.user?.email
+                  },
+                  {
+                    key: "userId",
+                    value: this.user?.id_user
+                  },
+                  {
+                    key: "didedu-token",
+                    value: this.authenticationService.getToken()
+                  }
+                ]
+                if (answer3.user) {
+                  this.dideduDataService
+                    .issueCredential(
+                      answer3.user.username,
+                      answer3.user.mnemonic,
+                      environment.AUTH_CREDENTIAL_PASSPHRASE,
+                      did,
+                      credential
+                    ).pipe(catchError((error4: HttpErrorResponse) => {
                     this.showSpinner = false;
-                    this.formError = error6.toString();
-                    return throwError(() => error6);
-                  })).subscribe((answer6) => {
-                    this.thread = setInterval(() => this.checkStatus(answer4.operationId, did, answer5._id, answer4.hash), 7000);
-                    this.showSpinner = false;
-                    this.formSuccess = 'A credential was issued to your wallet! You will be redirected to the login page in 5 seconds!';
-                    setTimeout(() => {
-                      this.authenticationService.logout();
-                      this.router.navigateByUrl('login')
-                    }, 5000);
+                    this.formError = error4.toString();
+                    return throwError(() => error4);
+                  })).subscribe((answer4) => {
+                    //Add in the user's acc
+                    this.dideduDataService
+                      .addCredentialToAcc(
+                        did,
+                        environment.AUTH_CREDENTIAL_NAME,
+                        answer4.credential,
+                        answer4.operationId,
+                        answer4.hash,
+                        answer4.batchId
+                      ).pipe(catchError((error5: HttpErrorResponse) => {
+                      this.showSpinner = false;
+                      this.formError = error5.toString();
+                      return throwError(() => error5);
+                    })).subscribe((answer5) => {
+                      this.dideduDataService
+                        .addDID(this.user!!.id_user.toString(), did, "Auth")
+                        .pipe(catchError((error6: HttpErrorResponse) => {
+                          this.showSpinner = false;
+                          this.formError = error6.toString();
+                          return throwError(() => error6);
+                        })).subscribe((answer6) => {
+                        this.thread = setInterval(() => this.checkStatus(answer4.operationId, did, answer5._id, answer4.hash), 7000);
+                        this.showSpinner = false;
+                        this.formSuccess = 'A credential was issued to your wallet! You will be redirected to the login page in 5 seconds!';
+                        setTimeout(() => {
+                          this.authenticationService.logout();
+                          this.router.navigateByUrl('login')
+                        }, 5000);
+                      });
+                    });
                   });
-            });
+                } else {
+                  this.showSpinner = false;
+                  this.formError = 'There was an error sending the credential! Please try again with another DID!';
+                }
+              });
+            }
           });
-        } else {
-          this.showSpinner = false;
-          this.formError = 'There was an error sending the credential! Please try again with another DID!';
-        }
-      });
     });
   }
 

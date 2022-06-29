@@ -1,0 +1,90 @@
+<div class="container-fluid pt-5 mt-5 pb-3">
+  <div class="row g-5 pt-3 ms-1 pe-xl-1 me-1">
+    <!-- Courses start -->
+    <div class="col col-12 col-xl-9 bg-light">
+      <div class="row pt-3">
+        <div class="col col-12 col-xl-6">
+          <h2><span *ngIf="user!!.role === 'professor'">My </span>Courses</h2>
+        </div>
+        <div class="col col-6 col-xl-3 scrollListSmall pt-2">
+          <select class="form-select " id="year">
+            <option selected disabled>--Choose year--</option>
+            <option value="1">1. year, bachelor's degree</option>
+            <option value="2">2. year, bachelor's degree</option>
+            <option value="3">3. year, bachelor's degree</option>
+            <option value="4">1. year, master's degree</option>
+            <option value="4">2. year, master's degree</option>
+            <option value="4">1. year, doctor's degree</option>
+            <option value="4">2. year, doctor's degree</option>
+            <option value="4">3. year, doctor's degree</option>
+            <option value="1">1. year, bachelor's degree</option>
+            <option value="2">2. year, bachelor's degree</option>
+            <option value="3">3. year, bachelor's degree</option>
+            <option value="4">1. year, master's degree</option>
+            <option value="4">2. year, master's degree</option>
+            <option value="4">1. year, doctor's degree</option>
+            <option value="4">2. year, doctor's degree</option>
+            <option value="4">3. year, doctor's degree</option>
+            <option value="1">1. year, bachelor's degree</option>
+            <option value="2">2. year, bachelor's degree</option>
+            <option value="3">3. year, bachelor's degree</option>
+            <option value="4">1. year, master's degree</option>
+            <option value="4">2. year, master's degree</option>
+            <option value="4">1. year, doctor's degree</option>
+            <option value="4">2. year, doctor's degree</option>
+            <option value="4">3. year, doctor's degree</option>
+          </select>
+        </div>
+        <div class="col col-6 col-xl-3 pt-2">
+          <select class="form-select" id="program">
+            <option selected disabled>--Choose semester--</option>
+            <option value="1">Winter semester</option>
+            <option value="2">Summer semester</option>
+          </select>
+        </div>
+      </div>
+      <div class="row pt-3 pe-3">
+        <div *ngIf="errorMessage" class="d-flex justify-content-center col col-xl-12 pt-5">
+          <h2>{{ errorMessage }}</h2>
+        </div>
+        <div *ngFor="let course of courses" class="col col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 pt-3 pb-3 ">
+          <div class="card">
+            <img class="card-img-top" src="assets/images/course.jpg" alt="Card image cap">
+            <div class="card-body">
+              <h4 class="card-title mb-5"><i class="fa fa-sun containerText1"></i> {{course.title}} {{course.abbreviation ? '(' + course.abbreviation + ')' : ''}}</h4>
+              <div class="row">
+                <div *ngIf="user!!.role === 'professor'" class="col col-xl-6 d-flex justify-content-start">
+                  <a routerLink="" class="btn-sm mainBtn p-2 text-center" (click)="delete(course.id_course.toString())">Delete Course</a>
+                </div>
+                <div class="col {{user!!.role === 'professor' ? 'col-xl-6' : 'col-xl-12'}} d-flex justify-content-end">
+                  <a routerLink="/didedu/courses/{{course.id_course.toString()}}" class="btn-sm mainBtnOutline text-center">Open Course</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="courses.length > 6"class="row pt-4">
+        <nav aria-label="pagination">
+          <ul class="pagination text-secondary justify-content-center">
+            <li id="prev" class="page-item disabled">
+              <a class="page-link bg-light"><i class="fa-solid fa-xl fa-angles-left"></i></a>
+            </li>
+            <li class="pt-1 ps-2 pe-2">
+              Page <span id="currentPage"><strong>1</strong></span> of <span id="allPages"><strong>2</strong></span>
+            </li>
+            <li id="next" class="page-item">
+              <a class="page-link text-end bg-light"><i class="fa-solid fa-xl fa-angles-right"></i></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <!-- Courses end -->
+
+    <div class="col col-12 col-xl-3 pe-0 ps-0 ps-xl-4">
+      <app-sidebar></app-sidebar>
+    </div>
+  </div>
+</div>
+

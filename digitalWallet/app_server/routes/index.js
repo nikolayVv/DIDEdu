@@ -269,6 +269,55 @@ router.put("/did/vc", async (req, res) => {
   }
 });
 
+router.post("/did/vc/check", async (req, res) => {
+  if (!req.body.name || !req.body.enrollmentName) {
+    return res.status(404).json({
+      message: "Name and enrollmentName are required"
+    });
+  }
+
+  try {
+    const users = await User.find();
+    let isValid = false;
+    let result = [];
+    let enrollmentCredential;
+    req.body.users.forEach(user => {
+      isValid = false;
+      for (let i = 0; i < users.length; i++) {
+        for (let j = 0; j < users[i].didList.length; j++) {
+            if (users[i].didList[j].did === user.did) {
+              isValid = false;
+              for (let l = 0; l < users[i].didList[j].credentialsList.length; l++) {
+                if (users[i].didList[j].credentialsList[l].title === req.body.enrollmentName) {
+                  isValid = true;
+                  enrollmentCredential = users[i].didList[j].credentialsList[l];
+                }
+                if (users[i].didList[j].credentialsList[l].title === req.body.name) {
+                  isValid = false
+                  break;
+                }
+              }
+              if (isValid) {
+                let newResult = {
+                  user: user,
+                  credential: enrollmentCredential
+                }
+                result.push(newResult);
+                break;
+              }
+            }
+        }
+        if (isValid) {
+          break;
+        }
+      }
+    })
+    res.status(200).json(result);
+  } catch (e) {
+    res.status(500).json({ message: "Error in checking the credentials" })
+  }
+})
+
 router.get("/me", auth, async (req, res) => {
   try {
     // request.user is getting fetched from Middleware after token authentication

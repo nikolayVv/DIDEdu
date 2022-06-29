@@ -1,0 +1,144 @@
+<!-- Sidebar start -->
+<div class="p-4 mb-3 bg-light rounded">
+  <h4>Search</h4>
+  <form action="#" class="m-0 p-0">
+    <div class="row input-group m-0 p-0">
+      <input type="search" id="searchInput" class="form-control rounded mt-3" placeholder="Search by professor's name...">
+    </div>
+    <div class="row row-xl-12 input-group pt-3 justify-content-start m-0 p-0">
+      <div class="col col-6 col-xl-6 form-check pb-3">
+        <input class="form-check-input" type="radio" name="mainSearch" id="professors" checked>
+        <label class="form-check-label" for="professors">
+          Search professors
+        </label>
+      </div>
+      <div class="col col-6 col-xl-6 form-check d-flex justify-content-end">
+        <input class="form-check-input" type="radio" name="mainSearch" id="students">
+        <label class="form-check-label ps-2" for="students">
+          Search students
+        </label>
+      </div>
+      <div class="col col-6 col-xl-6 form-check d-flex justify-content-start">
+        <input class="form-check-input" type="radio" name="mainSearch" id="admins">
+        <label class="form-check-label ps-2" for="admins">
+          Search admins
+        </label>
+      </div>
+      <div class="col col-6 col-xl-6 form-check d-flex justify-content-end">
+        <input class="form-check-input" type="radio" name="mainSearch" id="subjects">
+        <label class="form-check-label ps-2" for="subjects">
+          Search subjects
+        </label>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="mb-3 bg-light rounded">
+  <h4 class="titleSideBar p-4 mb-0">Last visited subjects</h4>
+  <ul id="lastSubjects" class="scrollListSmall list-group list-group-flush pe-0">
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa fa-sun containerText1"></i> Course title</h5>
+          </a>
+          <p class="text-secondary mb-0">3. year, bachelor's degree (2021/2022)</p>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa fa-snowflake-o containerText1"></i> Course title)</h5>
+          </a>
+          <p class="text-secondary mb-0">3. year, bachelor's degree (2020/2021) </p>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa fa-snowflake-o containerText1"></i> Course title </h5>
+          </a>
+          <p class="text-secondary mb-0">3. year, bachelor's degree (2020/2021)</p>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa fa-sun containerText1"></i> Course title</h5>
+          </a>
+          <p class="text-secondary mb-0">3. year, bachelor's degree (2021/2022)</p>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa fa-sun containerText1"></i> Course title</h5>
+          </a>
+          <p class="text-secondary mb-0">3. year, bachelor's degree (2021/2022)</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+<div class="bg-light rounded">
+  <h4 class="titleSideBar p-4 mb-0">Assignments for this subject</h4>
+  <ul id="assignments" class="scrollListSmall list-group list-group-flush pe-0"  style="max-height: 265px">
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+          </a>
+          <h6 class="text-secondary mb-3">(Course title)</h6>
+          <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+          <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+          </a>
+          <h6 class="text-secondary mb-3">(Course title)</h6>
+          <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+          <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+          </a>
+          <h6 class="text-secondary mb-3">(Course title)</h6>
+          <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+          <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+        </div>
+      </div>
+    </li>
+    <li class="list-group-item pe-0 bg-light">
+      <div class="row me-3 pt-2 pb-2">
+        <div class="col col-xl-12">
+          <a href="courseDetailsController.html" class="text-black">
+            <h5><i class="fa-solid fa-file containerText1"></i> Assignment title</h5>
+          </a>
+          <h6 class="text-secondary mb-3">(Course title)</h6>
+          <p class="text-secondary mb-0">Opens <b>dd:mm:yyyy hh:mm</b></p>
+          <p class="text-secondary mb-0">Closes <b>dd:mm:yyyy hh:mm</b></p>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+<!-- Sidebar end -->

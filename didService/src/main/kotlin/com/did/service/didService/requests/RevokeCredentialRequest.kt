@@ -4,6 +4,9 @@ import javax.validation.constraints.NotEmpty
 
 data class RevokeCredentialRequest(
     @field:NotEmpty
+    val credential: String,
+
+    @field:NotEmpty
     var username: String,
 
     @field:NotEmpty
@@ -13,13 +16,10 @@ data class RevokeCredentialRequest(
     var passphrase: String,
 
     @field:NotEmpty
-    var didHolder: String,
+    var holderDid: String,
 
     @field:NotEmpty
-    var oldHash: String,
-
-    @field:NotEmpty
-    var credentialHash: String,
+    var hash: String,
 
     @field:NotEmpty
     var batchId: String

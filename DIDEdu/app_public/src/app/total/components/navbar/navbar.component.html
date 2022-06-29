@@ -43,7 +43,59 @@
           <a class="nav-link tutorialSection {{getUrl() === '/didedu/editProfile' ? 'active' : ''}}" routerLink="didedu/users/{{user!!.id_user}}">Edit Profile</a>
         </li>
       </ul>
-      <ul class="navbar-nav ms-auto">
+      <ul *ngIf="isLoggedIn && user!!.role === 'facultyController'" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+        <li class="nav-item">
+          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/addFaculty' ? 'active' : ''}}" routerLink="didedu/addFaculty">Add Professor</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/addFaculty' ? 'active' : ''}}" routerLink="didedu/addFaculty">Add Student</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/addFaculty' ? 'active' : ''}}" routerLink="didedu/addFaculty">Add Subject</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/editProfile' ? 'active' : ''}}" routerLink="didedu/users/{{user!!.id_user}}">Edit Profile</a>
+        </li>
+      </ul>
+      <ul *ngIf="isLoggedIn && user!!.role === 'professor'" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+        <li class="nav-item">
+          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Courses</a>
+        </li>
+      </ul>
+      <ul *ngIf="isLoggedIn && user!!.role === 'student'" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
+        <li class="nav-item">
+          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Courses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/credentials' ? 'active' : ''}}" routerLink="didedu/addFaculty">My Credentials</a>
+        </li>
+      </ul>
+      <div *ngIf="isLoggedIn && (user!!.role === 'professor' || user!!.role === 'student')" class="ms-auto">
+        <div class="btn-group d-flex justify-content-center ms-xl-5 me-xl-5">
+          <button type="button" class="btn mainBtn ps-5 pe-5" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-user pe-3"></i> My Profile <i class="fas fa-caret-down ps-3"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-light w-100 pt-0 pb-0">
+            <li>
+                <span class="dropdown-item disabled bg-light pt-3 pb-2">
+                    <h6 class="d-inline ms-1  text-dark">Hello, {{user!!.name}}!</h6>
+                </span>
+            </li>
+            <li>
+              <hr class="dropdown-divider mt-0 mb-0">
+            </li>
+            <li><a class="dropdown-item pt-2 pb-2" routerLink="didedu/users/{{user!!.id_user}}">Edit Profile</a></li>
+            <li><a class="dropdown-item pt-2 pb-2" routerLink="" (click)="logout()">Log Out</a></li>
+          </ul>
+        </div>
+      </div>
+      <ul *ngIf="!isLoggedIn || (isLoggedIn && user!!.role !== 'professor' && user!!.role !== 'student')" class="navbar-nav ms-auto">
         <a *ngIf="!isLoggedIn" routerLink="login" class="btn mainBtn pt-3 pb-3 pe-4 ps-4 mt-1 me-3 w-100">
           Log In
         </a>

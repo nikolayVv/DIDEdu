@@ -1,0 +1,31 @@
+<div class="container-fluid pt-2 mt-5 ps-0 pe-0">
+  <div class="form-outline pt-5 p-2 ps-3 pe-3 bg-light">
+    <form action="#" class="m-0 p-0">
+      <div class="row input-group m-0 p-0">
+        <input type="search" id="searchInput" class="form-control rounded" name="filter" placeholder="Search by name..." (input)="filter()" [(ngModel)]="currInput">
+      </div>
+    </form>
+  </div>
+  <div class="row ps-3 pe-2">
+    <div *ngIf="errorMessage" class="d-flex justify-content-center col col-xl-12">
+      <h2>{{ errorMessage }}</h2>
+    </div>
+    <ul class="scrollListBig list-group list-group-flush pe-0">
+      <li class="list-group-item pe-0" *ngFor="let faculty of faculties">
+        <div class="row me-3 pt-2 pb-2">
+          <div class="col col-xl-8 pt-2">
+            <h6 class="m-0">{{faculty.title}}{{faculty.abbreviation ? ', ' + faculty.abbreviation : ''}}</h6>
+          </div>
+          <div class="col col-xl-2 ms-auto d-flex justify-content-end">
+            <a routerLink="/didedu/faculties/{{faculty.id_faculty}}">
+              <button class="btn btn-sm btn-outline-danger">
+                Edit Faculty
+              </button>
+            </a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>

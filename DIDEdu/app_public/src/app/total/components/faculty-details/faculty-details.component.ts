@@ -28,7 +28,7 @@ export class FacultyDetailsComponent implements OnInit {
     } else {
       let currUser = this.authenticationService.getCurrentUser();
       this.dideduDataService
-        .getDIDs(currUser!!.id_user.toString())
+        .getDIDs(currUser!!.id_user.toString(), "Auth")
         .subscribe((dids) => {
           if (dids.length > 0) {
             this.nav.show();

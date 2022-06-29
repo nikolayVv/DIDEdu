@@ -15,6 +15,7 @@ export class HomePageComponent implements OnInit {
   public currUser: User | null = null
   public currDid: string = '';
   public hasDid: boolean = false;
+  public showSpinner: boolean = true;
 
   constructor(
     private nav: NavbarService,
@@ -30,14 +31,14 @@ export class HomePageComponent implements OnInit {
     } else {
       this.currUser = this.authenticationService.getCurrentUser();
       this.dideduDataService
-        .getDIDs(this.currUser!!.id_user.toString())
+        .getDIDs(this.currUser!!.id_user.toString(), "Auth")
         .subscribe((dids) => {
-          console.log(dids);
           if (this.currUser?.role === 'admin' || (dids.length > 0 && this.currUser?.role !== 'admin')) {
             this.hasDid = true;
             this.nav.show();
             this.footer.show();
           }
+          this.showSpinner = false;
         });
     }
   }

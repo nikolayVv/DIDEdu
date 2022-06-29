@@ -12,6 +12,7 @@ import {UserDetailsComponent} from "../../total/components/user-details/user-det
 import { LoginComponent } from "../../total/components/login/login.component";
 import {FacultyDetailsComponent} from "../../total/components/faculty-details/faculty-details.component";
 import {HomePageComponent} from "../../total/components/home-page/home-page.component";
+import {CourseDetailsComponent} from "../../total/components/course-details/course-details.component";
 
 const routes: Routes = [
   { path: '', component: InfoPageComponent },
@@ -19,10 +20,12 @@ const routes: Routes = [
   { path: 'didedu', component: HomePageComponent },
   { path: 'didedu/addUniversity', component: AddUniversityComponent },
   { path: 'didedu/addFaculty', component: AddFacultyComponent },
+  { path: 'didedu/faculties/:idFaculty', component: FacultyDetailsComponent },
   { path: 'didedu/universities/:idUniversity/addController', component: AddUniversityControllerComponent },
   { path: 'didedu/universities/:idUniversity', component: UniversityDetailsComponent },
   { path: 'didedu/users/:idUser', component: UserDetailsComponent },
-  { path: 'didedu/universities/:idUniversity/faculties/:idFaculty', component: FacultyDetailsComponent }
+  { path: 'didedu/universities/:idUniversity/faculties/:idFaculty', component: FacultyDetailsComponent },
+  { path: 'didedu/courses/:idCourse', component: CourseDetailsComponent }
 ];
 
 @NgModule({

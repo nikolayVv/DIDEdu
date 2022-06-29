@@ -9,6 +9,11 @@ import { BROWSER_STORAGE } from "../classes/storage";
 import { environment } from "../../../environments/environment";
 import {Identity} from "../classes/identity";
 import has = Reflect.has;
+import {Faculty} from "../classes/faculty";
+import {Program} from "../classes/program";
+import {Course, CourseDetails} from "../classes/course";
+import {ObligationsGroup} from "../classes/obligation";
+import {Holder} from "../classes/holder";
 
 @Injectable({
   providedIn: 'root'
@@ -61,7 +66,7 @@ export class DideduDataService {
   }
 
   public getUniversitiesFiltered(filter: string, value: string): Observable<University[]> {
-      const url: string = `${this.apiUrl}/universities/filter?type=${filter}`;
+      const url: string = `${this.apiUrl}/universities/filter`;
 
 
       return this.http
@@ -85,6 +90,127 @@ export class DideduDataService {
         .pipe(retry(1), catchError(this.handleError));
   }
 
+  public getControlledUniversity(idUser: number): Observable<University> {
+      const url: string = `${this.apiUrl}/universities/controlledBy/${idUser}`;
+      const httpOptions = {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${this.storage.getItem('didedu-token')}`,
+        }),
+      };
+
+      return this.http
+        .get<University>(url, httpOptions)
+        .pipe(retry(1), catchError(this.handleError));
+  }
+
+  /* Faculties */
+  public getAllFaculties(): Observable<Faculty[]> {
+    const url: string = `${this.apiUrl}/faculties`
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.storage.getItem('didedu-token')}`,
+      }),
+    };
+
+    return this.http
+      .get<Faculty[]>(url, httpOptions)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getFacultiesFiltered(value: string): Observable<Faculty[]> {
+    const url: string = `${this.apiUrl}/faculties/filter`;
+
+    return this.http
+      .post<Faculty[]>(url, {
+        value: value
+      })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public addFaculty(data: any, programs: Program[]): Observable<any> {
+    const url: string = `${this.apiUrl}/faculties`;
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${this.storage.getItem('didedu-token')}`,
+      }),
+    };
+
+    return this.http
+      .post(url, {
+        faculty: data,
+        programs: programs
+      })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  /* Courses */
+  public getProfessorCourses(idUser: string): Observable<Course[]> {
+      const url: string = `${this.apiUrl}/professors/${idUser}/courses`;
+
+      return this.http
+        .get<Course[]>(url)
+        .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getStudentCourses(idUser: string): Observable<Course[]> {
+    const url: string = `${this.apiUrl}/students/${idUser}/courses`;
+
+    return this.http
+      .get<Course[]>(url)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getCourseDetails(idCourse: string): Observable<CourseDetails> {
+    const url: string = `${this.apiUrl}/courses/${idCourse}`;
+
+    return this.http
+      .get<CourseDetails>(url)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  /* Obligations */
+  public addObligationsGroup(
+    title: string,
+    idCourse: number,
+    type: string
+  ): Observable<any> {
+    const url: string = `${this.apiUrl}/obligations/${idCourse}/groups`;
+
+    return this.http
+      .post(url, {
+        title: title,
+        type: type
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public addObligation(
+    idObligationsGroup: number,
+    title: string
+  ): Observable<any> {
+    const url: string = `${this.apiUrl}/obligations/${idObligationsGroup}`;
+
+    return this.http
+      .post(url, {
+        title: title,
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getObligationsGroupsByCourse(idCourse: string): Observable<ObligationsGroup[]> {
+    const url: string = `${this.apiUrl}/obligations/${idCourse}/groups`;
+
+    return this.http
+      .get<ObligationsGroup[]>(url)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public changeObligationStatus(idObligation: number, newStatus: string): Observable<any> {
+    const url: string = `${this.apiUrl}/obligations/${idObligation}`;
+
+    return this.http
+      .put<any>(url, {status: newStatus})
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
   /* Users */
   public getUserByDID(did: string): Observable<User> {
       const url: string = `${this.apiUrl}/users/did`;
@@ -103,28 +229,44 @@ export class DideduDataService {
         .pipe(retry(1), catchError(this.handleError));
   }
 
-  public addDID(idUser: string, did: string): Observable<any> {
-      const url: string = `${this.apiUrl}/users/${idUser}/identities`;
-
-      return this.http
-        .post(url, { did: did })
-        .pipe(retry(1), catchError(this.handleError));
-  }
-
-  public getDIDs(idUser: string): Observable<Identity[]> {
-      const url: string = `${this.apiUrl}/users/${idUser}/identities`;
-
-      return this.http
-        .get<Identity[]>(url)
-        .pipe(retry(1), catchError(this.handleError));
-  }
-
   public checkStatus(idOperation: string): Observable<any> {
-      const url: string = `${this.didUrl}/${idOperation}/status`;
+    const url: string = `${this.didUrl}/${idOperation}/status`;
+
+    return this.http
+      .get(url)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public addDID(idUser: string, did: string, title: string): Observable<any> {
+      const url: string = `${this.apiUrl}/users/${idUser}/identities`;
 
       return this.http
-        .get(url)
+        .post(url, { did: did, title: title })
         .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getDIDs(idUser: string, title: string): Observable<Identity[]> {
+      const url: string = `${this.apiUrl}/users/${idUser}/identities/filter`;
+
+      return this.http
+        .post<Identity[]>(url, { title: title })
+        .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public deleteDID(idIdentity: string): Observable<any> {
+    const url: string = `${this.apiUrl}/identities/${idIdentity}`;
+
+    return this.http
+      .delete(url)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getAllDIDs(): Observable<Identity[]> {
+    const url: string = `${this.apiUrl}/identities`;
+
+    return this.http
+      .get<Identity[]>(url)
+      .pipe(retry(1), catchError(this.handleError));
   }
 
   public issueCredential(
@@ -148,27 +290,78 @@ export class DideduDataService {
 
   public verifyCredential(
     credential: string,
-    hash: string,
     batchId: string,
     issuerDid: string,
     userEmail: string,
     userId: string,
     holderDid: string,
-    credentialName: string
+    credentialName: string,
+    role: string = ''
   ): Observable<any> {
       const url: string = `${this.didUrl}/verify/credential`;
 
       return this.http
         .post(url, {
             credential: credential,
-            credentialHash: hash,
             batchId: batchId,
             issuerDid: issuerDid,
             userEmail: userEmail,
             userId: userId,
             holderDid: holderDid,
-            credentialName: credentialName
+            credentialName: credentialName,
+            role: role
         }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public revokeCredential(
+    credential: string,
+    username: string,
+    mnemonic: string[],
+    passphrase: string,
+    holderDid: string,
+    hash: string,
+    batchId: string
+  ): Observable<any> {
+    const url: string = `${this.didUrl}/revoke/credential`;
+
+    return this.http
+      .post(url, {
+        credential: credential,
+        username: username,
+        mnemonic: mnemonic,
+        passphrase: passphrase,
+        holderDid: holderDid,
+        hash: hash,
+        batchId: batchId
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public issueBatch(
+    username: string,
+    mnemonic: string[],
+    passphrase: string,
+    data: any
+  ): Observable<any> {
+    const url: string = `${this.didUrl}/issue/batch`;
+
+    return this.http
+      .post(url, {
+        username: username,
+        mnemonic: mnemonic,
+        passphrase: passphrase,
+        data: data
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getVerifiedUsers(users: any, issuerDid: string, credentialName: string): Observable<any> {
+    const url: string = `${this.didUrl}/verify/credential/returnValid`;
+
+    return this.http
+      .post(url, {
+        users: users,
+        issuerDid: issuerDid,
+        credentialName: credentialName
+      }).pipe(retry(1), catchError(this.handleError));
   }
 
   /* Wallet */
@@ -189,10 +382,7 @@ export class DideduDataService {
     credential: string,
     operationId: string,
     hash: string,
-    batchId: string,
-    curve: string,
-    data: number[],
-    unknownFields: any
+    batchId: string
   ): Observable<any> {
       const url: string = `${this.walletUrl}/did/vc`;
 
@@ -204,13 +394,12 @@ export class DideduDataService {
             credential,
             operationId,
             hash,
-            batchId,
-            curve,
-            data,
-            unknownFields
+            batchId
           }
         }).pipe(retry(1), catchError(this.handleError));
   }
+
+
 
   public updateStatusVC(
     idUser:string,
@@ -227,6 +416,15 @@ export class DideduDataService {
             status: status
         }).pipe(retry(1), catchError(this.handleError));
   }
+
+  public checkIfAlreadyIssued(holders: User[], name: string, enrollmentName: string): Observable<User[]> {
+    const url: string = `${this.walletUrl}/did/vc/check`;
+
+    return this.http
+      .post<User[]>(url, { users: holders, name: name, enrollmentName: enrollmentName })
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
 
   private authentication(urlAddress: string, user: User): Observable<ResultAuthentication> {
       const url: string = `${this.apiUrl}/${urlAddress}`;

@@ -268,9 +268,37 @@ const getUniversityById = (req, res) => {
     });
 };
 
+const getControlledUniversity = (req, res) => {
+    let idUser = req.params.idUser;
+    if (!idUser) {
+        return res.status(404).json({ message: "Couldn't find user, idUser is required parameter." });
+    }
+
+    connection.query(`SELECT * FROM university_controller WHERE user='${idUser}'`, (error, users) => {
+        if (error) {
+            return res.status(500).json(error);
+        }
+        if (!users[0]) {
+            return res.status(404).json({ message: "Couldn't find university with the given ID." })
+        }
+
+        connection.query(`SELECT * FROM university WHERE id_university='${users[0].university}'`, (error, universities) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
+            if (!universities[0]) {
+                return res.status(404).json({message: "Couldn't find university with the given ID."})
+            }
+
+            res.status(200).json(universities[0]);
+        });
+    });
+};
+
 module.exports = {
     getAllUniversities,
     createUniversity,
     getUniversitiesFiltered,
-    getUniversityById
+    getUniversityById,
+    getControlledUniversity
 }

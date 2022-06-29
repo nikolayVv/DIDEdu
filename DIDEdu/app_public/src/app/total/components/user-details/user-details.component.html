@@ -1,14 +1,38 @@
-<div class="container-fluid  d-flex justify-content-center pt-5 mt-4 mb-4 ">
+<app-wallet-login [display]="display" (credentialsEvent)="checkCredential($event)" (closeEvent)="onCloseHandled()"></app-wallet-login>
+
+<div class="wrapper">
+  <div class="overlay" *ngIf="showSpinner">
+    <div class="spinner-wrapper">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+
+  <div class="loaded-content" [class.blurred]="showSpinner">
+    <ng-content></ng-content>
+  </div>
+</div>
+
+<div *ngIf="currUser" class="container-fluid  d-flex justify-content-center pt-5 mt-4 mb-4 ">
   <form action="#" class="pb-1 ps-3 mt-5 bg-light w-50" style="box-shadow: 4px 4px 12px 4px gray">
     <div class="input-group mb-3 row">
       <div class="col col-sm-12 col-xl-12">
-        <h1 class="text-center pt-3 mb-3 ">Nikolay Vasilev</h1>
+        <h1 class="text-center pt-3 mb-3 ">{{currUser.name}}</h1>
+      </div>
+    </div>
+    <div *ngIf="formError" class="form-group">
+      <div class="alert alert-danger p-2 mt-4" role="alert">
+        <i class="fas fa-exclamation-triangle pe-2"></i>{{ formError }}
+      </div>
+    </div>
+    <div *ngIf="formSuccess" class="form-group">
+      <div class="alert alert-success p-2 mt-4" role="alert">
+        <i class="fas fa-check-circle pe-2"></i>{{ formSuccess }}
       </div>
     </div>
     <div class="input-group mb-3 row">
       <div class="col col-sm-12 col-xl-12">
         <label for="email" class="form-label"><b>Email address</b></label>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email address" value="didedu-tech@gmail.com" disabled>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email address" [value]="currUser.email" disabled>
         <div class="invalid-feedback">
           This field is required
         </div>
@@ -16,20 +40,19 @@
     </div>
     <div class="input-group mb-5 row">
       <div class="col col-sm-12 col-xl-12">
-        <label for="role" class="form-label"><b>Role</b></label>
-        <input type="text" class="form-control" id="role" aria-describedby="role" placeholder="Role" disabled>
-        <div class="invalid-feedback">
-          This field is required
-        </div>
-      </div>
-    </div>
-    <div class="input-group mb-5 row">
-      <div class="col col-sm-12 col-xl-12">
-        <label for="publicKey" class="form-label"><b>DIDs</b></label>
-        <input type="text" class="form-control" id="publicKey" aria-describedby="publicKey" placeholder="Did" disabled>
-        <div class="invalid-feedback">
-          This field is required
-        </div>
+        <label for="dids" class="form-label"><b>DIDs</b></label>
+        <ul id="dids" class="scrollListSmall list-group list-group-flush pe-0" style="max-height: 100px !important;">
+          <li class="list-group-item pe-0" style="border-bottom: 1px solid lightgray !important;" *ngFor="let did of dids">
+            <div class="row me-3 pb-1">
+              <div class="col col-xl-8 pt-2">
+                <h6 class="m-0">{{did.did}}</h6>
+              </div>
+              <div class="col col-xl-4 pt-2 d-flex justify-content-end">
+                <button class="btn btn-sm btn-danger" (click)="revoke(did.did, did.id_identity)">Revoke</button>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </form>

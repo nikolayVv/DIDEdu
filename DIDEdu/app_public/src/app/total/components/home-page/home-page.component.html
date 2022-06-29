@@ -1,5 +1,19 @@
+<div class="wrapper">
+  <div class="overlay" *ngIf="showSpinner">
+    <div class="spinner-wrapper">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+
+  <div class="loaded-content" [class.blurred]="showSpinner">
+    <ng-content></ng-content>
+  </div>
+</div>
+
 <app-list-universities *ngIf="currUser!!.role === 'admin'"></app-list-universities>
 
-<app-list-universities *ngIf="currDid && hasDid && currUser!!.role === 'universityController'"></app-list-universities>
+<app-list-faculties *ngIf="hasDid && currUser!!.role === 'universityController'"></app-list-faculties>
+
+<app-list-courses [user]="currUser" *ngIf="hasDid && (currUser!!.role === 'professor' || currUser!!.role === 'student')"></app-list-courses>
 
 <app-register-first-did [user]="currUser" *ngIf="!hasDid && currUser!!.role !== 'admin'"></app-register-first-did>

@@ -1,11 +1,14 @@
+import {Program} from "./program";
+import {User} from "./user";
+
 export class Faculty {
   "id_faculty": number;
   "title": string;
   "abbreviation": string;
-  "address": string;
+  "country": string;
+  "city": string;
   "contactNumber": string;
-  "registrationDate": string;
-  "programs": any[];
-  "controllers": any[];
+  "programs": Program[];
+  "controllers": User[];
 }
 

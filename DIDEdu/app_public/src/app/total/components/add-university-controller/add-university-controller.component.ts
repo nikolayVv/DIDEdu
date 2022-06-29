@@ -24,7 +24,8 @@ export class AddUniversityControllerComponent implements OnInit {
     confirmPassword: '',
     role: '',
     idUniversity: '',
-    hasDid: 0
+    hasDid: 0,
+    did: ''
   }
 
   constructor(
