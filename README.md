@@ -7,6 +7,7 @@ DIDEdu is an open code decentralized solution, which is developed to present the
 - Secured data storage;
 - Easy to use and user friendly interface;
 - Cheaper usage of the Blockchain using Batches;
+
 The main logic is in the DID service, which is developed in Kotlin and is using the Atala PRISM SDK. Atala PRISM SDK is a development kit, which is following the W3C standard and is working on the Cardano Blockchain. It allows developers to use already implemented functionalities, which helps them develop solutions, that are using DIDs and VCs.
 
 ## Usage
