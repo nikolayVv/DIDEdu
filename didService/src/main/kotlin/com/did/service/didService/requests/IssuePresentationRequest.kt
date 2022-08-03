@@ -1,5 +1,6 @@
 package com.did.service.didService.requests
 
+import com.did.service.didService.models.CredentialForPresentation
 import javax.validation.constraints.NotEmpty
 
 data class IssuePresentationRequest(
@@ -8,6 +9,9 @@ data class IssuePresentationRequest(
 
     @field: NotEmpty
     var subjectTitle: String,
+
+    @field: NotEmpty
+    var currCourse: String,
 
     @field:NotEmpty
     var username: String,
@@ -30,23 +34,12 @@ data class IssuePresentationRequest(
     var userId: String,
 
     @field:NotEmpty
-    var adminDid: String,
+    var studentDid: String,
 
     @field:NotEmpty
-    var role: String
+    var role: String,
+
+    var obligations: List<String>
 )
 
 
-data class CredentialForPresentation(
-    @field:NotEmpty
-    var title: String,
-
-    @field:NotEmpty
-    var did: String,
-
-    @field:NotEmpty
-    var credential: String,
-
-    @field: NotEmpty
-    var batchId: String
-)

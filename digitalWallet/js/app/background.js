@@ -31,7 +31,6 @@ chrome.runtime.onMessage.addListener(
                         ajaxDWCall("PUT", `wallet/users/${loggedInData.user._id}`, didRequest, loggedInData.token, function (response) {
                             let isValid = true;
                             if (!response.message) {
-                                console.log(response);
                                 let newThread = {
                                     thread: setInterval(() => checkDidStatus(threadData.operationId, threadData.userId, threadData.did), 7000),
                                     lastStatus: "",

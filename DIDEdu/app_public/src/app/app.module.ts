@@ -30,6 +30,7 @@ import { CourseDetailsComponent } from './total/components/course-details/course
 import { SidebarComponent } from './total/components/sidebar/sidebar.component';
 import { IssueCredentialComponent } from './total/components/issue-credential/issue-credential.component';
 import { PercentagePipe } from './total/pipes/percentage.pipe';
+import { ListCredentialsComponent } from './total/components/list-credentials/list-credentials.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { PercentagePipe } from './total/pipes/percentage.pipe';
     SidebarComponent,
     IssueCredentialComponent,
     PercentagePipe,
+    ListCredentialsComponent
   ],
   imports: [
     BrowserModule,

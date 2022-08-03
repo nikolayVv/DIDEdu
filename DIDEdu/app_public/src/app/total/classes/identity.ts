@@ -4,3 +4,8 @@ export class Identity {
   'title': string;
   'user': number;
 }
+
+export class IdentityPresent {
+  'title': string;
+  'did': string;
+}

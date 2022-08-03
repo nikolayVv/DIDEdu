@@ -13,7 +13,7 @@
 </div>
 
 <div *ngIf="currUser" class="container-fluid  d-flex justify-content-center pt-5 mt-4 mb-4 ">
-  <form action="#" class="pb-1 ps-3 mt-5 bg-light w-50" style="box-shadow: 4px 4px 12px 4px gray">
+  <form action="#" class="pb-1 ps-3 mt-5 bg-light w-75" style="box-shadow: 4px 4px 12px 4px gray">
     <div class="input-group mb-3 row">
       <div class="col col-sm-12 col-xl-12">
         <h1 class="text-center pt-3 mb-3 ">{{currUser.name}}</h1>
@@ -45,7 +45,7 @@
           <li class="list-group-item pe-0" style="border-bottom: 1px solid lightgray !important;" *ngFor="let did of dids">
             <div class="row me-3 pb-1">
               <div class="col col-xl-8 pt-2">
-                <h6 class="m-0">{{did.did}}</h6>
+                <h6 class="m-0"><b>{{did.title}}</b>: {{did.did.length <= 64 ? did.did : did.did.slice(0, 64) + "..."}}</h6>
               </div>
               <div class="col col-xl-4 pt-2 d-flex justify-content-end">
                 <button class="btn btn-sm btn-danger" (click)="revoke(did.did, did.id_identity)">Revoke</button>

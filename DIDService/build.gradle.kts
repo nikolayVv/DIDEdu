@@ -24,7 +24,7 @@ repositories {
 		url = uri("https://maven.pkg.github.com/input-output-hk/atala-prism-sdk")
 		credentials {
 			username = "atala-dev"
-			password = "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"
+			password = System.getenv("PRISM_SDK_PASSWORD")
 		}
 	}
 }

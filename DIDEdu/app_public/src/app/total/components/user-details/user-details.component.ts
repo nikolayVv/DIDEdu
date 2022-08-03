@@ -197,9 +197,15 @@ export class UserDetailsComponent implements OnInit {
     } else {
       this.currUser = this.authenticationService.getCurrentUser();
       this.dideduDataService
-        .getDIDs(this.currUser!!.id_user.toString(), "Auth")
+        .getDIDs(this.currUser!!.id_user.toString(), "All")
         .subscribe((dids) => {
-          if (dids.length > 0) {
+          let isValid = false;
+          for (let i = 0; i < dids.length; i++) {
+            if (dids[i].title === "Auth") {
+              isValid = true;
+            }
+          }
+          if (dids.length > 0 && isValid) {
             this.showSpinner = false;
             this.dids = dids;
             this.nav.show();

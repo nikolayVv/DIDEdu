@@ -18,13 +18,23 @@ const getFilteredByUser = (req, res) => {
         return res.status(400).json({ message: "All the data is required." });
     }
 
-    connection.query(`SELECT * FROM identity WHERE user=${idUser} AND title='${req.body.title}'`, (error, identities) => {
-        if (error) {
-            return res.status(500).json(error);
-        }
+    if (req.body.title === 'All') {
+        connection.query(`SELECT * FROM identity WHERE user=${idUser}`, (error, identities) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
 
-        res.status(200).json(identities);
-    });
+            res.status(200).json(identities);
+        });
+    } else {
+        connection.query(`SELECT * FROM identity WHERE user=${idUser} AND title='${req.body.title}'`, (error, identities) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
+
+            res.status(200).json(identities);
+        });
+    }
 }
 
 const getAllByUser = (req, res) => {

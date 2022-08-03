@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ListUniversitiesComponent } from "../../total/components/list-universities/list-universities.component";
 import { InfoPageComponent } from "../../total/components/info-page/info-page.component";
 import { AddUniversityComponent } from "../../total/components/add-university/add-university.component";
 import { AddFacultyComponent } from "../../total/components/add-faculty/add-faculty.component";
@@ -13,6 +12,7 @@ import { LoginComponent } from "../../total/components/login/login.component";
 import {FacultyDetailsComponent} from "../../total/components/faculty-details/faculty-details.component";
 import {HomePageComponent} from "../../total/components/home-page/home-page.component";
 import {CourseDetailsComponent} from "../../total/components/course-details/course-details.component";
+import {ListCredentialsComponent} from "../../total/components/list-credentials/list-credentials.component";
 
 const routes: Routes = [
   { path: '', component: InfoPageComponent },
@@ -25,7 +25,8 @@ const routes: Routes = [
   { path: 'didedu/universities/:idUniversity', component: UniversityDetailsComponent },
   { path: 'didedu/users/:idUser', component: UserDetailsComponent },
   { path: 'didedu/universities/:idUniversity/faculties/:idFaculty', component: FacultyDetailsComponent },
-  { path: 'didedu/courses/:idCourse', component: CourseDetailsComponent }
+  { path: 'didedu/courses/:idCourse', component: CourseDetailsComponent },
+  { path: 'didedu/credentials', component: ListCredentialsComponent }
 ];
 
 @NgModule({

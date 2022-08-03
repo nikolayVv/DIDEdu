@@ -117,7 +117,7 @@
               </summary>
               <div *ngFor="let obligation of obligationsGroup.obligations" class="col col-12 col-xl-12 pt-3 ms-3 h5">
                 <h3>{{obligation.title}}
-                  <button *ngIf="obligation.status === 'Not Issued' && currUser!!.role === 'professor'" class="btn btn-sm mainBtn me-3" (click)="openLogin('examCredential', obligation, obligationsGroup)">Issue</button>
+                  <button *ngIf="obligation.status === 'Not Issued' && currUser!!.role === 'professor'" class="btn btn-sm mainBtn me-3" (click)="openLogin('obligationCredential', obligation, obligationsGroup)">Issue</button>
                   <span *ngIf="obligation.status === 'Issued' && currUser!!.role === 'professor'"><i class="fa fa-check-circle containerText1"></i></span>
                 </h3>
                 <span class="text-secondary ">Created: {{obligation.created | date: 'dd. MMMM, y (EEEE) - HH:mm'}}</span>

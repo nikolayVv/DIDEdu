@@ -65,7 +65,7 @@
           <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Courses</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Courses</a>
+          <a class="nav-link aboutSection {{getUrl() === '/didedu/credentials' ? 'active' : ''}}" aria-current="page"  routerLink="didedu/credentials">Presentations</a>
         </li>
       </ul>
       <ul *ngIf="isLoggedIn && user!!.role === 'student'" class="navbar-nav ms-auto mb-2 mb-lg-0 scroll">
@@ -73,7 +73,7 @@
           <a class="nav-link aboutSection {{getUrl() === '/didedu' ? 'active' : ''}}" aria-current="page"  routerLink="didedu">Courses</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link tutorialSection {{getUrl() === '/didedu/credentials' ? 'active' : ''}}" routerLink="didedu/addFaculty">My Credentials</a>
+          <a class="nav-link tutorialSection {{getUrl() === '/didedu/credentials' ? 'active' : ''}}" routerLink="didedu/credentials">My Credentials</a>
         </li>
       </ul>
       <div *ngIf="isLoggedIn && (user!!.role === 'professor' || user!!.role === 'student')" class="ms-auto">

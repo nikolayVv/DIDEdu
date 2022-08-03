@@ -1,6 +1,6 @@
 export class Credential {
   'key': string;
-  'value': string | number;
+  'value': string;
 }
 
 export class CredentialPresent {
@@ -8,4 +8,5 @@ export class CredentialPresent {
   'credential': string;
   'did': string;
   'batchId': string;
+  'chosenAttributes': Credential[]
 }

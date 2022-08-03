@@ -22,7 +22,30 @@ const getProfessorCourses = (req, res) => {
                 return res.status(404).json({ message: `You don't have any courses in the database yet.` })
             }
 
-            res.status(200).json(courses);
+            let isEnrolled = false;
+            let result = [];
+            courses.forEach(course => {
+                isEnrolled = false;
+                for (let i = 0; i < professors.length; i++) {
+                    if (professors[i].course === course.id_course) {
+                        isEnrolled = true;
+                        professors.splice(i, 1);
+                        break;
+                    }
+                }
+
+                result.push({
+                    id_course: course.id_course,
+                    title: course.title,
+                    abbreviation: course.abbreviation,
+                    start_date: course.start_date,
+                    end_date: course.end_date,
+                    presentation_needed: course.presentation_needed,
+                    is_enrolled: isEnrolled
+                });
+            });
+
+            res.status(200).json(result);
         });
     });
 };
@@ -41,7 +64,7 @@ const getStudentCourses = (req, res) => {
             return res.status(404).json({ message: "Couldn't find student with the given ID." })
         }
 
-        connection.query(`SELECT * FROM course WHERE id_course='${students[0].course}'`, (error, courses) => {
+        connection.query(`SELECT * FROM course`, (error, courses) => {
             if (error) {
                 return res.status(500).json(error);
             }
@@ -49,7 +72,30 @@ const getStudentCourses = (req, res) => {
                 return res.status(404).json({ message: `You don't have any courses in the database yet.` })
             }
 
-            res.status(200).json(courses);
+            let isEnrolled = false;
+            let result = [];
+            courses.forEach(course => {
+                isEnrolled = false;
+                for (let i = 0; i < students.length; i++) {
+                    if (students[i].course === course.id_course) {
+                        isEnrolled = true;
+                        students.splice(i, 1);
+                        break;
+                    }
+                }
+
+                result.push({
+                    id_course: course.id_course,
+                    title: course.title,
+                    abbreviation: course.abbreviation,
+                    start_date: course.start_date,
+                    end_date: course.end_date,
+                    presentation_needed: course.presentation_needed,
+                    is_enrolled: isEnrolled
+                });
+            });
+
+            res.status(200).json(result);
         });
     });
 };
@@ -167,8 +213,97 @@ const getCourseDetails = (req, res) => {
     });
 }
 
+const getEnrollmentCourses = (req, res) => {
+    connection.query("SELECT * FROM course WHERE presentation_needed='1'", (error, courses) => {
+        if (error) {
+            return res.status(500).json(error);
+        }
+        if (courses.length === 0) {
+            return res.status(404).json({ message: "Couldn't find any courses for enrollment." });
+        }
+
+        let ids = [];
+        courses.forEach((course) => {
+            ids.push(course.id_course);
+        })
+
+        connection.query(`SELECT p.course, n.obligation_title, n.obligations_group_title, n.course_title FROM presentation AS p INNER JOIN (SELECT o.id_obligation, o.title AS obligation_title, ng.obligations_group_title, ng.course_title FROM obligation AS o INNER JOIN (SELECT og.id_obligations_group, og.title AS obligations_group_title, c.title AS course_title FROM obligations_group AS og INNER JOIN course AS c ON (og.course=c.id_course)) AS ng ON (o.obligations_group=ng.id_obligations_group)) AS n ON (p.obligation=n.id_obligation) WHERE p.course IN (${ids})`, (error, presentations) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
+
+            let result = [];
+            courses.forEach((course) => {
+                let newCourse = {
+                    id_course: course.id_course,
+                    title: course.title,
+                    abbreviation: course.abbreviation,
+                    start_date: course.start_date,
+                    end_date: course.end_date,
+                    presentation_needed: course.presentation_needed,
+                    presentations: []
+                }
+                presentations.forEach((presentation) => {
+                   if (presentation.course === course.id_course) {
+                       newCourse.presentations.push(`${presentation.course_title} (${presentation.obligation_title} - ${presentation.obligations_group_title})`);
+                   }
+                })
+
+                result.push(newCourse);
+            });
+
+            res.status(200).json(result);
+        });
+    })
+};
+
+const enrollStudent = (req, res) => {
+    let idStudent = req.params.idStudent;
+    let idCourse = req.params.idCourse;
+    if (!idStudent || !idCourse) {
+        return res.status(404).json({ message: "Couldn't find student or course, idStudent and idCourse are required parameters." });
+    }
+
+    connection.query(`SELECT * FROM course WHERE id_course='${idCourse}'`, (error, courses) => {
+        if (error) {
+            return res.status(500).json(error);
+        }
+        if (!courses[0]) {
+            return res.status(404).json({ message: "Couldn't find course with the given ID." })
+        }
+
+        connection.query(`SELECT * FROM user WHERE id_user='${idStudent}'`, (error, students) => {
+            if (error) {
+                return res.status(500).json(error);
+            }
+            if (!students[0]) {
+                return res.status(404).json({message: "Couldn't find student with the given ID."})
+            }
+
+            let newStudent = [
+                idStudent,
+                req.body.program,
+                idCourse
+            ];
+
+            connection.query('INSERT INTO student (user, program, course) VALUES (?)', newStudent, (error, answer) => {
+                if (error) {
+                    return res.status(500).json(error);
+                }
+
+                res.status(200).json({
+                    message: `The student was successfully enrolled to the course.`,
+                    answer: answer
+                });
+            });
+        });
+    });
+};
+
 module.exports = {
     getProfessorCourses,
     getStudentCourses,
-    getCourseDetails
+    getCourseDetails,
+    getEnrollmentCourses,
+    enrollStudent
 };

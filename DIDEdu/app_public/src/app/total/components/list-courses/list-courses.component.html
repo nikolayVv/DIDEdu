@@ -1,4 +1,25 @@
-<div class="container-fluid pt-5 mt-5 pb-3">
+<div class="wrapper">
+  <div class="overlay" *ngIf="showSpinner">
+    <div class="spinner-wrapper">
+      <app-spinner></app-spinner>
+    </div>
+  </div>
+
+  <div class="loaded-content" [class.blurred]="showSpinner">
+    <ng-content></ng-content>
+  </div>
+</div>
+
+<app-wallet-login [display]="displayLogin" (credentialsEvent)="showPresentations($event)" (closeEvent)="onCloseHandled()"></app-wallet-login>
+
+<app-issue-credential [credentials]="currCredentials" [user]="currUser" [course]="currCourse" [type]="type" [display]="display" (credentialsEvent)="verifyCredentialEvent()" (closeEvent)="onCloseHandled()"></app-issue-credential>
+
+<div *ngIf="!showSpinner" class="container-fluid pt-5 mt-5 pb-3">
+  <div *ngIf="formError" class="form-group">
+    <div class="alert alert-danger p-2 mt-4" role="alert">
+      <i class="fas fa-exclamation-triangle pe-2"></i>{{ formError }}
+    </div>
+  </div>
   <div class="row g-5 pt-3 ms-1 pe-xl-1 me-1">
     <!-- Courses start -->
     <div class="col col-12 col-xl-9 bg-light">
@@ -47,24 +68,27 @@
         <div *ngIf="errorMessage" class="d-flex justify-content-center col col-xl-12 pt-5">
           <h2>{{ errorMessage }}</h2>
         </div>
-        <div *ngFor="let course of courses" class="col col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 pt-3 pb-3 ">
+        <div *ngFor="let course of courses; let i = index" class="col col-12 col-sm-12 col-md-6 col-lg-6 col-xl-4 pt-3 pb-3 ">
           <div class="card">
             <img class="card-img-top" src="assets/images/course.jpg" alt="Card image cap">
             <div class="card-body">
-              <h4 class="card-title mb-5"><i class="fa fa-sun containerText1"></i> {{course.title}} {{course.abbreviation ? '(' + course.abbreviation + ')' : ''}}</h4>
+              <h4 class="card-title mb-5"><i class="fa {{i < 3 ? 'fa-sun' : 'fa-snowflake'}} containerText1"></i> {{course.title}} {{course.abbreviation ? '(' + course.abbreviation + ')' : ''}}</h4>
               <div class="row">
                 <div *ngIf="user!!.role === 'professor'" class="col col-xl-6 d-flex justify-content-start">
                   <a routerLink="" class="btn-sm mainBtn p-2 text-center" (click)="delete(course.id_course.toString())">Delete Course</a>
                 </div>
-                <div class="col {{user!!.role === 'professor' ? 'col-xl-6' : 'col-xl-12'}} d-flex justify-content-end">
+                <div *ngIf="course.is_enrolled" class="col {{user!!.role === 'professor' ? 'col-xl-6' : 'col-xl-12'}} d-flex justify-content-end">
                   <a routerLink="/didedu/courses/{{course.id_course.toString()}}" class="btn-sm mainBtnOutline text-center">Open Course</a>
+                </div>
+                <div *ngIf="!course.is_enrolled && user!!.role === 'student'" class="col col-xl-12 d-flex justify-content-end">
+                  <button class="btn-sm mainBtn text-center" (click)="enroll(course.presentation_needed, course.id_course)">Enroll</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div *ngIf="courses.length > 6"class="row pt-4">
+      <div *ngIf="courses.length >= 6"class="row pt-4">
         <nav aria-label="pagination">
           <ul class="pagination text-secondary justify-content-center">
             <li id="prev" class="page-item disabled">

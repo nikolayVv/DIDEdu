@@ -14,7 +14,7 @@ import {Program} from "../classes/program";
 import {Course, CourseDetails} from "../classes/course";
 import {ObligationsGroup} from "../classes/obligation";
 import {Holder} from "../classes/holder";
-import {CredentialPresent} from "../classes/credential";
+import {Credential, CredentialPresent} from "../classes/credential";
 
 @Injectable({
   providedIn: 'root'
@@ -161,11 +161,27 @@ export class DideduDataService {
       .pipe(retry(1), catchError(this.handleError));
   }
 
+  public enrollStudentToCourse(idUser: string, idCourse: string, idProgram: string): Observable<any> {
+    const url: string = `${this.apiUrl}/students/${idUser}/courses/${idCourse}`;
+
+    return this.http
+      .put(url, {program: idProgram})
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
   public getCourseDetails(idCourse: string): Observable<CourseDetails> {
     const url: string = `${this.apiUrl}/courses/${idCourse}`;
 
     return this.http
       .get<CourseDetails>(url)
+      .pipe(retry(1), catchError(this.handleError));
+  }
+
+  public getEnrollmentCourses(): Observable<Course[]> {
+    const url: string = `${this.apiUrl}/enrollment/courses`;
+
+    return this.http
+      .get<Course[]>(url)
       .pipe(retry(1), catchError(this.handleError));
   }
 
@@ -309,6 +325,7 @@ export class DideduDataService {
   public issuePresentation(
     title: string,
     subjectTitle: string,
+    currCourse: string,
     username: string,
     mnemonic: string[],
     passphrase: string,
@@ -316,8 +333,9 @@ export class DideduDataService {
     credentials: CredentialPresent[],
     userEmail: string,
     userId: string,
-    adminDid: string,
-    role: string = ''
+    studentDid: string,
+    role: string = '',
+    obligations: string[]
   ): Observable<any> {
     const url: string = `${this.didUrl}/issue/presentation`;
 
@@ -325,6 +343,7 @@ export class DideduDataService {
       .post(url, {
         title: title,
         subjectTitle: subjectTitle,
+        currCourse: currCourse,
         username: username,
         mnemonic: mnemonic,
         passphrase: passphrase,
@@ -332,8 +351,30 @@ export class DideduDataService {
         credentials: credentials,
         userEmail: userEmail,
         userId: userId,
-        adminDid: adminDid,
-        role: role
+        studentDid: studentDid,
+        role: role,
+        obligations: obligations
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
+  public verifyPresentation(
+      title: string,
+      subjectTitle: string,
+      issuerDid: string,
+      credential: string,
+      batchId: string,
+      data: Credential[]
+  ): Observable<any> {
+    const url: string = `${this.didUrl}/verify/presentation`;
+
+    return this.http
+      .post(url, {
+        title: title,
+        subjectTitle: subjectTitle,
+        issuerDid: issuerDid,
+        credential: credential,
+        batchId: batchId,
+        data: data
       }).pipe(retry(1), catchError(this.handleError));
   }
 
@@ -362,6 +403,17 @@ export class DideduDataService {
         }).pipe(retry(1), catchError(this.handleError));
   }
 
+  public showCredential(
+    data: CredentialPresent,
+  ): Observable<any> {
+    const url: string = `${this.didUrl}/read/credential`;
+
+    return this.http
+      .post(url, {
+        data: data
+      }).pipe(retry(1), catchError(this.handleError));
+  }
+
   public revokeCredential(
     credential: string,
     username: string,
@@ -384,6 +436,7 @@ export class DideduDataService {
         batchId: batchId
       }).pipe(retry(1), catchError(this.handleError));
   }
+
 
   public getVerifiedUsers(users: any, issuerDid: string, credentialName: string): Observable<any> {
     const url: string = `${this.didUrl}/verify/credential/returnValid`;

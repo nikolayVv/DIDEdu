@@ -120,7 +120,8 @@ export class CourseDetailsComponent implements OnInit {
                         title: credential.title,
                         did: did.did,
                         credential: credential.credential,
-                        batchId: credential.batchId
+                        batchId: credential.batchId,
+                        chosenAttributes: []
                       });
                     });
                   });

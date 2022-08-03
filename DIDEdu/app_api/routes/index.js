@@ -48,12 +48,14 @@ router
 router
     .route("/courses/:idCourse")
     .get(ctrlCourses.getCourseDetails)
+router.get("/enrollment/courses", ctrlCourses.getEnrollmentCourses)
 
 /* Users */
 router
     .route("/universities/controllers")
     .post(ctrlAuthentication.addUniversityController)
 router.post("/users/did", ctrlUsers.getUserByDID)
+router.put("/students/:idStudent/courses/:idCourse", ctrlCourses.enrollStudent)
 
 /* Obligations */
 router.put("/obligations/:idObligation", ctrlObligations.changeObligationStatus)
