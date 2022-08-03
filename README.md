@@ -9,7 +9,7 @@ DIDEdu is an open code decentralized solution, which is developed to present the
 - Cheaper usage of the Blockchain using Batches;
 The main logic is in the DID service, which is developed in Kotlin and is using the Atala PRISM SDK. Atala PRISM SDK is a development kit, which is following the W3C standard and is working on the Cardano Blockchain. It allows developers to use already implemented functionalities, which helps them develop solutions, that are using DIDs and VCs.
 
-## Scenario
+## Usage
 The following video (presentation) shows the main decentralized identifiers' functionalities, that DIDEdu is implementing.
 - Generating DID
 - Verifying batch/credential
@@ -51,3 +51,14 @@ cd app_public
 ng serve --open
 ```
 After the last terminal loads, the website must show in a new tab, in your browser. If it doesn't load and everything is running without errors, you can find the webpage on localhost:4200.
+
+## Contributing
+Pull requests are welcome! For changes, please fork the repository!
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Acknowledgements
+This solution is developed as part of a diplom work for receiving a bachelor's degree from the University of Ljubljana, Faculty of Computer Science. I would like to give very special thanks to:
+- my mentor, [prof. Dejan Lavbič](https://www.lavbic.net/), who came up with the theme of the diplom work and helped me develop a solution for it;
+- the [Atala PRISM](https://atalaprism.io/) team for giving me a spot in the first Pioneer program, where I learned, how to work with the Atala PRISM SDK;
