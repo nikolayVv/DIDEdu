@@ -16,3 +16,38 @@ The following video (presentation) shows the main decentralized identifiers' fun
 - Issuing batch/credential
 - Generating verifiable presentation
 - Revocation
+
+## Installation
+Before starting the installation, please make sure you have cloned (pulled) the repository.
+```bash
+git clone git@github.com:nikolayVv/DIDEdu.git
+```
+### Configuration
+The first thing you have to do is to add a system environment variable with the name "PRISM_SDK_PASSWORD". This will allow the DID service to access the libraries that Atala PRISM SDK is offerring. To get this password, you must become part of the Atala PRISM developers' community by joining the [Atala PRISM Pioneer Program](https://input-output.typeform.com/to/xfSQykYo?typeform-source=atalaprism.io).
+After that is done you have to build the gradle file in the DID service. This can be done authomatic by using a development environment like [IntelliJ](https://www.jetbrains.com/idea/). You will also need to install the libraries needed for the DIDEdu webpage. Make sure you have npm installed!
+```bash
+cd DIDEdu
+npm install
+cd app_public
+npm install
+```
+### Running
+Now after all libraries are installed, it's time to start the systems. First start the DID service, by running the "DidServiceApplication.kt" file in the development environment. After that you will need to import the digital wallet in your Chrome browser by opening the extensions tab, switching to Developers mode and loading the folder "digitalWallet". When this is done on different terminals run:
+- digital wallet server,
+```bash
+cd digitalWallet
+cd app_server
+npm run start
+```
+- DIDEdu server and
+```bash
+cd DIDEdu
+npm run start
+```
+- DIDEdu webpage
+```bash
+cd DIDEdu
+cd app_public
+ng serve --open
+```
+After the last terminal loads, the website must show in a new tab, in your browser. If it doesn't load and everything is running without errors, you can find the webpage on localhost:4200.
