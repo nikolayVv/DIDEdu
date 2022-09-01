@@ -567,7 +567,7 @@ class IdentityController {
         }
 
         for (obligation in request.obligations) {
-            if (!obligations.contains(obligation)) {
+            if (!obligations.contains("\"${obligation}\"")) {
                 throw ResponseStatusException(HttpStatus.BAD_REQUEST, "The credential for the obligation '${obligation}' is missing")
             }
         }

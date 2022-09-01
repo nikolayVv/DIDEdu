@@ -522,108 +522,146 @@ export class IssueCredentialComponent implements OnInit {
           this.disabled = '';
           this.formError = error1.toString();
           return throwError(() => error1);
-        })).subscribe((answer1) => {
-        this.dideduDataService
-          .getAllDIDs()
-          .subscribe((answer2) => {
-            let alreadyIn = false;
-            for (let i = 0; i < answer2.length; i++) {
-              if (answer2[i].did === did && answer2[i].title === this.course?.title) {
-                alreadyIn = true;
-                break;
-              }
-            }
-            if (alreadyIn) {
-              this.disabled = '';
-              this.formError = `The did '${did}' is already in the database!`;
-            } else {
-              this.dideduDataService
-                .getWalletAcc(environment.WALLET_USERNAME, environment.WALLET_PASSWORD)
-                .pipe(catchError((error3: HttpErrorResponse) => {
-                  this.disabled = '';
-                  this.formError = error3.toString();
-                  return throwError(() => error3);
-                })).subscribe((answer3) => {
-                let credential: Credential[] = [
-                  {
-                    key: "credentialName",
-                    value: this.course?.title + " (Enrollment)",
-                  },
-                  {
-                    key: "userEmail",
-                    value: this.user?.email!!
-                  },
-                  {
-                    key: "userId",
-                    value: this.user?.id_user.toString()!!
-                  },
-                  {
-                    key: "role",
-                    value: this.user?.role!!
-                  }
-                ]
-                if (answer3.user) {
-                  this.dideduDataService
-                    .verifyPresentation(
-                      `${this.user?.name}(${this.user?.id_user}) - Course enrollment, Presentation (${this.course?.title})`,
-                      this.course?.title!!,
-                      answer3.user.didList[0].did,
-                      this.currPresentation?.credential!!,
-                      this.currPresentation?.batchId!!,
-                      credential
-                    ).pipe(catchError((error4: HttpErrorResponse) => {
-                    this.disabled = '';
-                    this.formError = error4.toString();
-                    return throwError(() => error4);
-                  })).subscribe((answer4) => {
-                    console.log(answer4);
-                    // //Add in the user's acc
-                    // this.dideduDataService
-                    //   .enrollStudentToCourse(
-                    //     this.user?.id_user.toString()!!,
-                    //     this.course?.program.toString()!!,
-                    //     this.course?.id_course.toString()!!
-                    //   ).subscribe((answer5) => {
-                      // this.dideduDataService
-                      //   .addCredentialToAcc(
-                      //     did,
-                      //     this.course?.title!! + " (Enrollment)",
-                      //     answer4.credential,
-                      //     answer4.operationId,
-                      //     answer4.hash,
-                      //     answer4.batchId
-                      //   ).pipe(catchError((error5: HttpErrorResponse) => {
-                      //   this.disabled = '';
-                      //   this.formError = error5.toString();
-                      //   return throwError(() => error5);
-                      // })).subscribe((answer5) => {
-                      //   this.dideduDataService
-                      //     .addDID(this.user!!.id_user.toString(), did, this.course?.title!!)
-                      //     .pipe(catchError((error6: HttpErrorResponse) => {
-                      //       this.disabled = '';
-                      //       this.formError = error6.toString();
-                      //       return throwError(() => error6);
-                      //     })).subscribe((answer6) => {
-                      //     let newThread = new Thread()
-                      //     newThread.currThread = setInterval(() => this.checkStatus(answer4.operationId, did, answer5._id, answer4.hash), 7000);
-                      //     newThread.currStatus = '';
-                      //     newThread.did = did;
-                      //     this.disabled = '';
-                      //     this.statusThreadArray.push(newThread);
-                      //     this.credentialsEvent.emit();
-                      //     this.cleanModal();
-                      //   });
-                      // });
-                    //})
-                  });
-                } else {
-                  this.disabled = '';
-                  this.formError = 'There was an error sending the credential! Please try again with another DID!';
+        }))
+        .subscribe((answer1) => {
+          this.dideduDataService
+            .getAllDIDs()
+            .subscribe((answer2) => {
+              let alreadyIn = false;
+              for (let i = 0; i < answer2.length; i++) {
+                if (answer2[i].did === did && answer2[i].title === this.course?.title) {
+                  alreadyIn = true;
+                  break;
                 }
-              });
-            }
-          });
-      });
+              }
+              if (alreadyIn) {
+                this.disabled = '';
+                this.formError = `The did '${did}' is already in the database!`;
+              } else {
+                this.dideduDataService
+                  .getWalletAcc(environment.WALLET_USERNAME, environment.WALLET_PASSWORD)
+                  .pipe(catchError((error3: HttpErrorResponse) => {
+                    this.disabled = '';
+                    this.formError = error3.toString();
+                    return throwError(() => error3);
+                  })).subscribe((answer3) => {
+                  let credential: Credential[] = [
+                    {
+                      key: "credentialName",
+                      value: this.course?.title + " (Enrollment)",
+                    },
+                    {
+                      key: "userEmail",
+                      value: this.user?.email!!
+                    },
+                    {
+                      key: "userId",
+                      value: this.user?.id_user.toString()!!
+                    },
+                    {
+                      key: "role",
+                      value: this.user?.role!!
+                    }
+                  ]
+                  if (answer3.user) {
+                    this.dideduDataService
+                      .verifyPresentation(
+                        `${this.user?.name}(${this.user?.id_user}) - Course enrollment, Presentation (${this.course?.title})`,
+                        this.course?.title!!,
+                        answer3.user.didList[0].did,
+                        this.currPresentation?.credential!!,
+                        this.currPresentation?.batchId!!,
+                        credential
+                      ).pipe(catchError((error4: HttpErrorResponse) => {
+                      this.disabled = '';
+                      this.formError = error4.toString();
+                      return throwError(() => error4);
+                    })).subscribe((answer4) => {
+                      if (answer4.message === 'Valid') {
+                        //Add in the user's acc
+                        this.dideduDataService
+                          .enrollStudentToCourse(
+                            this.user?.id_user.toString()!!,
+                            this.course?.id_course.toString()!!,
+                            this.course?.program.id_program.toString()!!
+                          ).subscribe((answer5) => {
+                          let credential = [
+                            {
+                              key: "credentialName",
+                              value: this.course?.title + " (Enrollment)",
+                            },
+                            {
+                              key: "userEmail",
+                              value: this.user?.email
+                            },
+                            {
+                              key: "userId",
+                              value: this.user?.id_user
+                            },
+                            {
+                              key: "role",
+                              value: this.user?.role
+                            }
+                          ]
+
+                          this.dideduDataService
+                            .issueCredential(
+                              answer3.user.username,
+                              answer3.user.mnemonic,
+                              environment.AUTH_CREDENTIAL_PASSPHRASE,
+                              did,
+                              credential
+                            ).pipe(catchError((error6: HttpErrorResponse) => {
+                            this.disabled = '';
+                            this.formError = error6.toString();
+                            return throwError(() => error6);
+                          })).subscribe((answer6) => {
+                            //Add in the user's acc
+                            this.dideduDataService
+                              .addCredentialToAcc(
+                                did,
+                                this.course?.title!! + " (Enrollment)",
+                                answer6.credential,
+                                answer6.operationId,
+                                answer6.hash,
+                                answer6.batchId
+                              ).pipe(catchError((error7: HttpErrorResponse) => {
+                              this.disabled = '';
+                              this.formError = error7.toString();
+                              return throwError(() => error7);
+                            })).subscribe((answer7) => {
+                              this.dideduDataService
+                                .addDID(this.user!!.id_user.toString(), did, this.course?.title!!)
+                                .pipe(catchError((error8: HttpErrorResponse) => {
+                                  this.disabled = '';
+                                  this.formError = error8.toString();
+                                  return throwError(() => error8);
+                                })).subscribe((answer8) => {
+                                let newThread = new Thread()
+                                newThread.currThread = setInterval(() => this.checkStatus(answer6.operationId, did, answer7._id, answer6.hash), 7000);
+                                newThread.currStatus = '';
+                                newThread.did = did;
+                                this.disabled = '';
+                                this.statusThreadArray.push(newThread);
+                                this.credentialsEvent.emit();
+                                this.cleanModal();
+                              });
+                            })
+                          })
+                        })
+                      } else {
+                        this.disabled = '';
+                        this.formError = 'The credential is not valid';
+                      }
+                    })
+                  } else {
+                    this.disabled = '';
+                    this.formError = 'There was an error sending the enrollment credential! Please try again with another DID!';
+                  }
+                })
+              }
+            })
+        })
     }
   }
 

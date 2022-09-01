@@ -286,11 +286,10 @@ const enrollStudent = (req, res) => {
                 idCourse
             ];
 
-            connection.query('INSERT INTO student (user, program, course) VALUES (?)', newStudent, (error, answer) => {
+            connection.query('INSERT INTO student (user, program, course) VALUES (?)', [ newStudent ], (error, answer) => {
                 if (error) {
                     return res.status(500).json(error);
                 }
-
                 res.status(200).json({
                     message: `The student was successfully enrolled to the course.`,
                     answer: answer

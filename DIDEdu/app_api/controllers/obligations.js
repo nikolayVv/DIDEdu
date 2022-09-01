@@ -102,7 +102,7 @@ const getAllObligationsGroupsByCourse = (req, res) => {
             return res.status(500).json(error);
         }
         if (obligationsGroups.length === 0) {
-            return res.status(404).json({ message: `No obligations groups found for this course.` });
+            return res.status(200).json([]);
         }
 
         let result = [];
