@@ -1,6 +1,6 @@
 # DIDEdu
 
-DIDEdu is an open code decentralized solution, which is developed to present the advantages of implementing Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs) in a system. [Decentralized Identifiers](https://www.w3.org/TR/did-core/) are a new type of identifiers, that enable a verifiable, distributed digital identity. With the help of this technology, DIDEdu offers to its users:
+DIDEdu is an open source decentralized solution, which is developed to present the advantages of implementing Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs) in a system. [Decentralized Identifiers](https://www.w3.org/TR/did-core/) are a new type of identifiers, that enable a verifiable, distributed digital identity. With the help of this technology, DIDEdu offers to its users:
 - Issuing of credentials for completed obligations (exams, exercises, lectures, assignments, etc.), subjects, years and programs;
 - Authentication/Registration for individual activities (exams, colloquiums, tests, etc.) using credentials or presentations;
 - Signing in the website only with a DID;
@@ -9,6 +9,9 @@ DIDEdu is an open code decentralized solution, which is developed to present the
 - Cheaper usage of the Blockchain using Batches;
 
 The main logic is in the DID service, which is developed in Kotlin and is using the Atala PRISM SDK. Atala PRISM SDK is a development kit, which is following the W3C standard and is working on the Cardano Blockchain. It allows developers to use already implemented functionalities, which helps them develop solutions, that are using DIDs and VCs.
+The website, where the functionalities can be tested is called DIDEdu and is developed in Typescript, CSS and HTML. It is also using a MySQL data to store some data, which is needed to make the user's experience better.
+I have also developed a simple digital wallet in Javascript, CSS and HTML as a chrome-extension. It is only used as a local storage, that stores the data in a MongoDB database and is not an actual working digital wallet, that communicates with blockchain. The Cardano Blockchain doesn't have a digital wallet yet, which works with DIDs and VCs, which is why I had to create one.
+These three systems communicate with each other and allow the users to feel all the benefits from the usage of the DIDs and VCs in the educational process.
 
 ## Usage
 
