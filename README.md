@@ -67,6 +67,6 @@ Pull requests are welcome! For changes, please fork the repository!
 
 ## Acknowledgements
 This solution is developed as part of my thesis for receiving a bachelor's degree from the [University of Ljubljana Faculty of Computer and Information Science](https://www.fri.uni-lj.si/en). I would like to give very special thanks to:
-- my mentor [prof. dr. Dejan Lavbič](https://www.lavbic.net/), who came up with the theme of the thesis and helped me write it and develop a solution for it;
+- my mentor [Assoc. Prof. dr. Dejan Lavbič](https://www.lavbic.net/), who came up with the theme of the thesis and helped me write it and develop a solution for it;
 - the [Atala PRISM](https://atalaprism.io/) team for giving me a spot in the first cohort of the Atala PRISM pioneer program, where I learned, how to work with the Atala PRISM SDK;
 - the [IOG's Technical Community](https://iohk.io/) for their help through the developing process;
